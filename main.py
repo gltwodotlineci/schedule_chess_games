@@ -5,7 +5,7 @@ from controller.controller import create_games
 from controller.controller import create_results
 from controller.controller import passing_results2games
 from controller.controller import add_points_to_players
-
+from views.view1 import starting_tournament
 
 #list_pl = create_player()
 #print(create_game())
@@ -13,4 +13,6 @@ from controller.controller import add_points_to_players
 #create_games()
 #create_results()
 #print(passing_results2games())
-add_points_to_players()
+#add_points_to_players()
+starting_tournament()
+

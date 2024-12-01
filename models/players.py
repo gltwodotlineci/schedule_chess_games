@@ -1,6 +1,6 @@
 import random
 def create_id(x,y):
-    rand =''.join([str(random.randint(0,9)) for a in range(1,4)])
+    rand = ''.join([str(random.randint(0,9)) for a in range(1,4)])
     return rand + x + y
 
 class Player:
