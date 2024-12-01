@@ -1,0 +1,12 @@
+.git
+pyvenv.cfg
+__pycache__
+*.csv
+*.jpg
+*.zip
+*.json
+lib/
+lib64/
+bin/
+json_data/
+
