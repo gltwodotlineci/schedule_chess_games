@@ -1,21 +1,23 @@
 import random
 def create_id(x):
     rand = ''.join([str(random.randint(0,9))for a in range(1,4)])
-    return rand + x
+    return rand + x.replace(' ','_')
 class Tournament:
     def __init__(
             self,
             name,
+            place,
             starting_date,
             ending_date,
             description,
-            rounds_list = None,
+            rounds_list = [],
             players_list = None,
             round_numbers = 4,
             actual_round_number = 1
             ):
-        self.id = create_id(self.name)
+        self.id = create_id(name)
         self.name = name
+        self.place = place
         self.starting_date = starting_date      
         self.ending_date = ending_date
         self.round_numbers = 4

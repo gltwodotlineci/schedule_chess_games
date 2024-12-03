@@ -4,11 +4,10 @@ def create_id():
     
 
 class ResultGame:
-    def __init__(self, game_id):
+    def __init__(self, after_game_id, winner):
         self.id = create_id()
-        self.game_id = game_id
-        possibles_results = ['player1', 'player2','draw']
-        self.winner = possibles_results[random.randint(0,2)]
+        self.after_game_id = after_game_id
+        self.winner = winner
 
     def serialize_result_game(self):
         return {
