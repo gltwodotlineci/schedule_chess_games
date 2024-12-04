@@ -7,6 +7,7 @@ from models.result import ResultGame
 from models.tournament import Tournament
 from models.game import Game
 from views.view1 import geting_dt_tournament
+from views.view1 import enter_player_data
 
 
 # method to read json
@@ -59,6 +60,57 @@ def add_round_2tournement():
 Players part:
 create and serialize player
 '''
+class CreatePlayer(Player):
+    def __init__(self, first_name, last_name, birth_date):
+        self._birth_date = birth_date
+        super().__init__(first_name, last_name, birth_date)
+
+    @property
+    def birth_date(self):
+        return self._birth_date
+    
+    @birth_date.setter
+    def birth_date(self, val):
+        if val[2] != '-' or val[5] != '-' or len(val) != 10:
+            raise ValueError('Wrong date format, please retry!')
+        else:
+            self._birth_date = val
+        
+def create_pp():
+    dt = enter_player_data()
+    try:
+        dt_validator = CreatePlayer(dt[0],dt[1],dt[2])
+        player = CreatePlayer(
+            dt_validator.first_name,
+            dt_validator.last_name,
+            dt_validator.birth_date
+        )
+        validate = True
+    except:
+        print("Please check if the date birth has the format 'dd-mm-yyyy'")
+        validate = False
+
+    while validate != True:
+        dt[2] = input("write again the birth date please: ")
+        try:
+            dt_validator = CreatePlayer(dt[0],dt[1],dt[2])
+            player = CreatePlayer(
+                dt_validator.first_name,
+                dt_validator.last_name,
+                dt_validator.birth_date
+            )
+            validate = True
+        except:
+            print("Please check if the date birth has the format 'dd-mm-yyyy'")
+            validate = False
+
+    # saving player to data
+    players = read_json('json_data/players.json')
+    player_serialized = player.serialize_player()
+    players.append(player_serialized)
+    write_json('json_data/players.json',players)
+
+    
 def create_player():
     players = []
     players.append(Player('aqif','kapertoni','22-06-1979').serialize_players())
@@ -72,9 +124,7 @@ def create_player():
 Game part:
 create and serialize game
 '''
-'''
-    AfterGame
-'''
+
 def simulate_winner():
     possibles_results = ['player1', 'player2','draw']
     return possibles_results[random.randint(0,2)]
@@ -91,61 +141,7 @@ def gemes_by_round(round_nb):
     return gemes_round
 
 
-def add_after_game():
-    rounds = read_json("json_data/rounds.json")
-    given_round_nb = 1
-    
-    # if given_round.get('number') == given_round:
-    #     players = read_json("json_data/players.json")
-    games = gemes_by_round(1)
-    after_games = []
-    results = []
-    for game in games:
-        player1 = game.get('player1')
-        player2 = game.get('player2')
-        winner = simulate_winner()
-        if winner == 'player1':
-            after_game = Game(
-                player1,
-                player2,
-                given_round_nb,
-                ([player1,'Won'],[player2,'Loose'])
-                )
-        elif winner == 'plyer2':
-            after_game = Game(
-                player1,
-                player2,
-                given_round_nb,
-                ([player1,'Loose'],[player2,'Won'])
-                )
-        else:
-            after_game = Game(
-                player1,
-                player2,
-                given_round_nb,
-                ([player1,'Won'],[player2,'Loose'])
-                )
-        result = ResultGame(after_game.id,winner)
-            
-        after_games.append(after_game.__dict__)
-        results.append(result.__dict__)
-
-
-    rounds_new = rounds
-    for i in range(len(rounds_new)):
-        if rounds_new[i].get('number') == given_round_nb:
-            rounds_new[i]['game_list'] = after_games
-
-    # adding games with results and results
-    write_json('json_data/after_game.json', after_games)
-    write_json('json_data/results.json',results)
-    # adding list games to round
-    write_json('json_data/rounds.json',rounds_new)
-                
-        
-
-
-#---------------------------
+# make the planing of thee games
 def planing_games():
     # Calling rounds data
     # with open("json_data/rounds.json",'r') as rounds_file:
@@ -172,6 +168,84 @@ def planing_games():
     elif rounds.get('number') > 1:
         pass
 
+def add_points_to_players(game):
+    players = read_json('json_data/players.json')
+    new_list_players = []
+    for player in players:
+        player_id = player.get('id')
+        if player_id == game[0][0]:
+            if game[0][1] == 'Draw':
+                player['points'] += 0.5
+            elif game[0][1] == 'Won':
+                player['points'] += 1
+        if player_id == game[1][0]:
+            if game[1][1] == 'Draw':
+                player['points'] += 0.5
+            elif game[0][1] == 'Won':
+                player['points'] += 1
+        
+        new_list_players.append(player)
+    write_json('json_data/players.json', new_list_players)
+
+
+# add points after game
+def add_after_game():
+    rounds = read_json("json_data/rounds.json")
+    given_round_nb = 1
+    
+    # if given_round.get('number') == given_round:
+    #     players = read_json("json_data/players.json")
+    games = gemes_by_round(1)
+    after_games = []
+    results = []
+    games_for_plyers = []
+
+    for game in games:
+        player1 = game.get('player1')
+        player2 = game.get('player2')
+        winner = simulate_winner()
+        if winner == 'player1':
+            after_game = Game(
+                player1,
+                player2,
+                given_round_nb,
+                ([player1,'Won'],[player2,'Loose'])
+                )
+        elif winner == 'plyer2':
+            after_game = Game(
+                player1,
+                player2,
+                given_round_nb,
+                ([player1,'Loose'],[player2,'Won'])
+                )
+        else:
+            after_game = Game(
+                player1,
+                player2,
+                given_round_nb,
+                ([player1,'Draw'],[player2,'Draw'])
+                )
+        # Adding points to players
+        add_points_to_players(after_game.result)
+
+        result = ResultGame(after_game.id,winner)
+        after_games.append(after_game.__dict__)
+        games_for_plyers.append(after_game)
+        results.append(result.__dict__)
+
+    rounds_new = rounds
+    for i in range(len(rounds_new)):
+        if rounds_new[i].get('number') == given_round_nb:
+            rounds_new[i]['game_list'] = after_games
+
+    # adding games with results and results
+    write_json('json_data/after_game.json', after_games)
+    write_json('json_data/results.json',results)
+    # adding list games to round
+    write_json('json_data/rounds.json',rounds_new)
+                
+
+
 '''
 Rresult part:
 create and associate points
@@ -182,66 +256,6 @@ def prod_result(game_id):
     results_list.append(result)
     # write results as json
     write_json('json_data/results.json', results_list)
-
-
-def create_results():
-    rounds = read_json('json_data/rounds.json')
-    print("Please Chose this round number between the next rounds: ")
-    for round in rounds:
-        print(f"Round N° {round.get('number')}")
-    
-    round_nb = input(" Your round nb is: ")
-    games = read_json('json_data/games.json')
-    games_list = []
-    for game in games:
-        if game.get('round_number') == int(round_nb):
-            games_list.append(game)
-
-    for game in games_list:
-        game_id = game.get('id')
-        result = ResultGame(game_id)
-        all_results.append(result.__dict__)
-
-    # write results as json
-    #write_json('json_data/results.json', all_results)
-
-# passing the results to the game:
-def passing_results2games():
-    results = read_json('json_data/results.json')
-    games = read_json('json_data/games.json')
-    for result in results:
-        game_id = result.get('game_id')
-        winner = result.get('winner')
-        new_game_list = []
-        for game in games:
-            if game.get('id') == game_id:
-                game['winner'] = winner
-                if result.get('winner') != 'draw':
-                    game['winner_id'] = (game.get(winner))
-                else:
-                    game['winner_id'] = (game.get('player1'), game.get('player2'))
-            
-            new_game_list.append(game)
-    write_json('json_data/games.json', new_game_list)
-
-    return new_game_list
-
-def add_points_to_players():
-    games = read_json('json_data/games.json')
-    players = read_json('json_data/players.json')
-    new_list_players = []
-    for player in players:
-        player_id = player.get('id')
-        for game in games:
-            if player_id in game.get('winner_id'):
-                if game.get('winner') == 'draw':
-                    player['points'] += 0.5
-                else:
-                    player['points'] += 1.0
-        
-        new_list_players.append(player)
-
-    write_json('json_data/players.json', new_list_players)
 
 
 
@@ -257,5 +271,3 @@ def create_round(round_name, number):
         f.write(new_round)
 
 #---------------------------------------
-
-

@@ -11,13 +11,11 @@ class Player:
         self.birth_date = birth_date
         self.points = points
 
-    def serialize_players(self):
+    def serialize_player(self):
         return {   
             'id': self.id,
             'first_name': self.first_name,
             'last_name': self.last_name,
             'birth_date': self.birth_date,
             'points': self.points
-        }
-    
-    
+        }  

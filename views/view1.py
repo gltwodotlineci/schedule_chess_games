@@ -1,3 +1,37 @@
+
+def enter_player_data():
+    check0 = None
+    print("Welcome to the creation player part")
+    print("You can write 'yes' if you want to add a new player\
+          or 'close' if you want to close the program")
+    check0 = input("Please write 'yes' or 'close' ")
+    check0.lower()
+
+    while check0 not in ['yes', 'close']:
+        print(" You might writed 'yes' or 'close' wrong ")
+        check0 = input("Please write 'yes' or 'close' ")
+        if check0 == 'close':
+            break
+
+    if check0 == 'yes':
+        data = []
+        firstname = input("Enter the players first name: ")
+        data.append(firstname)
+        lastname = input("Enter the players last name: ")
+        data.append(lastname)
+        print("for the player's birth date please follow this\
+        format exemple: dd-mm-yyyy ")
+        birthdate = input("Enter the player's birth date: ")
+        data.append(birthdate)
+        return data
+
+
+
+
+
+
+
+
 def entering_data():
     name = input('The tournemant name: ')
     place = input('The place to be: ')
@@ -5,6 +39,8 @@ def entering_data():
     ending__date = input("The date of the endining of the tournement: ")
     description = input("Please write a description of the tournement: ")
     return name, place, starting_date, ending__date, description
+
+
 
 def geting_dt_tournament():
     print('WELCOME \n Pleas choose your turnement information')

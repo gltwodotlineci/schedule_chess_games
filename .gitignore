@@ -9,4 +9,6 @@ lib/
 lib64/
 bin/
 json_data/
+lib/
+lib64/
 
