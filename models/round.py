@@ -1,19 +1,27 @@
 
 class Round:
-    def __init__(self, name, number):
+    def __init__(
+            self,
+            tournament_id,
+            name,
+            number,
+            starting_date_hour = None,
+            ending_date_hour = None
+            ):
+
+        self.tournament_id = tournament_id
         self.name = name
         self.number = number
+        self.starting_date_hour = starting_date_hour
+        self.ending_date_hour = ending_date_hour
         self.games_list = []
-#        self.player_list = player_list
 
     def serialize_round(self):
         return {
-            'number': self.number,
+            'tournement_id': self.tournament_id,
             'name': self.name,
-            'game_list': self.games_list
+            'number': self.number,
+            'game_list': self.games_list,
+            'starting_date_hour': self.starting_date_hour,
+            'ending_date_hour': self.ending_date_hour
         }
-
-
-    def organize_games(self):
-        for player in self.player_list:
-            print(player.name)

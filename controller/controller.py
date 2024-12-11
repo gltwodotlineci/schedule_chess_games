@@ -1,14 +1,14 @@
 import json
 import random
-from models.players import Player
+from models.player import Player
 from models.planing_game import PlaningGame
 from models.round import Round
 from models.result import ResultGame
 from models.tournament import Tournament
 from models.game import Game
-from views.view1 import geting_dt_tournament
-from views.view1 import enter_player_data
-
+from controller.validator import ValidatePlayer
+from controller.validator import ValidateRound
+from controller.validator import ValidateTournament
 
 # method to read json
 def read_json(path):
@@ -22,112 +22,166 @@ def write_json(path,list_dict):
         json.dump(list_dict, f, indent=2)
 
 
+
+'''
+Round
+'''
+def all_rounds():
+    list_rounds = read_json('json_data/rounds.json')
+    return list_rounds
+
+
+def create_round(round_nb,tournament_id=None):
+    round_nb = round_nb[0]
+    if tournament_id == None:
+        tournament_id = input("Tournament id: ")
+    validated_data = ValidateRound(tournament_id, f"Round {round_nb}",int(round_nb))
+    round = Round(validated_data.tournament_id, validated_data.name, validated_data.number)
+    # add round to json
+    rounds_list = read_json('json_data/rounds.json')
+    rounds_list.append(round.serialize_round())
+    write_json('json_data/rounds.json',rounds_list)
+    return round
+
+
+def add_round_2_tour(round):
+    list_tours = read_json('json_data/tournaments.json')
+    for i,tour in enumerate(list_tours):
+        if round.tournament_id == tour.get('id'):
+            list_tours[i].get('rounds_list').append(round.name)
+    write_json('json_data/tournaments.json', list_tours)
+
+
 '''
 Tournement,
 create ans serialize tournement
 '''
-def create_tournement():
-    given_dt = geting_dt_tournament()
-    tournement = Tournament(given_dt[0], given_dt[1], given_dt[2], given_dt[3], given_dt[4])
-    
-    tournement_list = read_json('json_data/tournement.json')
-    tournement_list.append(tournement.__dict__)
-    write_json('json_data/tournement.json', tournement_list)
-    
-def add_round_2tournement():
-    list_tournement = read_json('json_data/tournement.json')
-    list_rounds = read_json('json_data/rounds.json')
-    print("Here is the list of the tornements names:")
-    i = 1
-    for tournement in list_tournement:
-        print(f"{tournement.get('name')} - {i}")
-        i +=1
+def all_tournaments():
+    list_tournament = read_json('json_data/tournaments.json')
+    return list_tournament
 
-    nb = input(" Chose the number of tournement: ")
-    choosed_tournement = list_tournement[int(nb)-1]
-    for round in list_rounds:
-        if round.get('tournement_id') == choosed_tournement.get('id'):
-            choosed_tournement['rounds_list'].append(round)
-            
-    list_tournement[int(nb)-1] = choosed_tournement
 
-    write_json('json_data/tournement.json', list_tournement)
-    print(f'You choosed the "{choosed_tournement.get('name')}" tournement')
+def list_tournaments_players():
+    data = {}
+    data['tournaments'] = read_json('json_data/tournaments.json')
+    data['players'] = read_json('json_data/players.json')
+    return data
+
+def create_tournament(given_dt):
+    valid_dt = ValidateTournament(**given_dt)
+    tournement = Tournament(
+        valid_dt.name,
+        valid_dt.place,
+        valid_dt.starting_date,
+        valid_dt.ending_date,
+        valid_dt.description
+        )
+    tournament_list = read_json('json_data/tournaments.json')
+    tournament_list.append(tournement.serialize_data())
+    write_json('json_data/tournaments.json', tournament_list)
+    return tournement
+
+def edit_tournament(tour_id,attribute,value):
+    list_tours = read_json('json_data/tournaments.json')
+    x = None
+    for i,tour in enumerate(list_tours):
+        if tour.get("id") == tour_id:
+            x = i
+            if attribute == 'players_list':
+                for player in value:
+                    list_tours[i][attribute].append(player)# replace with 'tour'
+                
+
+    list_tours[x][attribute] = list(dict.fromkeys(list_tours[x][attribute]))
+
+    write_json('json_data/tournaments.json', list_tours)
+
+
+def add_round_2tournement(round_id, tournament_id):
+    list_tournament = read_json('json_data/tournaments.json')
+
+    index_tour = None
+    tour = None
+    for i, tournament in enumerate(list_tournament):
+        if tournament.get('id') == tournament_id:
+            index_tour = i
+            tour = tournament
+
+    tour.get('rounds_list').append(round_id)
+    list_tournament[index_tour] = tour
+
+    write_json('json_data/tournaments.json', list_tournament)
     
+
+# Adding player id to Taurnement
+# ?????
+def add_player2_tour(given_tour, player):
+    tournaments = read_json('json_data/tournaments.json')
+    for i,tour in enumerate(tournaments):
+        if tour.get('id') == given_tour:#.id:
+            tournaments[i]['players_list'].append(player.id)
+
+    write_json('json_data/tournaments.json',tournaments)
+
 
 
 '''
 Players part:
 create and serialize player
 '''
-class CreatePlayer(Player):
-    def __init__(self, first_name, last_name, birth_date):
-        self._birth_date = birth_date
-        super().__init__(first_name, last_name, birth_date)
+# List of all players
+def all_players():
+    all_players = read_json('json_data/players.json')
+    return all_players
 
-    @property
-    def birth_date(self):
-        return self._birth_date
-    
-    @birth_date.setter
-    def birth_date(self, val):
-        if val[2] != '-' or val[5] != '-' or len(val) != 10:
-            raise ValueError('Wrong date format, please retry!')
-        else:
-            self._birth_date = val
-        
-def create_pp():
-    dt = enter_player_data()
+
+def create_player(dt): 
     try:
-        dt_validator = CreatePlayer(dt[0],dt[1],dt[2])
-        player = CreatePlayer(
+        dt_validator = ValidatePlayer(**dt)
+        player = Player(
             dt_validator.first_name,
             dt_validator.last_name,
             dt_validator.birth_date
         )
         validate = True
-    except:
-        print("Please check if the date birth has the format 'dd-mm-yyyy'")
-        validate = False
+    except ValueError as e:
+            print(f"Error: {e}")
+            validate = False
 
     while validate != True:
-        dt[2] = input("write again the birth date please: ")
+        dt['birth_date'] = input("write again the birth date please: ")
         try:
-            dt_validator = CreatePlayer(dt[0],dt[1],dt[2])
-            player = CreatePlayer(
+            dt_validator = ValidatePlayer(**dt)
+            player = Player(
                 dt_validator.first_name,
                 dt_validator.last_name,
                 dt_validator.birth_date
             )
             validate = True
-        except:
-            print("Please check if the date birth has the format 'dd-mm-yyyy'")
+        except ValueError as e:
+            print(f"Error: {e}")
             validate = False
 
     # saving player to data
     players = read_json('json_data/players.json')
-    player_serialized = player.serialize_player()
-    players.append(player_serialized)
+    players.append(player.serialize_player())
     write_json('json_data/players.json',players)
+    return player
 
-    
-def create_player():
-    players = []
-    players.append(Player('aqif','kapertoni','22-06-1979').serialize_players())
-    players.append(Player('Afrim', 'Tahipi', '01-01-2000').serialize_players())
-    players.append(Player('Zeqo', 'Pilafi', '01-11-1912').serialize_players())
-    with open('json_data/players.json', 'w') as f:
-        json.dump(players,f,indent=2)
 
 
 '''
 Game part:
 create and serialize game
 '''
-
 def simulate_winner():
     possibles_results = ['player1', 'player2','draw']
     return possibles_results[random.randint(0,2)]
+
+
+def all_games():
+    games = read_json('json_data/games.json')
+    return games
 
 
 # givin games by round
@@ -162,8 +216,6 @@ def planing_games():
 
         # add games to json
         write_json("json_data/preparing_game.json", games)
-        
-
 
     elif rounds.get('number') > 1:
         pass
@@ -257,17 +309,5 @@ def prod_result(game_id):
     # write results as json
     write_json('json_data/results.json', results_list)
 
-
-
-'''
-Round part:
-create and serialize round
-'''
-def create_round(round_name, number):
-    round_dict = Round(round_name, number).serialize_round()
-    new_round = json.dumps(round_dict)
-    new_round
-    with open("json_data/rounds.json", "w") as f:
-        f.write(new_round)
 
 #---------------------------------------
