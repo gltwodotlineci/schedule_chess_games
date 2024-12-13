@@ -54,11 +54,11 @@ def send_dt_round():
 
 def select_or_create():
     print("  ---      You have three choices      ---")
-    print("  -- < Add/check the players   - 0 > --")
-    print("  -- < Select a tournament     - 1 > --")
-    print("  -- < Create a new tournament - 2 > --")    
-    content = "Please write '0', '1' or '2' "
-    return verify_choice(content,['0','1','2'])
+    print("  -- < Add/check the players   - 1 > --")
+    print("  -- < Select a tournament     - 2 > --")
+    print("  -- < Create a new tournament - 3 > --")    
+    content = "Please write '1', '2' or '3' "
+    return verify_choice(content,['1','2','3'])
 
 
 def select_tournament(tours):
@@ -104,40 +104,3 @@ write 'y' if you want to add this player to the tournament")
     
     return list_players
 
-
-#-----------------
-
-def check_progress(welcome):
-    check = None
-    print(welcome)
-    print("You can write 'yes' if you want to continue")
-    print("or 'back' if you want to go back")
-    check = input("Please write 'yes' or 'back' ")
-    check.lower()
-
-    while check not in ['yes', 'back']:
-        print(" You might writed 'yes' or 'back' wrong ")
-        check = input("Please write 'yes' or 'back' ")
-
-    return check
-
-
-
-def enter_player_data():
-    welcome = "Welcome to the creation player part"
-    check0 = check_progress(welcome)
-  
-    if check0 == 'back':
-        return 'back'
-
-    if check0 == 'yes':
-        data = []
-        firstname = input("Enter the players first name: ")
-        data.append(firstname)
-        lastname = input("Enter the players last name: ")
-        data.append(lastname)
-        print("for the player's birth date please follow this\
-        format exemple: dd-mm-yyyy ")
-        birthdate = input("Enter the player's birth date: ")
-        data.append(birthdate)
-        return data

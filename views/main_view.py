@@ -1,35 +1,20 @@
 from views.choose_dt import send_dt_tourn
 from views.choose_dt import send_dt_round
 from views.choose_dt import send_dt_player
-from views.choose_dt import verify_choice
 from views.choose_dt import select_or_create
 from views.choose_dt import select_tournament
 from views.choose_dt import choosed_tournament
-from views.choose_dt import select_player4_tour
 from views.choose_dt import ask_add_player
 
 from views.lists_values import show_all_tournaments
-from views.lists_values import show_all_games
 from views.lists_values import show_all_players
-from views.lists_values import show_all_rounds
 
-from controller.controller import all_players
-from controller.controller import all_games
-from controller.controller import all_rounds
 from controller.controller import all_tournaments
 from controller.controller import list_tournaments_players
 from controller.controller import create_tournament
 from controller.controller import create_round
 from controller.controller import create_player
 from controller.controller import add_round_2_tour
-from controller.controller import edit_tournament
-
-from views.create_veiw import ask_dt_tournament
-
-
-
-def create_game():
-    pass
 
 
 def welcom_header(data):
@@ -37,31 +22,6 @@ def welcom_header(data):
     print(f"You have registred {len(data['tournaments'])} tournements")
     print(f"You alsow have {len(data['players'])} players")
     print('                ')
-    #show_all_tournemnts(data.get('tournaments'))
-
-
-# giving data for round
-def data_for_round():
-    print("Here you have the list of the round names")
-    print("and a number at the side of each name: ")
-        
-    for i in range(1,11):
-        print(f" Round {i} - {i}")
-        x += i
-    
-    round_nb =verify_choice(
-        "Your round number is? ",
-        [str(x) for x in range(1,11)]
-        )
-
-    print(f'you choosed Round {round_nb}')
-    return round_nb
-
-def welcome_pg_bis():
-    welcom_header(list_tournaments_players())
-    show_all_tournaments(all_tournaments())
-    choice = select_or_create()
-    return choice
 
 
 def create_round_from_tour(tour):
@@ -86,30 +46,13 @@ def create_round_from_tour(tour):
             print("You created the last round for this tournament")
 
 
-def mock_show():
-    
-    # show_all_games(all_games())
-    # show_all_rounds(all_rounds())
-    choice = welcome_pg_bis()
-    if choice == "2":
-        dt_tournament = send_dt_tourn()
-        tour = create_tournament(dt_tournament)
-        print(tour)
-        create_round_from_tour(tour)
-        # player = create_player4_tour()
-        list_players = select_player4_tour(all_players())
-        edit_tournament(tour.id,'players_list',list_players)
-
-    elif choice == '3':
-        pass
 
 
 def main_page():
     welcom_header(list_tournaments_players())
     print(" -*-*-*-  -*-*-*- -*-*-*- -*-*-*-")
     choice1 = select_or_create()
-    data = all_tournaments()
-    if choice1 == '0':
+    if choice1 == '1':
         print(" ")
         print("     Your Players Are:")
         show_all_players()
@@ -117,18 +60,13 @@ def main_page():
         if add_player == 'yes':
             player = send_dt_player()
             create_player(player)
-
-    if choice1 == '1':
+    if choice1 == '2':
         print(" ")
         show_all_tournaments()
         tour = select_tournament(all_tournaments())
         choosed_tournament(tour)
-        #tour_select = select_tournaments(data)
-        #print("Tour select >>> ", tour_select)
-    elif choice1 == '2':
+    elif choice1 == '3':
         print(" ")
         print("Lets create some Tournaments ! ")
         dt_tournament = send_dt_tourn()
         tour = create_tournament(dt_tournament)
-        print(tour)
-
