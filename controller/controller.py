@@ -57,8 +57,8 @@ Tournement,
 create ans serialize tournement
 '''
 def all_tournaments():
-    list_tournament = read_json('json_data/tournaments.json')
-    return list_tournament
+    tours = Tournament.all_data()
+    return tours
 
 
 def list_tournaments_players():
@@ -139,6 +139,7 @@ def create_player(dt):
     try:
         dt_validator = ValidatePlayer(**dt)
         player = Player(
+            dt_validator.fin,
             dt_validator.first_name,
             dt_validator.last_name,
             dt_validator.birth_date
@@ -150,9 +151,12 @@ def create_player(dt):
 
     while validate != True:
         dt['birth_date'] = input("write again the birth date please: ")
+        print("Remember the fin format exemple is: 'AB1245' ")
+        dt['fin'] = input("write again the fin number: ")
         try:
             dt_validator = ValidatePlayer(**dt)
             player = Player(
+                dt_validator.fin,
                 dt_validator.first_name,
                 dt_validator.last_name,
                 dt_validator.birth_date
@@ -164,8 +168,6 @@ def create_player(dt):
 
     # saving player to data
     player.save_dt()
-
-
 
 
 '''

@@ -19,7 +19,7 @@ def show_all_players():
     players = all_players()
     print("The first name and the last name of the players")
     for player in players:
-        print(f"Player Name: {player.first_name} {player.last_name}")
+        print(f"Player Name: {player.first_name} {player.last_name}.  Id {player.fin}")
 
 
 def show_all_rounds(dt):
@@ -34,3 +34,14 @@ def show_all_games(dt):
     print("You have here the list of games")
     for game in dt:
         print(game)
+
+
+def show_all_tournaments():
+    tournaments = all_tournaments()
+    print(len(tournaments))
+    if len(tournaments) > 0:
+        print("Here you have the tournement names and their number. ")
+        i = 1
+        for tour in tournaments:
+            print(f"Name: {tour.name} - {i} ")
+            i += 1

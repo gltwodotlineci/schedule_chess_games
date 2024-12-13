@@ -4,7 +4,7 @@ from views.choose_dt import send_dt_player
 from views.choose_dt import verify_choice
 from views.choose_dt import select_or_create
 from views.choose_dt import select_tournament
-from views.choose_dt import select_round
+from views.choose_dt import choosed_tournament
 from views.choose_dt import select_player4_tour
 from views.choose_dt import ask_add_player
 
@@ -64,39 +64,6 @@ def welcome_pg_bis():
     return choice
 
 
-def select_tournaments(data):
-    print("  ")
-    if len(data) > 0:
-        print("Here you have the tournement names and their number. ")
-        i = 1
-        for tour in data:
-            print(f"{tour.get('name')} - {i}")
-            i += 1
-
-        tour = select_tournament(data)
-        print(' ')
-        print(f"You selected {tour.get('name')} at {tour.get('place')}")
-        print(f"From {tour.get('starting_date')} to {tour.get('ending_date')}")
-        
-        if tour.get('players_list') == []:
-            print("There are no players registred on this tournaments")
-        else:
-            print("The players registred at this turnament are: ")
-            for pl in tour.get('players_list'):
-                print(pl)
-        
-        tour_id = tour.get('id')
-        if len(tour.get('rounds_list')) == 0:
-            print(" The tournament you choosed has 0 rounds")
-            round_nb = tour.get('round_numbers')
-            print(f"This tournament is expected to have {round_nb} rounds")
-            print("If you want to create the rounds for this tournament")
-            confirm_select = input("Write 'yes' to cnfirm or anything else if not: ")
-            return confirm_select, tour_id
-        else:
-            return 'no', tour_id
-
-
 def create_round_from_tour(tour):
     if isinstance(tour,str):
         tour_id = tour
@@ -124,18 +91,7 @@ def mock_show():
     # show_all_games(all_games())
     # show_all_rounds(all_rounds())
     choice = welcome_pg_bis()
-    data = all_tournaments()
-    if choice == "1":    
-        tour_select = select_tournaments(data)
-
-        if tour_select[0] == 'yes':
-            create_round_from_tour(tour_select[1])
-
-        # else:
-        #     print("Do you want to start a game round? ")
-        # list_players = select_player4_tour(all_players())
-        # edit_tournament(tour_select[1],'players_list',list_players )
-    elif choice == "2":
+    if choice == "2":
         dt_tournament = send_dt_tourn()
         tour = create_tournament(dt_tournament)
         print(tour)
@@ -164,8 +120,15 @@ def main_page():
 
     if choice1 == '1':
         print(" ")
-        tour_select = select_tournaments(data)
+        show_all_tournaments()
+        tour = select_tournament(all_tournaments())
+        choosed_tournament(tour)
+        #tour_select = select_tournaments(data)
+        #print("Tour select >>> ", tour_select)
     elif choice1 == '2':
         print(" ")
         print("Lets create some Tournaments ! ")
+        dt_tournament = send_dt_tourn()
+        tour = create_tournament(dt_tournament)
+        print(tour)
 

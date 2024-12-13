@@ -1,3 +1,5 @@
+from models.player import Player
+
 def verify_choice(condition,options):
     input_var = input(condition)
     while input_var not in options:
@@ -26,6 +28,7 @@ def ask_add_player():
 def send_dt_player():
     dt = {}
     print("Please enter the data for the new player")
+    dt['fin'] = input("Enter the FID ID ").upper()
     dt['first_name'] = input("Enter the first name ")
     dt['last_name'] = input("Enter the last name ")
     dt['birth_date'] = input("Enter the birth date ")
@@ -63,6 +66,18 @@ def select_tournament(tours):
     content = f"For choosing the tournament write one of the numbers {' '.join(nb_tours)} "
     nb_tour = verify_choice(content,nb_tours)
     return tours[int(nb_tour)-1]
+
+def choosed_tournament(tournament):
+    print(f"You selected {tournament.name} at {tournament.place}")
+    print(f"From {tournament.starting_date} to {tournament.ending_date}")
+        
+    if tournament.players_list == []:
+        print("There are no players registred on this tournaments")
+    else:
+        print("The players registred at this turnament are: ")
+        for pl_id in tournament.players_list:
+            player = Player.from_db(pl_id)
+            print(f"{player.first_name} {player.last_name}")
 
 
 def select_round(round_nb):

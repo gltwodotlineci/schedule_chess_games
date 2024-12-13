@@ -14,11 +14,15 @@ def write_json(path,list_dict):
 
 def create_id(x=None,y=None,id=None):
     nb_lst = 9
-    if x == None:
+    if x is None:
         nb_lst = 4
 
     if id == None:
         rand = ''.join([str(random.randint(0,9)) for a in range(1,nb_lst)])
-        return rand + x + y
-
+        if x is None:
+            return rand
+        else:
+            if y is None:
+                return rand + x
+            return rand + x + y
     return id

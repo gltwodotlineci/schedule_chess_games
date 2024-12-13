@@ -3,7 +3,8 @@ from models.support_classes import write_json
 from models.support_classes import create_id
 
 class Player:
-    def __init__(self, first_name, last_name, birth_date,id = None, points=0.0):
+    def __init__(self,fin, first_name, last_name, birth_date,id = None, points=0.0):
+        self.fin = fin
         self.id = create_id(first_name, last_name, id)
         self.first_name = first_name
         self.last_name = last_name
@@ -12,8 +13,9 @@ class Player:
 
 
     def serialize_player(self):
-        return {   
+        return {
             'id': self.id,
+            'fin': self.fin,
             'first_name': self.first_name,
             'last_name': self.last_name,
             'birth_date': self.birth_date,
