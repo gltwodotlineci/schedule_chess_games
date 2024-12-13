@@ -1,20 +1,7 @@
-import random
-import json
+from models.support_classes import read_json
+from models.support_classes import write_json
+from models.support_classes import create_id
 
-# method to read json
-def read_json(path):
-    with open(path, 'r') as f:
-        return json.load(f)
-
-
-# method to write json
-def write_json(path,list_dict):
-    with open(path, 'w') as f:
-        json.dump(list_dict, f, indent=2)
-
-def create_id(x):
-    rand = ''.join([str(random.randint(0,9))for a in range(1,4)])
-    return rand + x.replace(' ','_')
 class Tournament:
     def __init__(
             self,
@@ -23,6 +10,7 @@ class Tournament:
             starting_date,
             ending_date,
             description,
+            id = None,
             rounds_list = [],
             players_list = [],
             round_numbers = 4,
@@ -33,12 +21,12 @@ class Tournament:
         self.place = place
         self.starting_date = starting_date      
         self.ending_date = ending_date
-        self.round_numbers = 4
+        self.description = description
         self.rounds_list = rounds_list
         self.players_list = players_list
-        self.description = description
         self.round_numbers = round_numbers
         self.actual_round_number = actual_round_number
+
 
     def serialize_data(self):
         return {
@@ -56,12 +44,30 @@ class Tournament:
 
 
     @classmethod
-    def from_db(cls, tour_id):
+    def from_db(cls, id):
         list_tours = read_json('json_data/tournaments.json')
         for tour in list_tours:
-            if tour.get("id") == tour_id:
+            if tour.get("id") == id:
                 return cls(**tour)
+            
+
+    @classmethod
+    def all_data(cls):
+        lst_tours_json = read_json('json_data/tournaments.json')
+        tournaments_list = []
+        for tournament in lst_tours_json:
+            tr = cls(**tournament)
+            tournaments_list.append(tr)
+
+        return tournaments_list
 
     # save:
-    def save(self):
-        pass
+    def save(self,id=None):
+        lst_tours_json = read_json('json_data/tournaments.json')
+        for tournament in lst_tours_json:
+            if tournament.get('id') == id:
+                tournament.update(self.serialize_data())
+                break
+
+        lst_tours_json.append(self.serialize_data())
+        write_json('json_data/tournaments.json', lst_tours_json)       

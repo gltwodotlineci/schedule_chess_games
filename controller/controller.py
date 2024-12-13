@@ -131,7 +131,7 @@ create and serialize player
 '''
 # List of all players
 def all_players():
-    all_players = read_json('json_data/players.json')
+    all_players = Player.all_data()
     return all_players
 
 
@@ -163,10 +163,8 @@ def create_player(dt):
             validate = False
 
     # saving player to data
-    players = read_json('json_data/players.json')
-    players.append(player.serialize_player())
-    write_json('json_data/players.json',players)
-    return player
+    player.save_dt()
+
 
 
 
