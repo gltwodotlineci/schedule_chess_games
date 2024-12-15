@@ -24,10 +24,10 @@ class Player:
     
 
     @classmethod
-    def from_db(cls, player_id):
+    def from_db(cls, key, player_id):
         list_players = read_json('json_data/players.json')
         for player in list_players:
-            if player.get('id') == player_id:
+            if player.get(key) == player_id:
                 return cls(**player)
 
     
@@ -46,8 +46,10 @@ class Player:
         lst_players_json = read_json('json_data/players.json')
         for player in lst_players_json:
             if player.get('id') == id:
-                player.update(self.serialize_player())# = self.serialize_player()
+                player.update(self.serialize_player())
                 break
-
-        lst_players_json.append(self.serialize_player())
+            elif id == None:
+                lst_players_json.append(self.serialize_player())
+                break
+            
         write_json('json_data/players.json',lst_players_json)

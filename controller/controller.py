@@ -1,5 +1,9 @@
 import json
 import random
+from datetime import datetime
+
+from views.choose_dt import choos_fed_nb
+
 from models.player import Player
 from models.planing_game import PlaningGame
 from models.round import Round
@@ -21,8 +25,7 @@ def write_json(path,list_dict):
     with open(path, 'w') as f:
         json.dump(list_dict, f, indent=2)
 
-
-
+today = datetime.now().strftime("%d-%m-%Y-%H-%M")
 '''
 Round
 '''
@@ -31,17 +34,31 @@ def all_rounds():
     return list_rounds
 
 
-def create_round(round_nb,tournament_id=None):
-    round_nb = round_nb[0]
-    if tournament_id == None:
-        tournament_id = input("Tournament id: ")
-    validated_data = ValidateRound(tournament_id, f"Round {round_nb}",int(round_nb))
-    round = Round(validated_data.tournament_id, validated_data.name, validated_data.number)
-    # add round to json
-    rounds_list = read_json('json_data/rounds.json')
-    rounds_list.append(round.serialize_round())
-    write_json('json_data/rounds.json',rounds_list)
+def create_round(tournament,starting_date, ending_date=None):
+    round_nb = len(tournament.rounds_list) + 1
+    data = {
+        "tournament_id": tournament.id,
+        "name": f"Round {round_nb}",
+        "number": round_nb,
+        "starting_date_hour": starting_date
+    }
+    validate = False
+    while validate is not True:
+        try:
+            validated_data = ValidateRound(**data)
+            round = Round(
+                validated_data.tournament_id,
+                validated_data.name,
+                validated_data.number,
+                validated_data.starting_date_hour
+            )
+            validate = True
+        except ValueError as e:
+            print(f"Error: {e}")
+            validate = False
+    round.save()
     return round
+
 
 
 def add_round_2_tour(round):
@@ -68,18 +85,45 @@ def list_tournaments_players():
     return data
 
 def create_tournament(given_dt):
-    valid_dt = ValidateTournament(**given_dt)
-    tournement = Tournament(
-        valid_dt.name,
-        valid_dt.place,
-        valid_dt.starting_date,
-        valid_dt.ending_date,
-        valid_dt.description
+
+    try:
+        valid_dt = ValidateTournament(**given_dt)
+        tournament = Tournament(
+            valid_dt.name,
+            valid_dt.place,
+            valid_dt.starting_date,
+            valid_dt.ending_date,
+            valid_dt.description,
+            valid_dt.nb_players
         )
-    tournament_list = read_json('json_data/tournaments.json')
-    tournament_list.append(tournement.serialize_data())
-    write_json('json_data/tournaments.json', tournament_list)
-    return tournement
+        validate = True
+    except ValueError as e:
+            print(f"Error: {e}")
+            validate = False
+
+    while validate != True:
+        print("Remember the format of the date: 'dd-mm-yyyy' ")
+        given_dt['starting_date'] = input("write again the starting date please: ")
+        given_dt['ending_date'] = input("write again the ending date please: ")
+        given_dt['nb_players'] = input("write again the number of players please: ")
+
+        try:
+            valid_dt = ValidateTournament(**given_dt)
+            tournament = Tournament(
+            valid_dt.name,
+            valid_dt.place,
+            valid_dt.starting_date,
+            valid_dt.ending_date,
+            valid_dt.description,
+            valid_dt.nb_players
+            )
+        except ValueError as e:
+            print(e)
+            validate = False
+
+    tournament.save()
+    return tournament
+
 
 def edit_tournament(tour_id,attribute,value):
     list_tours = read_json('json_data/tournaments.json')
@@ -127,7 +171,6 @@ def add_player2_tour(given_tour, player):
 
 '''
 Players part:
-create and serialize player
 '''
 # List of all players
 def all_players():
@@ -168,6 +211,33 @@ def create_player(dt):
 
     # saving player to data
     player.save_dt()
+
+#selecting player from it's 
+
+
+# ad multiple players
+def add_players2_tour(tour):
+    nb_pl = int(tour.nb_players)
+    players = []
+    for i in range(1,nb_pl+1):
+        valide = False
+        while valide == False:
+            try:
+                fed_choosed = choos_fed_nb()
+                pl = Player.from_db('fin',fed_choosed)
+                valide = True
+                players.append(pl.id)
+            except ValueError:
+                print("Please check again your choice")
+                print("It seams the FED Id does not exist")
+                valide = False
+
+        if i == nb_pl:
+            print("   ")
+            print(f"You registerd {i} players on the tournament {tour.name}")
+    
+    tour.players_list = players
+    tour.save(tour.id)
 
 
 '''

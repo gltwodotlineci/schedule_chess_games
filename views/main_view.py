@@ -1,10 +1,11 @@
 from views.choose_dt import send_dt_tourn
-from views.choose_dt import send_dt_round
 from views.choose_dt import send_dt_player
 from views.choose_dt import select_or_create
 from views.choose_dt import select_tournament
 from views.choose_dt import choosed_tournament
 from views.choose_dt import ask_add_player
+from views.choose_dt import create_round_4new_tour
+from views.choose_dt import confirm_creation
 
 from views.lists_values import show_all_tournaments
 from views.lists_values import show_all_players
@@ -15,6 +16,7 @@ from controller.controller import create_tournament
 from controller.controller import create_round
 from controller.controller import create_player
 from controller.controller import add_round_2_tour
+from controller.controller import add_players2_tour
 
 
 def welcom_header(data):
@@ -32,7 +34,7 @@ def create_round_from_tour(tour):
     round_nbs = 4 #tour.round_numbers
     print("You can choose the round number to create a round")
     for x in range(1,round_nbs+1):
-        round_nb = send_dt_round(x)
+        round_nb = "replaced dt"# send_dt_round(x)
         round = create_round(round_nb, tour_id)
         add_round_2_tour(round)
         contin = input('write "continu" ')
@@ -46,6 +48,11 @@ def create_round_from_tour(tour):
             print("You created the last round for this tournament")
 
 
+#---------------- Round Test part
+
+
+
+#------------------
 
 
 def main_page():
@@ -67,6 +74,27 @@ def main_page():
         choosed_tournament(tour)
     elif choice1 == '3':
         print(" ")
-        print("Lets create some Tournaments ! ")
-        dt_tournament = send_dt_tourn()
-        tour = create_tournament(dt_tournament)
+        # print("Lets create some Tournaments ! ")
+        # dt_tournament = send_dt_tourn()
+        # tour = create_tournament(dt_tournament)
+        # print(" ")
+        # print("From the next player list you can choose the players for this tournament")
+        # print("The number of players must be even. ")
+        # print(" ")
+        # show_all_players()
+        # print("_________________")
+        # add_players2_tour(tour)
+        # print(" ")
+        choice = create_round_4new_tour()
+        if choice == 'back':
+            return True
+        from models.tournament import Tournament
+        tour = Tournament.from_db("150Cartier_Goyave")
+        choice = confirm_creation(len(tour.rounds_list))
+        if choice == 'back':
+            return True
+        
+        
+
+
+        input("buliding rounds part")

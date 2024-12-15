@@ -1,6 +1,7 @@
 from models.support_classes import read_json
-from models.support_classes import write_json
 from models.support_classes import create_id
+from models.support_classes import select_from_db
+from models.support_classes import save_support
 
 class Tournament:
     def __init__(
@@ -10,6 +11,7 @@ class Tournament:
             starting_date,
             ending_date,
             description,
+            nb_players,
             id = None,
             rounds_list = [],
             players_list = [],
@@ -22,6 +24,7 @@ class Tournament:
         self.starting_date = starting_date      
         self.ending_date = ending_date
         self.description = description
+        self.nb_players = nb_players
         self.rounds_list = rounds_list
         self.players_list = players_list
         self.round_numbers = round_numbers
@@ -35,20 +38,20 @@ class Tournament:
             'place': self.place,
             'starting_date': self.starting_date,
             'ending_date': self.ending_date,
+            'nb_players': self.nb_players,
             'description': self.description,
             'rounds_list': self.rounds_list,
             'players_list': self.players_list,
             'round_numbers': self.round_numbers,
             'actual_round_number': self.actual_round_number
         }
+    
 
 
     @classmethod
     def from_db(cls, id):
-        list_tours = read_json('json_data/tournaments.json')
-        for tour in list_tours:
-            if tour.get("id") == id:
-                return cls(**tour)
+        tournament = select_from_db("json_data/tournaments.json",id)
+        return cls(**tournament)
             
 
     @classmethod
@@ -62,13 +65,7 @@ class Tournament:
         return tournaments_list
 
 
-    # save:
+    # save  method
     def save(self,id=None):
-        lst_tours_json = read_json('json_data/tournaments.json')
-        for tournament in lst_tours_json:
-            if tournament.get('id') == id:
-                tournament.update(self.serialize_data())
-                break
-
-        lst_tours_json.append(self.serialize_data())
-        write_json('json_data/tournaments.json', lst_tours_json)       
+        #factoried save function
+        save_support("json_data/tournaments.json", self.serialize_data(),id)
