@@ -5,7 +5,10 @@ from models.support_classes import create_id
 class Player:
     def __init__(self,fin, first_name, last_name, birth_date,id = None, points=0.0):
         self.fin = fin
-        self.id = create_id(first_name, last_name, id)
+        if id is not None:
+            self.id = id
+        else:
+            self.id = create_id(first_name, last_name, id)
         self.first_name = first_name
         self.last_name = last_name
         self.birth_date = birth_date

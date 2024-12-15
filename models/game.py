@@ -4,8 +4,9 @@ def create_id():
 
 
 class Game():
-    def __init__(self, player1, player2, round_nb):
+    def __init__(self,round_id, player1, player2, round_nb):
         self.id = create_id()
+        self.round_id = round_id,
         self.player1_result = [player1, None]
         self.player2_result = [player2, None]
         self.round_nb = round_nb

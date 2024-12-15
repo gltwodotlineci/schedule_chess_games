@@ -92,6 +92,23 @@ def create_round_4new_tour():
     return verify_choice(content,['yes','back'])
 
 
+# asking for date and time
+def date_and_time(existing_round):
+    print(" ")
+    print(f"You can start choosing the date and the hour of the Round {existing_round+1}")
+    print(f"if you do not want to give the ending date-hour of the Round {existing_round+1}")
+    print("It will be filled at the end")
+    print("Remember the date-hour format must be like this: 'dd-mm-yyyy-HH-MM'")
+    starting_date = input(" Please enter the date and the hour of the starting date ")
+    data =  {
+        'starting_date_hour': starting_date,
+        'ending_date_hour': None,
+        'name':f"Round {existing_round+1}",
+        'number': existing_round+1
+    }
+    return data
+
+
 #asking to create the 1st, second, third or n-th round
 def confirm_creation(existing_rund):
     print(" ")
@@ -100,17 +117,10 @@ def confirm_creation(existing_rund):
     choice = verify_choice(content,['yes','no'])
     if choice == 'no':
         return 'back'
-    date_and_time(existing_rund)
-
-# asking for date and time
-def date_and_time(date):
-    print(" ")
-    print(f"You can start choosing the date and the hour of the Round {date+1}")
-    print(f"if you do not want to give the ending date-hour of the Round {date+1}")
-    print("It will be filled at the end")
-    print("Remember the date-hour format must be like this: 'dd-mm-yyyy-HH-MM'")
-    stating_date = input(" Please enter the date and the hour of the starting date ")
-    print(stating_date)
+    # date_and_time(existing_rund)
+    # print(date_and_time)
+    # data = date_and_time
+    return choice
 
 
 def select_round(round_nb):

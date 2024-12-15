@@ -1,6 +1,7 @@
 import json
 import random
 from datetime import datetime
+from operator import attrgetter
 
 from views.choose_dt import choos_fed_nb
 
@@ -26,6 +27,7 @@ def write_json(path,list_dict):
         json.dump(list_dict, f, indent=2)
 
 today = datetime.now().strftime("%d-%m-%Y-%H-%M")
+
 '''
 Round
 '''
@@ -34,14 +36,14 @@ def all_rounds():
     return list_rounds
 
 
-def create_round(tournament,starting_date, ending_date=None):
-    round_nb = len(tournament.rounds_list) + 1
-    data = {
-        "tournament_id": tournament.id,
-        "name": f"Round {round_nb}",
-        "number": round_nb,
-        "starting_date_hour": starting_date
-    }
+def create_round(data):#(tournament,starting_date, ending_date=None):
+    # round_nb = len(tournament.rounds_list) + 1
+    # data = {
+    #     "tournament_id": tournament.id,
+    #     "name": f"Round {round_nb}",
+    #     "number": round_nb,
+    #     "starting_date_hour": starting_date
+    # }
     validate = False
     while validate is not True:
         try:
@@ -212,7 +214,18 @@ def create_player(dt):
     # saving player to data
     player.save_dt()
 
-#selecting player from it's 
+
+#selecting player from it's
+def order_players(players_id):
+    lst_players = []
+    for pl_id in players_id:
+        player = Player.from_db('id',pl_id)
+        lst_players.append(player)
+    
+    # ordering the players from last name
+    lst_players.sort(key=attrgetter('last_name'))
+    return lst_players
+
 
 
 # ad multiple players
@@ -252,6 +265,19 @@ def simulate_winner():
 def all_games():
     games = read_json('json_data/games.json')
     return games
+
+def organize_game(players):
+    nb = len(players)
+    game = []
+    games = []
+    for i in range(0,nb,2):
+        game.append(players[i])
+        game.append(players[i+1])
+        games.append(game)
+        game = []
+
+    return games
+
 
 
 # givin games by round

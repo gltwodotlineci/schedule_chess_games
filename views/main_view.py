@@ -6,6 +6,7 @@ from views.choose_dt import choosed_tournament
 from views.choose_dt import ask_add_player
 from views.choose_dt import create_round_4new_tour
 from views.choose_dt import confirm_creation
+from views.choose_dt import date_and_time
 
 from views.lists_values import show_all_tournaments
 from views.lists_values import show_all_players
@@ -16,6 +17,8 @@ from controller.controller import create_tournament
 from controller.controller import create_round
 from controller.controller import create_player
 from controller.controller import add_round_2_tour
+from controller.controller import create_round
+from controller.controller import order_players
 from controller.controller import add_players2_tour
 
 
@@ -90,11 +93,17 @@ def main_page():
             return True
         from models.tournament import Tournament
         tour = Tournament.from_db("150Cartier_Goyave")
-        choice = confirm_creation(len(tour.rounds_list))
-        if choice == 'back':
-            return True
+        existing_round = len(tour.rounds_list)
+        # choice = confirm_creation(existing_round)
+        # if choice == 'back':
+        #     return True
+        # data = date_and_time(existing_round)
+        # round = create_round(data)
         
-        
-
+        sorted_players = order_players(tour.players_list)       
+        from controller.controller import organize_game
+        games = organize_game(sorted_players)
+        for game in games:
+            print(f"{game[0].first_name} {game[0].last_name} VS {game[1].first_name} {game[1].last_name}")
 
         input("buliding rounds part")

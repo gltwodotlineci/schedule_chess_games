@@ -25,7 +25,7 @@ def create_id(x=None,y=None,id=None):
         else:
             if y is None:
                 return rand + x
-            return rand + x + y
+            return rand + x.join(' ','_') + y.join(' ','_')
     return id
 
 

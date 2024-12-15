@@ -18,7 +18,10 @@ class Tournament:
             round_numbers = 4,
             actual_round_number = 0
             ):
-        self.id = create_id(name)
+        if id is not None:
+            self.id = id
+        else:
+            self.id = create_id(name)
         self.name = name
         self.place = place
         self.starting_date = starting_date      
@@ -52,7 +55,7 @@ class Tournament:
     def from_db(cls, id):
         tournament = select_from_db("json_data/tournaments.json",id)
         return cls(**tournament)
-            
+
 
     @classmethod
     def all_data(cls):
