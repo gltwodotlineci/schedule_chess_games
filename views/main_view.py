@@ -19,6 +19,7 @@ from controller.controller import create_player
 from controller.controller import add_round_2_tour
 from controller.controller import create_round
 from controller.controller import order_players
+from controller.controller import organize_game
 from controller.controller import add_players2_tour
 
 
@@ -75,35 +76,45 @@ def main_page():
         show_all_tournaments()
         tour = select_tournament(all_tournaments())
         choosed_tournament(tour)
+        first_round = tour.rounds_list[0]
+
+        from controller.controller import games_by_round
+        raunds_games = games_by_round(first_round)
+        print(raunds_games)
     elif choice1 == '3':
         print(" ")
-        # print("Lets create some Tournaments ! ")
-        # dt_tournament = send_dt_tourn()
-        # tour = create_tournament(dt_tournament)
-        # print(" ")
-        # print("From the next player list you can choose the players for this tournament")
-        # print("The number of players must be even. ")
-        # print(" ")
-        # show_all_players()
-        # print("_________________")
-        # add_players2_tour(tour)
-        # print(" ")
+        print("Lets create some Tournaments ! ")
+        dt_tournament = send_dt_tourn()
+        tour = create_tournament(dt_tournament)
+        print(" ")
+        print("From the next player list you can choose the players for this tournament")
+        print("The number of players must be even. ")
+        print(" ")
+        show_all_players()
+        print("_________________")
+        add_players2_tour(tour)
+        print(" ")
         choice = create_round_4new_tour()
         if choice == 'back':
             return True
-        from models.tournament import Tournament
-        tour = Tournament.from_db("150Cartier_Goyave")
         existing_round = len(tour.rounds_list)
-        # choice = confirm_creation(existing_round)
-        # if choice == 'back':
-        #     return True
-        # data = date_and_time(existing_round)
-        # round = create_round(data)
-        
+        choice = confirm_creation(existing_round)
+        if choice == 'back':
+            return True
+        data = date_and_time(existing_round)
+        data['tournament_id'] = tour.id
+        round = create_round(data)
+        '''
+        ordering the players from last name and creating games based on round
+        adding the games on the round list field
+        '''
         sorted_players = order_players(tour.players_list)       
-        from controller.controller import organize_game
-        games = organize_game(sorted_players)
-        for game in games:
-            print(f"{game[0].first_name} {game[0].last_name} VS {game[1].first_name} {game[1].last_name}")
+        games = organize_game(sorted_players, round)
+        # adding list games to the round
+        lst_games_id = [x.id for x in games]
+        round.games_list = lst_games_id
+        round.save(round.id)
+
+
 
         input("buliding rounds part")

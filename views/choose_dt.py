@@ -55,6 +55,12 @@ def choosed_tournament(tournament):
             player = Player.from_db('id',pl_id)
             print(f"{player.first_name} {player.last_name}")
 
+    if tournament.rounds_list != []:
+        print("The rounds for this turnament are.")
+        for i in range(1,len(tournament.rounds_list)+1):
+            print(f"Round {i}")
+
+
 '''
 Players
 '''

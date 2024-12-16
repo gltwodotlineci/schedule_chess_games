@@ -13,7 +13,7 @@ def write_json(path,list_dict):
         json.dump(list_dict, f, indent=2)
 
 
-def create_id(x=None,y=None,id=None):
+def create_id(id=None,x=None,y=None):
     nb_lst = 9
     if x is not None:
         nb_lst = 4
@@ -25,7 +25,7 @@ def create_id(x=None,y=None,id=None):
         else:
             if y is None:
                 return rand + x
-            return rand + x.join(' ','_') + y.join(' ','_')
+            return rand + x.replace(' ','') + y.replace(' ','')
     return id
 
 
@@ -40,13 +40,14 @@ def select_from_db(json_path, id):
 # Save method factorized
 def save_support(json_path, serialized_data,id=None):
     list_dt_json = read_json(json_path)
-    for element in list_dt_json:
-        if element.get('id') == id:
-            element.update(serialized_data)
-            break
-        else:
-            list_dt_json.append(serialized_data)
-            break
+    if id is None:
+        list_dt_json.append(serialized_data)
+    else:
+        for element in list_dt_json:
+            if element.get('id') == id:
+                element.update(serialized_data)
+                break
+
     write_json(json_path,list_dt_json)
 
 

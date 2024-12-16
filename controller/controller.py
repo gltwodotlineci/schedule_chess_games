@@ -36,14 +36,7 @@ def all_rounds():
     return list_rounds
 
 
-def create_round(data):#(tournament,starting_date, ending_date=None):
-    # round_nb = len(tournament.rounds_list) + 1
-    # data = {
-    #     "tournament_id": tournament.id,
-    #     "name": f"Round {round_nb}",
-    #     "number": round_nb,
-    #     "starting_date_hour": starting_date
-    # }
+def create_round(data):
     validate = False
     while validate is not True:
         try:
@@ -226,6 +219,9 @@ def order_players(players_id):
     lst_players.sort(key=attrgetter('last_name'))
     return lst_players
 
+def add_players2_round(round, players):
+    round.games_list = players
+
 
 
 # ad multiple players
@@ -266,29 +262,40 @@ def all_games():
     games = read_json('json_data/games.json')
     return games
 
-def organize_game(players):
+def organize_game(players,round):
     nb = len(players)
-    game = []
     games = []
     for i in range(0,nb,2):
-        game.append(players[i])
-        game.append(players[i+1])
+        game  = Game(
+            round.id,
+            players[i].id,
+            players[i+1].id,
+            round.number,
+            )
+        game.save()
         games.append(game)
-        game = []
 
     return games
 
 
 
 # givin games by round
-def gemes_by_round(round_nb):
-    games = read_json('json_data/preparing_game.json')
-    gemes_round = []
-    for game in games:
-        if game.get('round_number') == round_nb:
-            gemes_round.append(game)
+def games_by_round(round_nb):
+    games_lst = []
+    for game in Game.all_data():
+        if game.round_id == round_nb:
+            games_lst.append(game)
+
+    return games_lst
+
+
+    # games = read_json('json_data/preparing_game.json')
+    # gemes_round = []
+    # for game in games:
+    #     if game.get('round_number') == round_nb:
+    #         gemes_round.append(game)
     
-    return gemes_round
+    # return gemes_round
 
 
 # make the planing of thee games
@@ -343,7 +350,7 @@ def add_after_game():
     
     # if given_round.get('number') == given_round:
     #     players = read_json("json_data/players.json")
-    games = gemes_by_round(1)
+    games = games_by_round(1)
     after_games = []
     results = []
     games_for_plyers = []
