@@ -7,6 +7,10 @@ from views.choose_dt import ask_add_player
 from views.choose_dt import create_round_4new_tour
 from views.choose_dt import confirm_creation
 from views.choose_dt import date_and_time
+from views.choose_dt import choos_winner
+
+from views.show import view_round_contest
+from views.show import add_winner_instruct
 
 from views.lists_values import show_all_tournaments
 from views.lists_values import show_all_players
@@ -21,6 +25,10 @@ from controller.controller import create_round
 from controller.controller import order_players
 from controller.controller import organize_game
 from controller.controller import add_players2_tour
+from controller.controller import games_by_round
+from controller.controller import show_challanges
+from controller.controller import add_results
+from controller.controller import add_points_to_players
 
 
 def welcom_header(data):
@@ -55,7 +63,6 @@ def create_round_from_tour(tour):
 #---------------- Round Test part
 
 
-
 #------------------
 
 
@@ -76,11 +83,19 @@ def main_page():
         show_all_tournaments()
         tour = select_tournament(all_tournaments())
         choosed_tournament(tour)
+        # Geting round and creating games for round        
         first_round = tour.rounds_list[0]
-
-        from controller.controller import games_by_round
         raunds_games = games_by_round(first_round)
-        print(raunds_games)
+        players = show_challanges(raunds_games)
+        view_round_contest(players)
+        add_winner_instruct()
+        winners = choos_winner(players)
+        games_res = add_results(winners,raunds_games)
+        add_points_to_players(games_res)
+
+
+
+        
     elif choice1 == '3':
         print(" ")
         print("Lets create some Tournaments ! ")

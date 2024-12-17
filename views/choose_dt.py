@@ -152,3 +152,18 @@ write 'y' if you want to add this player to the tournament")
             list_players.append(player.get('id'))
     
     return list_players
+
+
+'''
+Game
+'''
+def choos_winner(data):
+    winners = []
+    for pl in data:
+        p1 = f"player1 {pl[0].first_name} {pl[0].last_name} "
+        p2 = f"player2 {pl[1].first_name} {pl[1].last_name}"
+        print(f"{p1} VS {p2}")
+        winner = input("Choose 1 ,2 or 3 ")
+        winners.append(winner)
+
+    return winners

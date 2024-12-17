@@ -1,5 +1,4 @@
 from views.main_view import main_page
-from models.support_classes import today_str
 
 #------
 # from models.game import Game

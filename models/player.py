@@ -47,5 +47,4 @@ class Player:
 
     # save method
     def save_dt(self, id=None):
-        save_support("json_data/rounds.json", self.serialize_player())
-        
+        save_support("json_data/players.json", self.serialize_player(),id)       

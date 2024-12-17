@@ -1,6 +1,5 @@
 import random
 import json
-from datetime import datetime
 # method to read json
 def read_json(path):
     with open(path, 'r') as f:
@@ -49,7 +48,3 @@ def save_support(json_path, serialized_data,id=None):
                 break
 
     write_json(json_path,list_dt_json)
-
-
-def today_str():
-    return datetime.now().strftime("%d-%m-%Y-%H-%M")

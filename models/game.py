@@ -16,7 +16,7 @@ class Game():
     @property
     def player1(self):
         return self.player1_result[0]
-    
+
     @property
     def player2(self):
         return self.player2_result[0]
@@ -26,6 +26,9 @@ class Game():
             self.player1_result[1] = True
         elif winner == self.player2:
             self.player2_result[1] = True
+        elif winner == "None":
+            self.player1_result[1] = False
+            self.player2_result[1] = False
         
     def serialize_data(self):
         return {
@@ -35,7 +38,8 @@ class Game():
             'player2_result': self.player2_result,
             'round_nb': self.round_nb
         }
-    
+
+
     @classmethod
     def from_db(cls,id):
         game = select_from_db("json_data/games.json",id)
@@ -47,7 +51,6 @@ class Game():
             'round_nb': game.get('round_nb')
         }
         return cls(**data)
-    
 
     # send all data method
     @classmethod
@@ -67,7 +70,7 @@ class Game():
             games_list.append(gm)
 
         return games_list
-    
+
 
     #save method
     def save(self, id=None):       
