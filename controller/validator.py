@@ -1,3 +1,5 @@
+import datetime
+import re
 from models.player import Player
 from models.round import Round
 from models.tournament import Tournament
@@ -20,15 +22,18 @@ class ValidatePlayer(Player):
 
     @birth_date.setter
     def birth_date(self, val):
-        if val[2] != '-' or val[5] != '-' or len(val) != 10:
-            raise ValueError("Wrong date format, please retry with this format 'dd-mm-yyyy' ")
-        else:
+        try:
+            datetime.datetime.strptime(val,"%d-%m-%Y")
             self._birth_date = val
+        except ValueError as e:
+            raise ValueError("Wrong date format, please retry with this format 'dd-mm-yyyy' ")
+        
 
 
     @fin.setter
     def fin(self,nb):
-        if nb[0:2].isdigit() or nb[2:].isdigit() == False or len(nb) != 7:
+        # regex
+        if not re.match(r"[A-Z]{2}\d{5}",nb):
             raise ValueError("Wrong 'fin' format, please retray with the format 'AB12345' " )
         else:
             self._fin = nb
@@ -84,7 +89,7 @@ class ValidateTournament(Tournament):
             self._starting_date = val
         
 
-    @starting_date.setter
+    @ending_date.setter
     def ending_date(self, val):
         if val[2] != '-' or val[5] != '-' or len(val) != 10:
             raise ValueError("Wrong date format, please retry with this format 'dd-mm-yyyy' ")

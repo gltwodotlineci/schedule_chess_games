@@ -43,23 +43,6 @@ def select_tournament(tours):
     nb_tour = verify_choice(content,nb_tours)
     return tours[int(nb_tour)-1]
 
-def choosed_tournament(tournament):
-    print(f"You selected {tournament.name} at {tournament.place}")
-    print(f"From {tournament.starting_date} to {tournament.ending_date}")
-        
-    if tournament.players_list == []:
-        print("There are no players registred on this tournaments")
-    else:
-        print("The players registred at this turnament are: ")
-        for pl_id in tournament.players_list:
-            player = Player.from_db('id',pl_id)
-            print(f"{player.first_name} {player.last_name}")
-
-    if tournament.rounds_list != []:
-        print("The rounds for this turnament are.")
-        for i in range(1,len(tournament.rounds_list)+1):
-            print(f"Round {i}")
-
 
 '''
 Players
@@ -159,11 +142,13 @@ Game
 '''
 def choos_winner(data):
     winners = []
+    content = "Choose 1 ,2 or 3"
     for pl in data:
         p1 = f"player1 {pl[0].first_name} {pl[0].last_name} "
         p2 = f"player2 {pl[1].first_name} {pl[1].last_name}"
         print(f"{p1} VS {p2}")
         winner = input("Choose 1 ,2 or 3 ")
+        winner = verify_choice(content,['1','2','3'])
         winners.append(winner)
 
     return winners

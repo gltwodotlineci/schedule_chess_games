@@ -2,7 +2,7 @@ from views.choose_dt import send_dt_tourn
 from views.choose_dt import send_dt_player
 from views.choose_dt import select_or_create
 from views.choose_dt import select_tournament
-from views.choose_dt import choosed_tournament
+from views.show import choosed_tournament
 from views.choose_dt import ask_add_player
 from views.choose_dt import create_round_4new_tour
 from views.choose_dt import confirm_creation
@@ -38,29 +38,8 @@ def welcom_header(data):
     print('                ')
 
 
-def create_round_from_tour(tour):
-    if isinstance(tour,str):
-        tour_id = tour
-    else:
-        tour_id = tour.id
-    round_nbs = 4 #tour.round_numbers
-    print("You can choose the round number to create a round")
-    for x in range(1,round_nbs+1):
-        round_nb = "replaced dt"# send_dt_round(x)
-        round = create_round(round_nb, tour_id)
-        add_round_2_tour(round)
-        contin = input('write "continu" ')
-        if contin != "continue":
-            return "menu principale"
-        if x < round_nbs:    
-            stop = input("Write 'stop' if you want to stop or write anything if you want to continue ")
-            if stop.lower() == 'stop':
-                break
-        else:
-            print("You created the last round for this tournament")
 
-
-#---------------- Round Test part
+#---------------- Test part
 
 
 #------------------
@@ -92,10 +71,10 @@ def main_page():
         winners = choos_winner(players)
         games_res = add_results(winners,raunds_games)
         add_points_to_players(games_res)
-
-
-
-        
+        #Round 2
+        choosed_tournament(tour, True)
+        print("     ")
+        print("Now you can pass to round two ")       
     elif choice1 == '3':
         print(" ")
         print("Lets create some Tournaments ! ")
@@ -129,7 +108,6 @@ def main_page():
         lst_games_id = [x.id for x in games]
         round.games_list = lst_games_id
         round.save(round.id)
+        input("Write anything if you want to go back ")
 
-
-
-        input("buliding rounds part")
+#-------

@@ -53,6 +53,10 @@ def create_round(data):
         except ValueError as e:
             print(f"Error: {e}")
             validate = False
+    tournament = Tournament.from_db(round.tournament_id)
+    tournament.actual_round_number = round.number
+    tournament.rounds_list.append(round.id)
+    tournament.save(tournament.id)
     round.save()
     return round
 
@@ -77,8 +81,8 @@ def all_tournaments():
 
 def list_tournaments_players():
     data = {}
-    data['tournaments'] = read_json('json_data/tournaments.json')
-    data['players'] = read_json('json_data/players.json')
+    data['tournaments'] = Tournament.all_data()#read_json('json_data/tournaments.json')
+    data['players'] = Player.all_data()#read_json('json_data/players.json')
     return data
 
 def create_tournament(given_dt):
@@ -219,10 +223,12 @@ def order_players(players_id):
     
     # ordering the players from last name
     lst_players.sort(key=attrgetter('last_name'))
+    lst_players.sort(key=attrgetter('points'), reverse=True)
     return lst_players
 
 def add_players2_round(round, players):
     round.games_list = players
+    round.save(round.id)
 
 
 # ad multiple players
@@ -292,6 +298,21 @@ def simulate_winner():
 
 
 def organize_game(players,round):
+    nb = len(players)
+    games = []
+    for i in range(0,nb,2):
+        game  = Game(
+            round.id,
+            players[i].id,
+            players[i+1].id,
+            round.number,
+            )
+        game.save()
+        games.append(game)
+
+    return games
+
+def organize_game_rd2(players,round):
     nb = len(players)
     games = []
     for i in range(0,nb,2):
