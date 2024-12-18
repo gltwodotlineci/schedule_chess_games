@@ -1,6 +1,6 @@
 from views.main_view import main_page
 
-# main_page()
+main_page()
 
 # while True:
 #     main_page()
@@ -9,11 +9,7 @@ from views.main_view import main_page
 
 
 #------
-from models.round import Round
 
-
-gg = Round("tttt id","Round 1",1,"last_name","birth_dt")
-print(gg.__dict__)
 
 
 # players = [

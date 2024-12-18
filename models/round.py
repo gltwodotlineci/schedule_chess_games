@@ -25,7 +25,7 @@ class Round:
 
     def serialize_data(self):
         return {
-            'id': self.id,
+            'id': str(self.id),
             'tournament_id': self.tournament_id,
             'name': self.name,
             'number': self.number,

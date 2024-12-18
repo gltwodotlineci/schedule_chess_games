@@ -15,7 +15,7 @@ class Player:
 
     def serialize_player(self):
         return {
-            'id': self.id,
+            'id': str(self.id),
             'fin': self.fin,
             'first_name': self.first_name,
             'last_name': self.last_name,

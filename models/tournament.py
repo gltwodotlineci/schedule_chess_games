@@ -33,7 +33,7 @@ class Tournament:
 
     def serialize_data(self):
         return {
-            'id': self.id,
+            'id': str(self.id),
             'name': self.name,
             'place': self.place,
             'starting_date': self.starting_date,

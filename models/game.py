@@ -32,7 +32,7 @@ class Game():
         
     def serialize_data(self):
         return {
-            'id': self.id,
+            'id': str(self.id),
             'round_id': self.round_id,
             'player1_result': self.player1_result,
             'player2_result': self.player2_result,

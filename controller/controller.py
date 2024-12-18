@@ -3,8 +3,6 @@ import random
 from datetime import datetime
 from operator import attrgetter
 
-from views.choose_dt import choos_fed_nb
-
 from models.player import Player
 from models.round import Round
 from models.result import ResultGame
@@ -159,13 +157,13 @@ def add_round_2tournement(round_id, tournament_id):
 
 # Adding player id to Taurnement
 # ?????
-def add_player2_tour(given_tour, player):
-    tournaments = read_json('json_data/tournaments.json')
-    for i,tour in enumerate(tournaments):
-        if tour.get('id') == given_tour:#.id:
-            tournaments[i]['players_list'].append(player.id)
+# def add_player2_tour(given_tour, player):
+#     tournaments = read_json('json_data/tournaments.json')
+#     for i,tour in enumerate(tournaments):
+#         if tour.get('id') == given_tour:#.id:
+#             tournaments[i]['players_list'].append(player.id)
 
-    write_json('json_data/tournaments.json',tournaments)
+#     write_json('json_data/tournaments.json',tournaments)
 
 
 
@@ -176,6 +174,31 @@ Players part:
 def all_players():
     all_players = Player.all_data()
     return all_players
+
+# check if fin exists
+def check_fin(data):
+    for fin in Player.all_data():
+        if fin.fin == data:
+            return True
+
+    return False
+
+
+def enter_existing_player(fed_id,tour):
+    count = 0
+    for player_id in tour.players_list:
+        try:
+            Player.from_db('fin',fed_id)
+            count += 1
+        except ValueError:
+            pass
+
+    if count > 0:
+        True
+
+    False
+
+
 
 
 def create_player(dt): 
@@ -230,28 +253,27 @@ def add_players2_round(round, players):
     round.save(round.id)
 
 
-# ad multiple players
-def add_players2_tour(tour):
-    nb_pl = int(tour.nb_players)
-    players = []
-    for i in range(1,nb_pl+1):
-        valide = False
-        while valide == False:
-            try:
-                fed_choosed = choos_fed_nb()
-                pl = Player.from_db('fin',fed_choosed)
-                valide = True
-                players.append(pl.id)
-            except ValueError:
-                print("Please check again your choice")
-                print("It seams the FED Id does not exist")
-                valide = False
 
-        if i == nb_pl:
-            print("   ")
-            print(f"You registerd {i} players on the tournament {tour.name}")
+# ad multiple players
+def add_player2_tour(tour, fed_id):
     
-    tour.players_list = players
+    pl = Player.from_db('fin',fed_id)
+    intermedian = tour.players_list
+    intermedian.append(pl.id)
+    tour.players_list = intermedian
+    
+        # valide = False
+        # while valide is False:
+        #     try:
+        #         pl = Player.from_db('fin',fed_id)
+        #         valide = True
+        #         tour.players_list.append(pl.id)
+
+        #     except ValueError:
+        #         print("Please check again your choice")
+        #         print("It seams the FED Id does not exist")
+        #         valide = False
+
     tour.save(tour.id)
 
 

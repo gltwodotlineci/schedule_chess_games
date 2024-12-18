@@ -1,4 +1,5 @@
-from models.player import Player
+from controller.controller import check_fin
+from controller.controller import enter_existing_player
 
 def verify_choice(condition,options):
     input_var = input(condition)
@@ -57,7 +58,14 @@ def ask_add_player():
 def send_dt_player():
     dt = {}
     print("Please enter the data for the new player")
-    dt['fin'] = input("Enter the FID ID ").upper()
+    given_fin = input("Enter the FED ID ").upper()
+    verify_fin = check_fin(given_fin)
+    # Check if it allredy exists on the DB
+    while verify_fin is True:
+        print("This FED ID allredy exist. Try an other FED ID please ")
+        given_fin = input("Enter an non existent FED ID ").upper()
+        verify_fin = check_fin(given_fin)    
+    dt['fin'] = verify_fin
     dt['first_name'] = input("Enter the first name ")
     dt['last_name'] = input("Enter the last name ")
     dt['birth_date'] = input("Enter the birth date ")
@@ -65,10 +73,26 @@ def send_dt_player():
 
 
 # to choose players
-def choos_fed_nb():
-    print("Exemple of the FED Id nb 'AB12345' ")
-    nb = input("Enter the player's FED number: ")
-    return nb.upper()
+def choos_fed_nb(tour,nb):
+    content = f"Enter the player {nb} FED number: "
+    given_fin = input(content)
+    verify_fin = check_fin(given_fin)
+    # Check if the player allredy exists in Data base
+    while verify_fin is False:
+        print("The FED Id you choosed does not exist")
+        print(" Please make sure you choosed an existant player")
+        given_fin = input(content)
+        verify_fin = check_fin(given_fin)
+
+    # Check if the player is not allredy registerd on the tournament
+    dublant_check = enter_existing_player(given_fin,tour)
+    while dublant_check is True:
+        print("You have allredy registerd this player")
+        given_fin = input(content)
+        dublant_check = enter_existing_player(given_fin,tour)
+
+    
+    return given_fin.upper()
     
 
 '''

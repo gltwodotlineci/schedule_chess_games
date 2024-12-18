@@ -8,6 +8,7 @@ from views.choose_dt import create_round_4new_tour
 from views.choose_dt import confirm_creation
 from views.choose_dt import date_and_time
 from views.choose_dt import choos_winner
+from views.choose_dt import choos_fed_nb
 
 from views.show import view_round_contest
 from views.show import add_winner_instruct
@@ -24,7 +25,7 @@ from controller.controller import add_round_2_tour
 from controller.controller import create_round
 from controller.controller import order_players
 from controller.controller import organize_game
-from controller.controller import add_players2_tour
+from controller.controller import add_player2_tour
 from controller.controller import games_by_round
 from controller.controller import show_challanges
 from controller.controller import add_results
@@ -86,8 +87,14 @@ def main_page():
         print(" ")
         show_all_players()
         print("_________________")
-        add_players2_tour(tour)
+
+        nb_players = int(tour.nb_players)
+        print("Exemple of the FED Id nb 'AB12345' ")
+        for i in range(1,nb_players+1):
+            add_player2_tour(tour,choos_fed_nb(tour,i))
+        
         print(" ")
+        
         choice = create_round_4new_tour()
         if choice == 'back':
             return True
