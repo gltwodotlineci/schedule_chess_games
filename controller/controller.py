@@ -6,7 +6,6 @@ from operator import attrgetter
 from views.choose_dt import choos_fed_nb
 
 from models.player import Player
-from models.planing_game import PlaningGame
 from models.round import Round
 from models.result import ResultGame
 from models.tournament import Tournament

@@ -1,5 +1,7 @@
 import random
 import json
+import uuid
+
 # method to read json
 def read_json(path):
     with open(path, 'r') as f:
@@ -11,21 +13,11 @@ def write_json(path,list_dict):
     with open(path, 'w') as f:
         json.dump(list_dict, f, indent=2)
 
-
-def create_id(id=None,x=None,y=None):
-    nb_lst = 9
-    if x is not None:
-        nb_lst = 4
-
-    if id == None:
-        rand = ''.join([str(random.randint(0,9)) for a in range(1,nb_lst)])
-        if x is None:
-            return rand
-        else:
-            if y is None:
-                return rand + x
-            return rand + x.replace(' ','') + y.replace(' ','')
-    return id
+# create an uuid
+def create_id(id=None):
+    if id:
+        return id
+    return uuid.uuid4()
 
 
 #select method factorized

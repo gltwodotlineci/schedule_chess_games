@@ -11,14 +11,11 @@ class Round:
             name,
             number,
             starting_date_hour,
-            id = None,
             ending_date_hour = None,
+            id = None,
             games_list = []
             ):
-        if id is not None:
-            self.id = id
-        else:
-            self.id = create_id()
+        self.id = create_id(id)
         self.tournament_id = tournament_id
         self.name = name
         self.number = number

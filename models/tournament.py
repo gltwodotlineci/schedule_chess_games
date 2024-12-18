@@ -18,10 +18,7 @@ class Tournament:
             round_numbers = 4,
             actual_round_number = 0
             ):
-        if id is not None:
-            self.id = id
-        else:
-            self.id = create_id(name)
+        self.id = create_id(id)
         self.name = name
         self.place = place
         self.starting_date = starting_date      
