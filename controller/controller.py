@@ -155,18 +155,6 @@ def add_round_2tournement(round_id, tournament_id):
     write_json('json_data/tournaments.json', list_tournament)
     
 
-# Adding player id to Taurnement
-# ?????
-# def add_player2_tour(given_tour, player):
-#     tournaments = read_json('json_data/tournaments.json')
-#     for i,tour in enumerate(tournaments):
-#         if tour.get('id') == given_tour:#.id:
-#             tournaments[i]['players_list'].append(player.id)
-
-#     write_json('json_data/tournaments.json',tournaments)
-
-
-
 '''
 Players part:
 '''
@@ -185,18 +173,12 @@ def check_fin(data):
 
 
 def enter_existing_player(fed_id,tour):
-    count = 0
     for player_id in tour.players_list:
-        try:
-            Player.from_db('fin',fed_id)
-            count += 1
-        except ValueError:
-            pass
+        player = Player.from_db('id',player_id)
+        if player.fin == fed_id:
+            return True
 
-    if count > 0:
-        True
-
-    False
+    return False
 
 
 
@@ -256,11 +238,9 @@ def add_players2_round(round, players):
 
 # ad multiple players
 def add_player2_tour(tour, fed_id):
-    
     pl = Player.from_db('fin',fed_id)
-    intermedian = tour.players_list
-    intermedian.append(pl.id)
-    tour.players_list = intermedian
+    tour.players_list.append(pl.id)
+    
     
         # valide = False
         # while valide is False:
@@ -274,7 +254,7 @@ def add_player2_tour(tour, fed_id):
         #         print("It seams the FED Id does not exist")
         #         valide = False
 
-    tour.save(tour.id)
+    tour.save(str(tour.id))
 
 
 def refac_if__game(player_result):

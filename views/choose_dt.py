@@ -76,22 +76,19 @@ def send_dt_player():
 def choos_fed_nb(tour,nb):
     content = f"Enter the player {nb} FED number: "
     given_fin = input(content)
+    # if player allredy exists
     verify_fin = check_fin(given_fin)
-    # Check if the player allredy exists in Data base
-    while verify_fin is False:
-        print("The FED Id you choosed does not exist")
-        print(" Please make sure you choosed an existant player")
+    # Verify if there is no dublant
+    doublant_check = enter_existing_player(given_fin,tour)
+    
+    while verify_fin is False or doublant_check is True:
+        print("Check your FED Id choice! Two possible errors.") 
+        print("   - 1. The FED Id does not exist on your playr list")
+        print("   - 2. The player is allredy registerd in your tournament")
         given_fin = input(content)
         verify_fin = check_fin(given_fin)
+        doublant_check = enter_existing_player(given_fin,tour)
 
-    # Check if the player is not allredy registerd on the tournament
-    dublant_check = enter_existing_player(given_fin,tour)
-    while dublant_check is True:
-        print("You have allredy registerd this player")
-        given_fin = input(content)
-        dublant_check = enter_existing_player(given_fin,tour)
-
-    
     return given_fin.upper()
     
 

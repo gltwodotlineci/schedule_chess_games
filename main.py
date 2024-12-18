@@ -1,6 +1,6 @@
 from views.main_view import main_page
 
-main_page()
+# main_page()
 
 # while True:
 #     main_page()
@@ -8,7 +8,17 @@ main_page()
 
 
 
-#------
+# ------
+from models.round import Round
+from controller.validator import ValidateRound
+data = {
+    'tournament_id':'',
+    'name':'',
+    'number':'',
+    'starting_date_hour':'11-11-1111-11-11',
+    
+        }
+rd = Round(1,2,3,4)
 
 
 
