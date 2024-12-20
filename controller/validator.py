@@ -33,7 +33,7 @@ class ValidatePlayer(Player):
     @fin.setter
     def fin(self,nb):
         # regex
-        if not re.match(r"[A-Z]{2}\d{5}",nb):
+        if bool(re.match(r"^[A-Z]{2}\d{5}$",nb)) is False:
             raise ValueError("Wrong 'fin' format, please retray with the format 'AB12345' " )
         else:
             self._fin = nb
@@ -42,9 +42,9 @@ class ValidatePlayer(Player):
 
 # validating the datas for the round creation
 class ValidateRound(Round):
-    def __init__(self, tournament_id, name, number):
+    def __init__(self, tournament_id, name, number, starting_date_hour):
         self._number = number
-        super().__init__(tournament_id, name, number)
+        super().__init__(tournament_id, name, number, starting_date_hour)
 
     @property
     def number(self):

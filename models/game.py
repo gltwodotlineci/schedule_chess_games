@@ -6,20 +6,23 @@ from models.support_classes import create_id
 
 
 class Game():
-    def __init__(self,round_id, player1, player2, round_nb,id=None):
+    def __init__(self,round_id, player1, player2, round_nb, res_p1=None, res_p2=None, id=None):
         self.id = create_id(id)
         self.round_id = round_id
-        self.player1_result = [player1, None]
-        self.player2_result = [player2, None]
+        self.player1_result = [player1, res_p1]
+        self.player2_result = [player2, res_p2]
         self.round_nb = round_nb
+
 
     @property
     def player1(self):
         return self.player1_result[0]
 
+
     @property
     def player2(self):
         return self.player2_result[0]
+
 
     def set_winner(self, winner):
         if winner == self.player1:
@@ -29,6 +32,7 @@ class Game():
         elif winner == "None":
             self.player1_result[1] = False
             self.player2_result[1] = False
+
         
     def serialize_data(self):
         return {
@@ -48,7 +52,7 @@ class Game():
             'round_id': game.get('round_id'),
             'player1': game.get('player1_result')[0],
             'player2': game.get('player2_result')[0],
-            'round_nb': game.get('round_nb')
+            'round_nb': game.get('round_nb'),
         }
         return cls(**data)
 
@@ -63,7 +67,10 @@ class Game():
             'round_id': game.get('round_id'),
             'player1': game.get('player1_result')[0],
             'player2': game.get('player2_result')[0],
-            'round_nb': game.get('round_nb')
+            'round_nb': game.get('round_nb'),
+            'res_p1': game.get('player1_result')[1],
+            'res_p2': game.get('player2_result')[1]
+
             }
 
             gm = cls(**data)

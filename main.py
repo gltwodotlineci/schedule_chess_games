@@ -1,6 +1,6 @@
 from views.main_view import main_page
 
-# main_page()
+main_page()
 
 # while True:
 #     main_page()
@@ -9,18 +9,10 @@ from views.main_view import main_page
 
 
 # ------
-from models.round import Round
-from controller.validator import ValidateRound
-data = {
-    'tournament_id':'',
-    'name':'',
-    'number':'',
-    'starting_date_hour':'11-11-1111-11-11',
-    
-        }
-rd = Round(1,2,3,4)
+# from models.game import Game
 
-
+# gm = Game.from_db("f3ad6e83-8cea-4ddd-b2c0-a1ae0c0ba5ac")
+# print(gm)
 
 # players = [
 #     "327PermetiAndon","325ZeqoPilafi" ,"794KasemTrepeshina",

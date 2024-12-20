@@ -52,8 +52,8 @@ def create_round(data):
             validate = False
     tournament = Tournament.from_db(round.tournament_id)
     tournament.actual_round_number = round.number
-    tournament.rounds_list.append(round.id)
-    tournament.save(tournament.id)
+    tournament.rounds_list.append(str(round.id))
+    tournament.save(str(tournament.id))
     round.save()
     return round
 
@@ -240,30 +240,16 @@ def add_players2_round(round, players):
 def add_player2_tour(tour, fed_id):
     pl = Player.from_db('fin',fed_id)
     tour.players_list.append(pl.id)
-    
-    
-        # valide = False
-        # while valide is False:
-        #     try:
-        #         pl = Player.from_db('fin',fed_id)
-        #         valide = True
-        #         tour.players_list.append(pl.id)
-
-        #     except ValueError:
-        #         print("Please check again your choice")
-        #         print("It seams the FED Id does not exist")
-        #         valide = False
 
     tour.save(str(tour.id))
 
 
-def refac_if__game(player_result):
-    pt = 0.0
-    if player_result:
-        pt = 1.0
-    elif player_result is False:
-        pt = 0.5
-    return pt
+def refact_if__game(player_result):
+    if player_result is True:
+        return 1.0
+    elif player_result == False:
+        return 0.5
+
 
 
 def add_points_to_players(games):
@@ -272,11 +258,11 @@ def add_points_to_players(games):
     for player in players:    
         for game in games:
             if player.id in game.player1_result:
-                player.points += refac_if__game(game.player1_result[1])
+                player.points += refact_if__game(game.player1_result[1])
                 player.save_dt(player.id)
 
             elif player.id in game.player2_result:
-                player.points += refac_if__game(game.player2_result[1])
+                player.points += refact_if__game(game.player2_result[1])
                 player.save_dt(player.id)
                 round_id = game.round_id
 
@@ -303,10 +289,10 @@ def organize_game(players,round):
     games = []
     for i in range(0,nb,2):
         game  = Game(
-            round.id,
+            str(round.id),
             players[i].id,
             players[i+1].id,
-            round.number,
+            round.number
             )
         game.save()
         games.append(game)
@@ -339,6 +325,7 @@ def games_by_round(round_nb):
     return games_lst
 
 
+
 def add_results(results_list,games):
     for i,game in enumerate(games):
         if results_list[i] == "1":
@@ -353,32 +340,6 @@ def add_results(results_list,games):
     return games
 
 
-#--
-# make the planing of thee games
-def planing_games():
-    rounds = read_json("json_data/rounds.json")[0]
-    games = []
-    if rounds.get('number') == 1:
-        players = read_json("json_data/players.json")
-        sorted_players = sorted(players, key=lambda x: x['last_name'], reverse=False )
-
-        for i in range(0,len(sorted_players),2):
-            player1 = sorted_players[i]['id']
-            player2 = sorted_players[i+1]['id']
-            round_nb = rounds.get('number')
-            game = PlaningGame(player1, player2, round_nb)
-            games.append(game.__dict__)
-            rounds.get('game_list').append(game.__dict__)
-
-        # add games to json
-        write_json("json_data/preparing_game.json", games)
-
-    elif rounds.get('number') > 1:
-        pass
-        
-
-
-
 # showing players contests for round
 def show_challanges(games_by_round):
     players = []
@@ -388,6 +349,24 @@ def show_challanges(games_by_round):
         playr1 = Player.from_db('id',id_p1)
         playr2 = Player.from_db('id',id_p2)
         players.append([playr1, playr2])
+
+    return players
+
+
+# convert game results to player instance points
+def calculate_points(players_id):
+
+    players = []
+    for id in players_id:
+        for game in Game.all_data():
+            if id == game.player1_result[0]:
+                count = refact_if__game(game.player1_result[1])
+            if id == game.player2_result[0]:
+                count = refact_if__game(game.player2_result[1])
+
+        player = Player.from_db('id',id)
+        player.points = count
+        players.append(player)
 
     return players
 
@@ -447,7 +426,6 @@ def add_after_game():
     # adding list games to round
     write_json('json_data/rounds.json',rounds_new)
                 
-
 
 '''
 Rresult part:

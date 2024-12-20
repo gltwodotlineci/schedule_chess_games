@@ -19,6 +19,11 @@ def select_or_create():
     content = "Please write '1', '2' or '3' "
     return verify_choice(content,['1','2','3'])
 
+
+def go_back():
+    content = "Write 'back' if you want to return to main page"
+    return verify_choice(content,['back'])
+
 '''
 Tournament
 '''
@@ -65,7 +70,7 @@ def send_dt_player():
         print("This FED ID allredy exist. Try an other FED ID please ")
         given_fin = input("Enter an non existent FED ID ").upper()
         verify_fin = check_fin(given_fin)    
-    dt['fin'] = verify_fin
+    dt['fin'] = given_fin
     dt['first_name'] = input("Enter the first name ")
     dt['last_name'] = input("Enter the last name ")
     dt['birth_date'] = input("Enter the birth date ")
@@ -166,9 +171,9 @@ def choos_winner(data):
     content = "Choose 1 ,2 or 3"
     for pl in data:
         p1 = f"player1 {pl[0].first_name} {pl[0].last_name} "
-        p2 = f"player2 {pl[1].first_name} {pl[1].last_name}"
+        p2 = f"player2 {pl[1].first_name} {pl[1].last_name} "
         print(f"{p1} VS {p2}")
-        winner = input("Choose 1 ,2 or 3 ")
+        content = f"Choose 1 ,2 or 3 "
         winner = verify_choice(content,['1','2','3'])
         winners.append(winner)
 
