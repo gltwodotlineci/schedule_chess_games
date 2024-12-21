@@ -1,10 +1,10 @@
+from views.choose_dt import verify_choice
 from views.choose_dt import send_dt_tourn
 from views.choose_dt import send_dt_player
 from views.choose_dt import select_or_create
 from views.choose_dt import select_tournament
-from views.show import choosed_tournament
 from views.choose_dt import ask_add_player
-from views.choose_dt import create_round_4new_tour
+from views.choose_dt import create_round_tour
 from views.choose_dt import confirm_creation
 from views.choose_dt import date_and_time
 from views.choose_dt import choos_winner
@@ -14,6 +14,7 @@ from views.show import after_contest
 
 from views.show import view_round_contest
 from views.show import add_winner_instruct
+from views.show import choosed_tournament
 
 from views.lists_values import show_all_tournaments
 from views.lists_values import show_all_players
@@ -23,15 +24,15 @@ from controller.controller import list_tournaments_players
 from controller.controller import create_tournament
 from controller.controller import create_round
 from controller.controller import create_player
-from controller.controller import add_round_2_tour
 from controller.controller import create_round
 from controller.controller import order_players
 from controller.controller import organize_game
 from controller.controller import add_player2_tour
 from controller.controller import games_by_round
-from controller.controller import show_challanges
+from controller.controller import round_players
 from controller.controller import add_results
 from controller.controller import calculate_points
+from controller.controller import sort_playrs_rnd2
 
 
 def welcom_header(data):
@@ -74,7 +75,7 @@ def main_page():
         # Geting round and creating games for round        
         first_round = tour.rounds_list[0]
         round_games = games_by_round(first_round)
-        players = show_challanges(round_games)
+        players = round_players(round_games)
         view_round_contest(players)
         add_winner_instruct()
         winners = choos_winner(players)
@@ -82,12 +83,38 @@ def main_page():
         actual_players = calculate_points(tour.players_list)
         after_contest(actual_players)
 
-        # games_res = add_results(winners,raunds_games)
-        # add_points_to_players(games_res)
-        # #Round 2
-        # choosed_tournament(tour)
-        # print("     ")
-        # print("Now you can pass to round two ")       
+        sort_playrs_rnd2(actual_players,games)
+        # New round
+        # checking the round that the tournament have
+        # and giving the data to create round 2
+        existing_round = len(tour.rounds_list)
+        choice = confirm_creation(existing_round)
+        if choice == 'back':
+            return True
+        data = date_and_time(existing_round)
+        print("Data existing round", data)
+        data['tournament_id'] = str(tour.id)
+        #creating round2
+        round2 = create_round(data)
+        # sort players so there is no repetition game
+        new_sorted_players_id = sort_playrs_rnd2(actual_players,games)
+        new_sorted_players = order_players(new_sorted_players_id)
+        # Create game with the new player configuration
+        games = organize_game(new_sorted_players, round2)
+        lst_games_id = [str(x.id) for x in games]
+        round2.games_list = lst_games_id
+        round2.save(str(round2.id))
+
+        # Showing contests of round two
+        round_games = games_by_round(str(round2.id))
+        players = round_players(round_games)
+        view_round_contest(players)
+        add_winner_instruct()
+        winners = choos_winner(players)
+        games = add_results(winners,round_games)
+        actual_players = calculate_points(tour.players_list)
+        after_contest(actual_players)
+     
     elif choice1 == '3':
         print(" ")
         print("Lets create some Tournaments ! ")
@@ -107,26 +134,39 @@ def main_page():
         
         print(" ")
         
-        choice = create_round_4new_tour()
+        choice = create_round_tour(tour)
         if choice == 'back':
             return True
         existing_round = len(tour.rounds_list)
-        choice = confirm_creation(existing_round)
-        if choice == 'back':
-            return True
-        data = date_and_time(existing_round)
-        data['tournament_id'] = str(tour.id)
-        round = create_round(data)
+        needed_rounds = tour.round_numbers
+        # choice = confirm_creation(existing_round)
+        # if choice == 'back':
+        #     return True
+
+        rounds = []
+        for i in range(existing_round,needed_rounds):
+            data = date_and_time(i)
+            data['tournament_id'] = str(tour.id)
+            rounds.append(create_round(data))
+            if i < needed_rounds-1:
+                print(f"Do you want to continue to creat round {i+2}")
+                content =" write 'yes' or 'stop' "
+                stop_creating = verify_choice(content,['yes','stop'])
+                if stop_creating == 'stop':
+                    break
         '''
         ordering the players from last name and creating games based on round
         adding the games on the round list field
         '''
-        sorted_players = order_players(tour.players_list)       
-        games = organize_game(sorted_players, round)
+        round1 = rounds[0]
+        sorted_players = order_players(tour.players_list,round1=True)       
+        games = organize_game(sorted_players, round1)
         # adding list games to the round
         lst_games_id = [str(x.id) for x in games]
-        round.games_list = lst_games_id
-        round.save(str(round.id))
-        input("Write anything if you want to go back ")
+        round1.games_list = lst_games_id
+        round1.save(str(round1.id))
+
+        print("Congratulation, You have created the {tour.name} tournament")
+        verify_choice("write 'yes' to go to the main menue: ",['yes'])
 
 #-------

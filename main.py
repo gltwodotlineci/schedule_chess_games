@@ -40,7 +40,6 @@ main_page()
 #         if combination_key not in used_combinations:
 #             game_list2.append([player1, player2])
 
-# print("game_list2:", game_list2)
 
 
 

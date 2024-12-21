@@ -22,6 +22,14 @@ class Game():
     @property
     def player2(self):
         return self.player2_result[0]
+    
+    @property
+    def res_p1(self):
+        return self.player1_result[1]
+    
+    @property
+    def res_p2(self):
+        return self.player2_result[1]
 
 
     def set_winner(self, winner):
@@ -53,6 +61,8 @@ class Game():
             'player1': game.get('player1_result')[0],
             'player2': game.get('player2_result')[0],
             'round_nb': game.get('round_nb'),
+            'res_p1': game.get('player1_result')[1],
+            'res_p2': game.get('player2_result')[1]
         }
         return cls(**data)
 

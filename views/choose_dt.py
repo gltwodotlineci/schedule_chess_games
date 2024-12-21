@@ -101,8 +101,12 @@ def choos_fed_nb(tour,nb):
 Round
 '''
 # asking if it want to create a round for the new tournament
-def create_round_4new_tour():
+def create_round_tour(tour_data):
     print("Do you want to start creating round for the new tournament?")
+    rd_4tour = tour_data.round_numbers
+    existing_rds = len(tour_data.rounds_list)
+
+    print(f"Your tournament must have {rd_4tour} rounds and you have {existing_rds} rounds created")
     content = ("Write 'yes' or 'back' if you want to go to the principal menue " )
     return verify_choice(content,['yes','back'])
 

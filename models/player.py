@@ -4,13 +4,13 @@ from models.support_classes import save_support
 
 
 class Player:
-    def __init__(self,fin, first_name, last_name, birth_date, points=0.0, id=None):
+    def __init__(self,fin, first_name, last_name, birth_date, id=None):
         self.id = create_id(id)
         self.fin = fin
         self.first_name = first_name
         self.last_name = last_name
         self.birth_date = birth_date
-        self.points = points
+        self._points = None
 
 
     def serialize_player(self):
@@ -19,10 +19,17 @@ class Player:
             'fin': self.fin,
             'first_name': self.first_name,
             'last_name': self.last_name,
-            'birth_date': self.birth_date,
-            'points': self.points
+            'birth_date': self.birth_date
         }
     
+
+    @property
+    def points(self):
+        return self._points
+    
+    @points.setter
+    def points(self,value):
+        self._points = value
 
     @classmethod
     def from_db(cls, key, player_id):
