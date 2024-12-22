@@ -32,7 +32,9 @@ from controller.controller import games_by_round
 from controller.controller import round_players
 from controller.controller import add_results
 from controller.controller import calculate_points
-from controller.controller import sort_playrs_rnd2
+from controller.controller import sort_players_rnd2
+from controller.controller import get_current_round
+from controller.controller import selected_games
 
 
 def welcom_header(data):
@@ -72,49 +74,50 @@ def main_page():
         show_all_tournaments()
         tour = select_tournament(all_tournaments())
         choosed_tournament(tour)
-        # Geting round and creating games for round        
-        first_round = tour.rounds_list[0]
-        round_games = games_by_round(first_round)
-        players = round_players(round_games)
-        view_round_contest(players)
-        add_winner_instruct()
-        winners = choos_winner(players)
-        games = add_results(winners,round_games)
-        actual_players = calculate_points(tour.players_list)
-        after_contest(actual_players)
-
-        sort_playrs_rnd2(actual_players,games)
-        # New round
-        # checking the round that the tournament have
-        # and giving the data to create round 2
-        existing_round = len(tour.rounds_list)
-        choice = confirm_creation(existing_round)
-        if choice == 'back':
+        '''
+        Organizing games by round.
+        '''
+        print("You can now start organzing the games or go back")
+        content = "write 'yes' or 'back' "
+        start_games = verify_choice(content,['yes','back'])
+        if start_games == 'back':
             return True
-        data = date_and_time(existing_round)
-        print("Data existing round", data)
-        data['tournament_id'] = str(tour.id)
-        #creating round2
-        round2 = create_round(data)
-        # sort players so there is no repetition game
-        new_sorted_players_id = sort_playrs_rnd2(actual_players,games)
-        new_sorted_players = order_players(new_sorted_players_id)
-        # Create game with the new player configuration
-        games = organize_game(new_sorted_players, round2)
-        lst_games_id = [str(x.id) for x in games]
-        round2.games_list = lst_games_id
-        round2.save(str(round2.id))
+        
+        # get the courrent round
+        while tour.actual_round_number < tour.round_numbers:
+                
+            round = get_current_round(tour)
+            if tour.actual_round_number < 1:    
+                sorted_players = order_players(tour.players_list,round1)
+            else:
+                games = selected_games('round_id',str(round.id))
+                actual_players = calculate_points(tour.players_list)
+                new_sorted_players_id = sort_players_rnd2(actual_players,games)
+                sorted_players = order_players(new_sorted_players_id)
 
-        # Showing contests of round two
-        round_games = games_by_round(str(round2.id))
-        players = round_players(round_games)
-        view_round_contest(players)
-        add_winner_instruct()
-        winners = choos_winner(players)
-        games = add_results(winners,round_games)
-        actual_players = calculate_points(tour.players_list)
-        after_contest(actual_players)
-     
+            games = organize_game(sorted_players, round)
+            # adding list games to the round
+            lst_games_id = [str(x.id) for x in games]
+            round.games_list = lst_games_id
+            round.save(str(round.id))
+            # Geting round and creating games for round        
+            round_games = games_by_round(str(round.id))
+            players = round_players(round_games)
+            view_round_contest(players)
+            add_winner_instruct()
+            winners = choos_winner(players)
+            games = add_results(winners,round_games)
+            # check the players points based on games results
+            actual_players = calculate_points(tour.players_list)
+            after_contest(actual_players)
+            # Checking if all rounds have been played
+            tour.actual_round_number
+            print("If you want to continue or go back write 'c' or 'back'")
+            content = "write 'c' or back "
+            cont_back = verify_choice(content,['c','back'])
+            if cont_back == 'back':
+                break
+
     elif choice1 == '3':
         print(" ")
         print("Lets create some Tournaments ! ")
@@ -137,23 +140,23 @@ def main_page():
         choice = create_round_tour(tour)
         if choice == 'back':
             return True
+
+        # creating all the rounds
         existing_round = len(tour.rounds_list)
         needed_rounds = tour.round_numbers
-        # choice = confirm_creation(existing_round)
-        # if choice == 'back':
-        #     return True
-
         rounds = []
         for i in range(existing_round,needed_rounds):
             data = date_and_time(i)
             data['tournament_id'] = str(tour.id)
             rounds.append(create_round(data))
-            if i < needed_rounds-1:
-                print(f"Do you want to continue to creat round {i+2}")
-                content =" write 'yes' or 'stop' "
-                stop_creating = verify_choice(content,['yes','stop'])
-                if stop_creating == 'stop':
-                    break
+            ## If we want to stop creating rounds and start over
+            ## latte... May be not a good solution
+            # if i < needed_rounds-1:
+            #     print(f"Do you want to continue to creat round {i+2}")
+            #     content =" write 'yes' or 'stop' "
+            #     stop_creating = verify_choice(content,['yes','stop'])
+            #     if stop_creating == 'stop':
+            #         break
         '''
         ordering the players from last name and creating games based on round
         adding the games on the round list field

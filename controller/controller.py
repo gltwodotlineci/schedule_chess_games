@@ -66,6 +66,13 @@ def add_round_2_tour(round):
     write_json('json_data/tournaments.json', list_tours)
 
 
+#get the current round
+def get_current_round(tour):
+    current_round = tour.actual_round_number
+    round_id = tour.rounds_list[current_round]
+    round = Round.from_db(round_id)
+    return round
+
 '''
 Tournement,
 create ans serialize tournement
@@ -280,6 +287,12 @@ def add_points_to_players(games):
 Game part:
 create and serialize game
 '''
+# send selected games
+def selected_games(inst,name):
+    games = Game.filter_by_instance(inst,name)
+    return games
+
+
 def simulate_winner():
     possibles_results = ['player1', 'player2','draw']
     return possibles_results[random.randint(0,2)]
@@ -306,7 +319,7 @@ def organize_game(players,round):
     return games
 
 
-def sort_playrs_rnd2(players,old_games):
+def sort_players_rnd2(players,old_games):
     finished_games =[]
     lst_players = []
     for game in old_games:
@@ -396,16 +409,6 @@ def calculate_points(players_id):
     return players
 
 
-'''
-Rresult part:
-create and associate points
-'''
-def prod_result(game_id):
-    results_list = read_json('json_data/results.json')
-    result = ResultGame(game_id).__dict__
-    results_list.append(result)
-    # write results as json
-    write_json('json_data/results.json', results_list)
 
 
 #---------------------------------------

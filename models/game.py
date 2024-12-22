@@ -92,3 +92,26 @@ class Game():
     #save method
     def save(self, id=None):       
         save_support("json_data/games.json", self.serialize_data(),id)
+
+
+    # filter method
+    @classmethod
+    def filter_by_instance(cls,instance,name):
+        list_games_json = read_json("json_data/games.json")
+        games = []
+        for game in list_games_json:
+            if game.get(instance) == name:
+                data={
+                    'id':game.get('id'),
+                    'round_id': game.get('round_id'),
+                    'player1': game.get('player1_result')[0],
+                    'player2': game.get('player2_result')[0],
+                    'round_nb': game.get('round_nb'),
+                    'res_p1': game.get('player1_result')[1],
+                    'res_p2': game.get('player2_result')[1]
+                }
+                gm = cls(**data)
+                games.append(gm)
+
+        return games
+
