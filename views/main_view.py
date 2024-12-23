@@ -84,18 +84,22 @@ def main_page():
             return True
         
         # get the courrent round
-        while tour.actual_round_number < tour.round_numbers:
+        actual_round = tour.actual_round_number
+        while actual_round < tour.round_numbers:
+            print("--------")
+            print("Round ", actual_round+1)
+            print("--------")
                 
             round = get_current_round(tour)
             if tour.actual_round_number < 1:    
-                sorted_players = order_players(tour.players_list,round1)
+                sorted_players = order_players(tour.players_list,True)
             else:
                 games = selected_games('round_id',str(round.id))
                 actual_players = calculate_points(tour.players_list)
                 new_sorted_players_id = sort_players_rnd2(actual_players,games)
                 sorted_players = order_players(new_sorted_players_id)
 
-            games = organize_game(sorted_players, round)
+            games, tour = organize_game(sorted_players, round)
             # adding list games to the round
             lst_games_id = [str(x.id) for x in games]
             round.games_list = lst_games_id
@@ -111,9 +115,12 @@ def main_page():
             actual_players = calculate_points(tour.players_list)
             after_contest(actual_players)
             # Checking if all rounds have been played
-            tour.actual_round_number
+            actual_round = tour.actual_round_number
+            if actual_round == tour.round_numbers:
+                return True
+
             print("If you want to continue or go back write 'c' or 'back'")
-            content = "write 'c' or back "
+            content = "write 'c' or 'back' "
             cont_back = verify_choice(content,['c','back'])
             if cont_back == 'back':
                 break
@@ -149,27 +156,8 @@ def main_page():
             data = date_and_time(i)
             data['tournament_id'] = str(tour.id)
             rounds.append(create_round(data))
-            ## If we want to stop creating rounds and start over
-            ## latte... May be not a good solution
-            # if i < needed_rounds-1:
-            #     print(f"Do you want to continue to creat round {i+2}")
-            #     content =" write 'yes' or 'stop' "
-            #     stop_creating = verify_choice(content,['yes','stop'])
-            #     if stop_creating == 'stop':
-            #         break
-        '''
-        ordering the players from last name and creating games based on round
-        adding the games on the round list field
-        '''
-        round1 = rounds[0]
-        sorted_players = order_players(tour.players_list,round1=True)       
-        games = organize_game(sorted_players, round1)
-        # adding list games to the round
-        lst_games_id = [str(x.id) for x in games]
-        round1.games_list = lst_games_id
-        round1.save(str(round1.id))
 
-        print("Congratulation, You have created the {tour.name} tournament")
+        print(f"Congratulation, You have created the {tour.name} tournament")
         verify_choice("write 'yes' to go to the main menue: ",['yes'])
 
 #-------

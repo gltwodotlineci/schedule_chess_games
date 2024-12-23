@@ -121,7 +121,6 @@ def date_and_time(existing_round):
     starting_date = input(" Please enter the date and the hour of the starting date ")
     data =  {
         'starting_date_hour': starting_date,
-        'ending_date_hour': None,
         'name':f"Round {existing_round+1}",
         'number': existing_round+1
     }

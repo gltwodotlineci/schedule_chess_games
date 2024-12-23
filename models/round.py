@@ -29,8 +29,8 @@ class Round:
             'tournament_id': self.tournament_id,
             'name': self.name,
             'number': self.number,
-            'games_list': self.games_list,
             'starting_date_hour': self.starting_date_hour,
+            'games_list': self.games_list,
             'ending_date_hour': self.ending_date_hour
         }
 

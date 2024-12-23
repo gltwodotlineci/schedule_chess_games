@@ -13,31 +13,13 @@ from controller.validator import ValidateTournament
 from controller.refactor_cont import support_create
 
 
-# method to read json
-def read_json(path):
-    with open(path, 'r') as f:
-        return json.load(f)
-
-
-# method to write json
-def write_json(path,list_dict):
-    with open(path, 'w') as f:
-        json.dump(list_dict, f, indent=2)
-
-
 def today_str():
-    return datetime.now().strftime("%d-%m-%Y-%H-%M")
+    return datetime.now().strftime("%d-%m-%Y-%H:%M")
 
 
 '''
 Round
 '''
-
-
-def all_rounds():
-    list_rounds = read_json('json_data/rounds.json')
-    return list_rounds
-
 
 def create_round(data):
     round = support_create(ValidateRound, Round, data, 'round')
@@ -47,14 +29,6 @@ def create_round(data):
     tournament.save(str(tournament.id))
     round.save()
     return round
-
-
-def add_round_2_tour(round):
-    list_tours = read_json('json_data/tournaments.json')
-    for i,tour in enumerate(list_tours):
-        if round.tournament_id == tour.get('id'):
-            list_tours[i].get('rounds_list').append(round.name)
-    write_json('json_data/tournaments.json', list_tours)
 
 
 #get the current round
@@ -85,38 +59,6 @@ def create_tournament(data):
     tournament.save()
     return tournament
 
-
-def edit_tournament(tour_id,attribute,value):
-    list_tours = read_json('json_data/tournaments.json')
-    x = None
-    for i,tour in enumerate(list_tours):
-        if tour.get("id") == tour_id:
-            x = i
-            if attribute == 'players_list':
-                for player in value:
-                    list_tours[i][attribute].append(player)# replace with 'tour'
-                
-
-    list_tours[x][attribute] = list(dict.fromkeys(list_tours[x][attribute]))
-
-    write_json('json_data/tournaments.json', list_tours)
-
-
-def add_round_2tournement(round_id, tournament_id):
-    list_tournament = read_json('json_data/tournaments.json')
-
-    index_tour = None
-    tour = None
-    for i, tournament in enumerate(list_tournament):
-        if tournament.get('id') == tournament_id:
-            index_tour = i
-            tour = tournament
-
-    tour.get('rounds_list').append(round_id)
-    list_tournament[index_tour] = tour
-
-    write_json('json_data/tournaments.json', list_tournament)
-    
 
 '''
 Players part:
@@ -168,7 +110,6 @@ def add_players2_round(round, players):
     round.save(round.id)
 
 
-
 # ad multiple players
 def add_player2_tour(tour, fed_id):
     pl = Player.from_db('fin',fed_id)
@@ -184,7 +125,6 @@ def refact_if__game(player_result):
         return 0.5
     elif player_result is None:
         return 0.0
-
 
 
 def add_points_to_players(games):
@@ -243,7 +183,7 @@ def organize_game(players,round):
     tour.actual_round_number += 1
     tour.save(str(tour_id))
 
-    return games
+    return games, tour
 
 
 def sort_players_rnd2(players,old_games):
@@ -272,7 +212,6 @@ def combination_no_repeat(players,used_comb):
             new_games.append([player1, player2])
     
     return new_games
-    
 
 
 # givin games by round
@@ -285,7 +224,6 @@ def games_by_round(rnd_id):
     return games_lst
 
 
-
 def add_results(results_list,games):
     for i,game in enumerate(games):
         if results_list[i] == "1":
@@ -296,7 +234,11 @@ def add_results(results_list,games):
             game.set_winner("None")
         # save results on game:
         game.save(game.id)
-
+    # closing hour round
+    rd_id = games[0].round_id
+    round = Round.from_db(rd_id)
+    round.ending_date_hour = today_str()
+    round.save(str(round.id))
     return games
 
 
@@ -334,8 +276,5 @@ def calculate_points(players_id):
         players.append(player)
 
     return players
-
-
-
 
 #---------------------------------------
