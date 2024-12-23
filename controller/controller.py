@@ -42,6 +42,12 @@ def get_current_round(tour):
 Tournement,
 create ans serialize tournement
 '''
+def create_tournament(data):
+    tournament = support_create(ValidateTournament, Tournament, data,'tournament')
+    tournament.save()
+    return tournament
+
+
 def all_tournaments():
     tours = Tournament.all_data()
     return tours
@@ -53,12 +59,6 @@ def list_tournaments_players():
     data['players'] = Player.all_data()
     return data
   
-
-def create_tournament(data):
-    tournament = support_create(ValidateTournament, Tournament, data,'tournament')
-    tournament.save()
-    return tournament
-
 
 '''
 Players part:
@@ -74,6 +74,7 @@ def create_player(data):
 def all_players():
     all_players = Player.all_data()
     return all_players
+
 
 # check if fin exists
 def check_fin(data):
@@ -93,7 +94,7 @@ def enter_existing_player(fed_id,tour):
     return False
 
 
-#selecting player from it's
+#selecting player from it's last name
 def order_players(players_id,round1=False):
     lst_players = []
     for pl_id in players_id:
@@ -104,10 +105,6 @@ def order_players(players_id,round1=False):
     if round1:
         lst_players.sort(key=attrgetter('last_name'))
     return lst_players
-
-def add_players2_round(round, players):
-    round.games_list = players
-    round.save(round.id)
 
 
 # ad multiple players
@@ -127,29 +124,6 @@ def refact_if__game(player_result):
         return 0.0
 
 
-def add_points_to_players(games):
-    players = Player.all_data()
-
-    for player in players:    
-        for game in games:
-            if player.id in game.player1_result:
-                player.points += refact_if__game(game.player1_result[1])
-                player.save_dt(player.id)
-
-            elif player.id in game.player2_result:
-                player.points += refact_if__game(game.player2_result[1])
-                player.save_dt(player.id)
-                round_id = game.round_id
-
-                
-    # Add closing hour to round.
-    round = Round.from_db(round_id)
-    round.ending_date_hour = today_str()
-    round.save(round_id)
-
-    return players
-
-
 '''
 Game part:
 create and serialize game
@@ -158,11 +132,6 @@ create and serialize game
 def selected_games(inst,name):
     games = Game.filter_by_instance(inst,name)
     return games
-
-
-def simulate_winner():
-    possibles_results = ['player1', 'player2','draw']
-    return possibles_results[random.randint(0,2)]
 
 
 def organize_game(players,round):
@@ -191,7 +160,7 @@ def sort_players_rnd2(players,old_games):
     lst_players = []
     for game in old_games:
         gm = [game.player1, game.player2]
-        finished_games.append(gm)#used_comb
+        finished_games.append(gm)
 
     players.sort(key=attrgetter('points'), reverse=True)
 
