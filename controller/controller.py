@@ -5,12 +5,13 @@ from operator import attrgetter
 
 from models.player import Player
 from models.round import Round
-from models.result import ResultGame
 from models.tournament import Tournament
 from models.game import Game
 from controller.validator import ValidatePlayer
 from controller.validator import ValidateRound
 from controller.validator import ValidateTournament
+from controller.refactor_cont import support_create
+
 
 # method to read json
 def read_json(path):
@@ -27,35 +28,25 @@ def write_json(path,list_dict):
 def today_str():
     return datetime.now().strftime("%d-%m-%Y-%H-%M")
 
+
 '''
 Round
 '''
+
+
 def all_rounds():
     list_rounds = read_json('json_data/rounds.json')
     return list_rounds
 
 
 def create_round(data):
-    validate = False
-    while validate is not True:
-        try:
-            validated_data = ValidateRound(**data)
-            round = Round(
-                validated_data.tournament_id,
-                validated_data.name,
-                validated_data.number,
-                validated_data.starting_date_hour
-            )
-            validate = True
-        except ValueError as e:
-            print(f"Error: {e}")
-            validate = False
+    round = support_create(ValidateRound, Round, data, 'round')
+    # adding round id to Tournament
     tournament = Tournament.from_db(round.tournament_id)
     tournament.rounds_list.append(str(round.id))
     tournament.save(str(tournament.id))
     round.save()
     return round
-
 
 
 def add_round_2_tour(round):
@@ -87,44 +78,10 @@ def list_tournaments_players():
     data['tournaments'] = Tournament.all_data()
     data['players'] = Player.all_data()
     return data
+  
 
-def create_tournament(given_dt):
-
-    try:
-        valid_dt = ValidateTournament(**given_dt)
-        tournament = Tournament(
-            valid_dt.name,
-            valid_dt.place,
-            valid_dt.starting_date,
-            valid_dt.ending_date,
-            valid_dt.description,
-            valid_dt.nb_players
-        )
-        validate = True
-    except ValueError as e:
-            print(f"Error: {e}")
-            validate = False
-
-    while validate != True:
-        print("Remember the format of the date: 'dd-mm-yyyy' ")
-        given_dt['starting_date'] = input("write again the starting date please: ")
-        given_dt['ending_date'] = input("write again the ending date please: ")
-        given_dt['nb_players'] = input("write again the number of players please: ")
-
-        try:
-            valid_dt = ValidateTournament(**given_dt)
-            tournament = Tournament(
-            valid_dt.name,
-            valid_dt.place,
-            valid_dt.starting_date,
-            valid_dt.ending_date,
-            valid_dt.description,
-            valid_dt.nb_players
-            )
-        except ValueError as e:
-            print(e)
-            validate = False
-
+def create_tournament(data):
+    tournament = support_create(ValidateTournament, Tournament, data,'tournament')
     tournament.save()
     return tournament
 
@@ -164,6 +121,13 @@ def add_round_2tournement(round_id, tournament_id):
 '''
 Players part:
 '''
+# Create player
+def create_player(data):
+    player = support_create(ValidatePlayer, Player, data, 'player')
+    player.save_dt()
+    return player
+
+
 # List of all players
 def all_players():
     all_players = Player.all_data()
@@ -185,43 +149,6 @@ def enter_existing_player(fed_id,tour):
             return True
 
     return False
-
-
-
-
-def create_player(dt): 
-    try:
-        dt_validator = ValidatePlayer(**dt)
-        player = Player(
-            dt_validator.fin,
-            dt_validator.first_name,
-            dt_validator.last_name,
-            dt_validator.birth_date
-        )
-        validate = True
-    except ValueError as e:
-            print(f"Error: {e}")
-            validate = False
-
-    while validate != True:
-        dt['birth_date'] = input("write again the birth date please: ")
-        print("Remember the fin format exemple is: 'AB1245' ")
-        dt['fin'] = input("write again the fin number: ")
-        try:
-            dt_validator = ValidatePlayer(**dt)
-            player = Player(
-                dt_validator.fin,
-                dt_validator.first_name,
-                dt_validator.last_name,
-                dt_validator.birth_date
-            )
-            validate = True
-        except ValueError as e:
-            print(f"Error: {e}")
-            validate = False
-
-    # saving player to data
-    player.save_dt()
 
 
 #selecting player from it's
