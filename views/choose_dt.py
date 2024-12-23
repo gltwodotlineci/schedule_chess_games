@@ -117,7 +117,7 @@ def date_and_time(existing_round):
     print(f"You can start choosing the date and the hour of the Round {existing_round+1}")
     print(f"if you do not want to give the ending date-hour of the Round {existing_round+1}")
     print("It will be filled at the end")
-    print("Remember the date-hour format must be like this: 'dd-mm-yyyy-HH-MM'")
+    print("Remember the date-hour format must be like this: 'dd-mm-yyyy-HH:MM'")
     starting_date = input(" Please enter the date and the hour of the starting date ")
     data =  {
         'starting_date_hour': starting_date,
@@ -136,9 +136,7 @@ def confirm_creation(existing_rund):
     choice = verify_choice(content,['yes','no'])
     if choice == 'no':
         return 'back'
-    # date_and_time(existing_rund)
-    # print(date_and_time)
-    # data = date_and_time
+
     return choice
 
 

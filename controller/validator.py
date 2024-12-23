@@ -44,6 +44,7 @@ class ValidatePlayer(Player):
 class ValidateRound(Round):
     def __init__(self, tournament_id, name, number, starting_date_hour):
         self._number = number
+        self._starting_date_hour = starting_date_hour
         super().__init__(tournament_id, name, number, starting_date_hour)
 
     @property
@@ -57,6 +58,20 @@ class ValidateRound(Round):
             self._number = nb_val
         else:
             raise ValueError("Wrong number choise, Please be sure to choose a number ")
+        
+
+    @property
+    def starting_date_hour(self):
+        return self._starting_date_hour
+
+
+    @starting_date_hour.setter
+    def starting_date_hour(self, val):
+        try:
+            datetime.datetime.strptime(val,"%d-%m-%Y-%H-%M")
+            self._starting_date_hour = val
+        except ValueError as e:
+            raise ValueError("Wrong date and hour format, please retry with this format 'dd-mm-yyyy-HH:MM' ")
 
 
 # validating the datas for the tournament creation
@@ -83,18 +98,20 @@ class ValidateTournament(Tournament):
 
     @starting_date.setter
     def starting_date(self, val):
-        if val[2] != '-' or val[5] != '-' or len(val) != 10:
-            raise ValueError("Wrong date format, please retry with this format 'dd-mm-yyyy' ")
-        else:
+        try:
+            datetime.datetime.strptime(val,"%d-%m-%Y")
             self._starting_date = val
-        
+        except ValueError as e:
+            raise ValueError("Wrong date format, please retry with this format 'dd-mm-yyyy' ")
+
 
     @ending_date.setter
     def ending_date(self, val):
-        if val[2] != '-' or val[5] != '-' or len(val) != 10:
-            raise ValueError("Wrong date format, please retry with this format 'dd-mm-yyyy' ")
-        else:
+        try:
+            datetime.datetime.strptime(val,"%d-%m-%Y")
             self._ending_date = val
+        except ValueError as e:
+            raise ValueError("Wrong date format, please retry with this format 'dd-mm-yyyy' ")
 
 
     @nb_players.setter
@@ -103,24 +120,3 @@ class ValidateTournament(Tournament):
             raise ValueError("Error, the number of players must be an even number ")
         else:
             self._nb_players = nb
-
-
-class ValidateRound(Round):
-    def __init__(self, tournament_id, name, number, starting_date_hour, ending_date_hour=None):
-        super().__init__(tournament_id, name, number, starting_date_hour, ending_date_hour)
-
-        self._starting_date_hour = starting_date_hour
-
-    @property
-    def starting_date_hour(self):
-        return self._starting_date_hour
-
-
-    @starting_date_hour.setter
-    def starting_date_hour(self,date):
-        if len(date) != 16:
-            raise ValueError("Please verify your starting date format")
-        elif '-' not in [date[2],date[5],date[10],date[13]]:
-            raise ValueError("Write your starting date-hour at this format 'dd-mm-yyyy-hh-mm'")
-        else:
-            self._starting_date_hour = date
