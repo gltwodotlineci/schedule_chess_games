@@ -77,6 +77,14 @@ def main_page():
         '''
         Organizing games by round.
         '''
+        actual_round = tour.actual_round_number
+        if actual_round == tour.round_numbers:
+            print("All the rounds of this tournament have been played")
+            content = "Write 'back' to go to the main page "
+            back = verify_choice(content,['back'])
+            if back == 'back':
+                return True
+
         print("You can now start organzing the games or go back")
         content = "write 'yes' or 'back' "
         start_games = verify_choice(content,['yes','back'])
@@ -84,7 +92,6 @@ def main_page():
             return True
         
         # get the courrent round
-        actual_round = tour.actual_round_number
         while actual_round < tour.round_numbers:
             print("--------")
             print("Round ", actual_round+1)
@@ -117,13 +124,15 @@ def main_page():
             # Checking if all rounds have been played
             actual_round = tour.actual_round_number
             if actual_round == tour.round_numbers:
-                return True
+                break
 
             print("If you want to continue or go back write 'c' or 'back'")
             content = "write 'c' or 'back' "
             cont_back = verify_choice(content,['c','back'])
             if cont_back == 'back':
                 break
+
+        
 
     elif choice1 == '3':
         print(" ")
@@ -161,3 +170,9 @@ def main_page():
         verify_choice("write 'yes' to go to the main menue: ",['yes'])
 
 #-------
+def rapport():
+    # print("You can choose the tournament here")
+    # print("writhe the number next to each tournament")
+    print(" ")
+    show_all_tournaments()
+    tour = select_tournament(all_tournaments())

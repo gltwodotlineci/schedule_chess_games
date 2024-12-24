@@ -38,7 +38,6 @@ def show_all_games(dt):
 
 def show_all_tournaments():
     tournaments = all_tournaments()
-    print(len(tournaments))
     if len(tournaments) > 0:
         print("Here you have the tournement names and their number. ")
         i = 1

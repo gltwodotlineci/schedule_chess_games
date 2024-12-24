@@ -247,3 +247,15 @@ def calculate_points(players_id):
     return players
 
 #---------------------------------------
+'''
+Rapport
+'''
+from models.rapport import Rapport
+
+def create_rapport():
+    rapport = Rapport()
+    return rapport
+
+
+def choose_tournament():
+    pass

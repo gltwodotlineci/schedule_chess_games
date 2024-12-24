@@ -179,3 +179,8 @@ def choos_winner(data):
         winners.append(winner)
 
     return winners
+
+from views.lists_values import show_all_tournaments
+from controller.controller import all_tournaments
+
+

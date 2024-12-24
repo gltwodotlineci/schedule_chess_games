@@ -23,7 +23,7 @@ def choosed_tournament(tournament):
         print("The players registred of the turnament are: ")
         for pl_id in tournament.players_list:
             player = Player.from_db('id',pl_id)
-            print(f"{player.first_name} {player.last_name} - {player.points} points")
+            print(f"{player.first_name} {player.last_name} ")
 
     if tournament.rounds_list != []:
         print("The rounds for this turnament are.")
