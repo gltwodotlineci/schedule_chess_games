@@ -21,7 +21,7 @@ class Rapport:
         self._choosed_tour = {
             'name':tournament.name,
             'starting_date':tournament.starting_date,
-            'endind_date':tournament.ending_date,
+            'ending_date':tournament.ending_date,
             'players_list':tournament.players_list,
             'rounds_list': tournament.rounds_list
         }

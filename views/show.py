@@ -45,3 +45,21 @@ def after_contest(players):
     print("The players points after the game are")
     for player in players:
         print(f"{player.first_name} {player.last_name} - {player.points} points")
+
+def give_player(id):
+    return Player.from_db("id",id)
+
+
+def game_details(games_list):
+    for game in games_list:
+        p1 = give_player(game.player1)
+        p2 = give_player(game.player2)
+        print(f"{p1.first_name} {p2.last_name} against {p2.first_name} {p2.last_name}")
+        if game.res_p1 is None:
+            print("The game is not played jet")
+        elif game.res_p1 is False:
+            print("This game was draw ")
+        elif game.res_p1 is True:
+            print(f"{p1.first_name} {p2.last_name} won the game")
+        else:
+            print(f"{p2.first_name} {p2.last_name} won the game")

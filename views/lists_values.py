@@ -17,9 +17,12 @@ def show_all_tournaments(dt):
 
 def show_all_players():
     players = all_players()
-    print("The first name and the last name of the players")
+    print("Playrs first name - last name - FED Id ")
+    print("_______________________________________")
     for player in players:
-        print(f"Player Name: {player.first_name} {player.last_name}.  Id {player.fin}")
+        print(f"{player.first_name} {player.last_name}.  Id {player.fin}")
+
+    print("_______________________________________")
 
 
 def show_all_rounds(dt):

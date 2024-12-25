@@ -38,6 +38,17 @@ def get_current_round(tour):
     round = Round.from_db(round_id)
     return round
 
+
+# giving round from tournament list
+def tournament_rounds(list_id):
+    tournament_rounds_lst = []
+    for id in list_id:
+        round = Round.from_db(id)
+        tournament_rounds_lst.append(round)
+
+    return tournament_rounds_lst
+
+
 '''
 Tournement,
 create ans serialize tournement
@@ -73,7 +84,20 @@ def create_player(data):
 # List of all players
 def all_players():
     all_players = Player.all_data()
+    all_players.sort(key=attrgetter('last_name'))
     return all_players
+
+
+# List of players from a tournament
+def tournament_players(list_id):
+    tour_players_lst = []
+    for id in list_id:
+        player = Player.from_db('id',id)
+        tour_players_lst.append(player)
+
+    tour_players_lst.sort(key=attrgetter('last_name'))
+    return tour_players_lst
+
 
 
 # check if fin exists
@@ -257,5 +281,3 @@ def create_rapport():
     return rapport
 
 
-def choose_tournament():
-    pass
