@@ -21,7 +21,7 @@ def select_or_create():
 
 
 def go_back():
-    content = "Write 'back' if you want to return to main page"
+    content = "Write 'back' if you want to return to the main page"
     return verify_choice(content,['back'])
 
 '''
@@ -36,7 +36,7 @@ def send_dt_tourn():
     data['ending_date'] = input("Please write the ending date ")
     data['description'] = input("Please write your description ")
     print("Before writing how many players will this tournament have")
-    print("Remember your choice must be an even number")
+    print("Remember, your choice must be an even number")
     data['nb_players'] = input("Please write the number of players ")
     int(data['nb_players'])
 
@@ -45,7 +45,7 @@ def send_dt_tourn():
 
 def select_tournament(tours):
     nb_tours = [str(x) for x in range(1,len(tours)+1)]
-    content = f"For choosing the tournament write one of the numbers {' '.join(nb_tours)} "
+    content = f"For choosing the tournament, write one of the numbers {' '.join(nb_tours)} "
     nb_tour = verify_choice(content,nb_tours)
     return tours[int(nb_tour)-1]
 
@@ -55,7 +55,7 @@ Players
 '''
 def ask_add_player():
     print("Write 'yes' or 'back' if you want to add a player or to go back")
-    content = " Do you want to add a playe - 'yes' or to go back 'back' "
+    content = " Do you want to add a player - 'yes' or 'back' to go back "
     yes_back = verify_choice(content,['yes', 'back'])
     return yes_back
 
@@ -67,13 +67,13 @@ def send_dt_player():
     verify_fin = check_fin(given_fin)
     # Check if it allredy exists on the DB
     while verify_fin is True:
-        print("This FED ID allredy exist. Try an other FED ID please ")
-        given_fin = input("Enter an non existent FED ID ").upper()
+        print("This FED ID allredy exist. Try another FED ID please ")
+        given_fin = input("Enter a non-existent FED ID ").upper()
         verify_fin = check_fin(given_fin)    
     dt['fin'] = given_fin
     dt['first_name'] = input("Enter the first name ")
     dt['last_name'] = input("Enter the last name ")
-    dt['birth_date'] = input("Enter the birth date ")
+    dt['birth_date'] = input("Enter the birthdate ")
     return dt
 
 
@@ -88,8 +88,8 @@ def choos_fed_nb(tour,nb):
     
     while verify_fin is False or doublant_check is True:
         print("Check your FED Id choice! Two possible errors.") 
-        print("   - 1. The FED Id does not exist on your playr list")
-        print("   - 2. The player is allredy registerd in your tournament")
+        print("   - 1. The FED Id does not exist on your player list")
+        print("   - 2. The player is already registered in your tournament")
         given_fin = input(content)
         verify_fin = check_fin(given_fin)
         doublant_check = enter_existing_player(given_fin,tour)
@@ -106,8 +106,8 @@ def create_round_tour(tour_data):
     rd_4tour = tour_data.round_numbers
     existing_rds = len(tour_data.rounds_list)
 
-    print(f"Your tournament must have {rd_4tour} rounds and you have {existing_rds} rounds created")
-    content = ("Write 'yes' or 'back' if you want to go to the principal menue " )
+    print(f"Your tournament must have {rd_4tour} rounds, and you have {existing_rds} rounds created")
+    content = ("Write 'yes' or 'back' if you want to go to the principal menu " )
     return verify_choice(content,['yes','back'])
 
 
@@ -115,9 +115,9 @@ def create_round_tour(tour_data):
 def date_and_time(existing_round):
     print(" ")
     print(f"You can start choosing the date and the hour of the Round {existing_round+1}")
-    print(f"if you do not want to give the ending date-hour of the Round {existing_round+1}")
+    print(f"If you do not want to give the ending date-hour of the Round {existing_round+1}")
     print("It will be filled at the end")
-    print("Remember the date-hour format must be like this: 'dd-mm-yyyy-HH:MM'")
+    print("Remember, the date-hour format must be like this: 'dd-mm-yyyy-HH:MM'")
     starting_date = input(" Please enter the date and the hour of the starting date ")
     data =  {
         'starting_date_hour': starting_date,
@@ -149,21 +149,6 @@ def send_dt_round(round_nb):
     return rnd
 
 
-# selecting players to add to the Tournament
-def select_player4_tour(dt):
-    list_players = []
-    print(" You will have the first and the last name of each player\
-write 'y' if you want to add this player to the tournament")
-    content = "Write 'y' our yes and 'n' for no "
-    for player in dt:
-        print(f"Do you want to add {player.get('first_name')} {player.get('last_name')}")
-        check = verify_choice(content,['y','n'])
-        if check == 'y':
-            list_players.append(player.get('id'))
-    
-    return list_players
-
-
 '''
 Game
 '''
@@ -182,5 +167,3 @@ def choos_winner(data):
 
 from views.lists_values import show_all_tournaments
 from controller.controller import all_tournaments
-
-

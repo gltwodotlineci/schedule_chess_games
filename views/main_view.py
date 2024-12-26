@@ -19,6 +19,9 @@ from views.show import choosed_tournament
 from views.lists_values import show_all_tournaments
 from views.lists_values import show_all_players
 
+from views.rapport import create_html_rapport
+
+
 from controller.controller import all_tournaments
 from controller.controller import list_tournaments_players
 from controller.controller import create_tournament
@@ -37,6 +40,8 @@ from controller.controller import get_current_round
 from controller.controller import selected_games
 from controller.controller import create_rapport
 from controller.controller import tournament_rounds
+from controller.controller import tournament_players
+
 
 
 
@@ -173,36 +178,23 @@ def main_page():
         verify_choice("write 'yes' to go to the main menue: ",['yes'])
 
 #-------
-from controller.controller import tournament_players
-from views.show import game_details
 
 def main_rapport():
-    # print("You can choose the tournament here")
-    # print("writhe the number next to each tournament")
     # Starting rapport
-    rapport = create_rapport()
+    print(" Creating rapport based on choosed tournament: ")
     print(" ")
-    #The players:
-    print(" All the players: ")
-    show_all_players()
+    # The tournaments
     show_all_tournaments()
     choosed_tour = select_tournament(all_tournaments())
+    # creating rapports
+    rapport = create_rapport()
     rapport.choosed_tour = choosed_tour.id
     tour_choice = rapport.choosed_tour
     print(f"The selected tournament is: {tour_choice.get('name')} starting at {tour_choice.get('starting_date')} ending at {tour_choice.get('ending_date')}")
     print("  ")
-    
     # Choosed tournament players
     print("The players of this tournament are:")
     tour_players = tournament_players(tour_choice.get('players_list'))
-    for player in tour_players:
-        print(f"{player.first_name} {player.last_name} ID {player.fin}")
-
-    # Choosed tournament players
-    round_players = tournament_rounds(tour_choice.get('rounds_list'))
-    for round in round_players:
-        print(f"{round.name} starting {round.starting_date_hour} ending {round.ending_date_hour}")
-        print(f"The games of this round where: ")
-        games = games_by_round(round.id)
-        game_details(games)
-        print(" ")
+    # Choosed tournament rounds
+    rounds_lst = tournament_rounds(tour_choice.get('rounds_list'))
+    create_html_rapport(rapport, tour_players, rounds_lst)

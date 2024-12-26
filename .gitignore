@@ -11,4 +11,5 @@ bin/
 json_data/
 lib/
 lib64/
+*.html
 

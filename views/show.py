@@ -42,24 +42,33 @@ def add_winner_instruct():
 
 def after_contest(players):
     print(" ")
+    results = "<p>"
     print("The players points after the game are")
     for player in players:
-        print(f"{player.first_name} {player.last_name} - {player.points} points")
+        result = f"{player.first_name} {player.last_name} - {player.points} points"
+        print(result)
+        results += result +"</p>"
+    return results
 
 def give_player(id):
     return Player.from_db("id",id)
 
 
 def game_details(games_list):
+    results = ""
     for game in games_list:
         p1 = give_player(game.player1)
         p2 = give_player(game.player2)
-        print(f"{p1.first_name} {p2.last_name} against {p2.first_name} {p2.last_name}")
-        if game.res_p1 is None:
-            print("The game is not played jet")
+        header = f"<p style='font-size: large;'>{p1.first_name} {p1.last_name} against {p2.first_name} {p2.last_name}</p>"
+        if game.res_p1 is None and game.res_p2 is None:
+            result = "<p>The game is not played jet</p>"
         elif game.res_p1 is False:
-            print("This game was draw ")
+            result = "<p>This game was draw </p>"
         elif game.res_p1 is True:
-            print(f"{p1.first_name} {p2.last_name} won the game")
-        else:
-            print(f"{p2.first_name} {p2.last_name} won the game")
+            result = f'<p style="color: green;">{p1.first_name} {p1.last_name} won the game</p>'
+        elif game.res_p2 is True:
+            result = f'<p style="color: green;">{p2.first_name} {p2.last_name} won the game'
+
+        results += header + f"{result}"
+
+    return results
