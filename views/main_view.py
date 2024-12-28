@@ -98,36 +98,36 @@ def main_page():
         start_games = verify_choice(content,['yes','back'])
         if start_games == 'back':
             return True
-        
+
         # get the courrent round
         while actual_round < tour.round_numbers:
             print("--------")
             print("Round ", actual_round+1)
             print("--------")
-                
             round = get_current_round(tour)
             if tour.actual_round_number < 1:    
                 sorted_players = order_players(tour.players_list,True)
+                print("Sorted PLayeRS if actual round is 0 ", sorted_players)
             else:
                 games = selected_games('round_id',str(round.id))
-                actual_players = calculate_points(tour.players_list)
+                actual_players = calculate_points(tour)
                 new_sorted_players_id = sort_players_rnd2(actual_players,games)
                 sorted_players = order_players(new_sorted_players_id)
 
-            games, tour = organize_game(sorted_players, round)
+            games = organize_game(sorted_players, round)
             # adding list games to the round
             lst_games_id = [str(x.id) for x in games]
             round.games_list = lst_games_id
             round.save(str(round.id))
             # Geting round and creating games for round        
             round_games = games_by_round(str(round.id))
-            players = round_players(round_games)
+            players, games = round_players(round_games)
             view_round_contest(players)
             add_winner_instruct()
             winners = choos_winner(players)
-            games = add_results(winners,round_games)
+            games, tour = add_results(winners,games)
             # check the players points based on games results
-            actual_players = calculate_points(tour.players_list)
+            actual_players = calculate_points(tour)
             after_contest(actual_players)
             # Checking if all rounds have been played
             actual_round = tour.actual_round_number
@@ -139,8 +139,7 @@ def main_page():
             cont_back = verify_choice(content,['c','back'])
             if cont_back == 'back':
                 break
-
-        
+     
 
     elif choice1 == '3':
         print(" ")

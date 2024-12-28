@@ -159,10 +159,11 @@ def selected_games(inst,name):
 
 
 def organize_game(players,round):
+    existing_games = len(round.games_list)
     nb = len(players)
     tour_id = str(round.tournament_id)
     games = []
-    for i in range(0,nb,2):
+    for i in range(existing_games*2,nb,2):
         game  = Game(
             str(round.id),
             players[i].id,
@@ -172,11 +173,15 @@ def organize_game(players,round):
         game.save()
         games.append(game)
     
-    tour = Tournament.from_db(tour_id)
-    tour.actual_round_number += 1
-    tour.save(str(tour_id))
+    if existing_games != 0:
+        games = selected_games('round_id',str(round.id))
 
-    return games, tour
+
+    # tour = Tournament.from_db(tour_id)
+    # tour.actual_round_number += 1
+    # tour.save(str(tour_id))
+
+    return games
 
 
 def sort_players_rnd2(players,old_games):
@@ -203,7 +208,7 @@ def combination_no_repeat(players,used_comb):
         combination_key = tuple(player1), tuple(player2)
         if combination_key not in used_comb:
             new_games.append([player1, player2])
-    
+
     return new_games
 
 
@@ -230,43 +235,54 @@ def add_results(results_list,games):
     # closing hour round
     rd_id = games[0].round_id
     round = Round.from_db(rd_id)
+    tour = Tournament.from_db(round.tournament_id)
+    tour.actual_round_number += 1
+    tour.save(str(tour.id))
     round.ending_date_hour = today_str()
     round.save(str(round.id))
-    return games
+    return games, tour
 
 
 # showing players contests for round
 def round_players(games_by_round):
     players = []
+    games = []
     for game in games_by_round:
-        id_p1 = game.player1
-        id_p2 = game.player2
-        playr1 = Player.from_db('id',id_p1)
-        playr2 = Player.from_db('id',id_p2)
-        players.append([playr1, playr2])
+        if None in game.player1_result and None in game.player2_result:
+            id_p1 = game.player1
+            id_p2 = game.player2
+            playr1 = Player.from_db('id',id_p1)
+            playr2 = Player.from_db('id',id_p2)
+            players.append([playr1, playr2])
+            games.append(game)
 
-    return players
+    return players, games
 
 
 # convert game results to player instance points
-def calculate_points(players_id):
+def calculate_points(tour):
+    rounds_id = tour.rounds_list
+    games = []
+    for round_id in rounds_id:
+        games += selected_games('round_id', round_id)
 
     players = []
-    for id in players_id:
+    for id in tour.players_list:
         count = 0.0
-        for game in Game.all_data():
+        for game in games:#Game.all_data():
             if id == game.player1:
                 count += refact_if__game(game.player1_result[1])
                 player = Player.from_db('id',id)
                 player.points = count
-            
+
             if id == game.player2:
                 count += refact_if__game(game.player2_result[1])
                 player = Player.from_db('id',id)
                 player.points = count
 
-        
+
         players.append(player)
+        players.sort(key=attrgetter('points'), reverse=True)
 
     return players
 
@@ -279,5 +295,3 @@ from models.rapport import Rapport
 def create_rapport():
     rapport = Rapport()
     return rapport
-
-
