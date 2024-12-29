@@ -51,11 +51,48 @@ def welcom_header(data):
     print('                ')
 
 
-    
-#---------------- Test part
+def palyer_menu_1():
+    print(" ")
+    print("     Your Players Are:")
+    show_all_players()
+    return ask_add_player()
 
 
-#------------------
+def add_player(player):
+    create_player(player)
+    print("Write 'stop' if you don't want to add more players")
+    print("Or write 'continue' if you want to add an other player")
+    content = "Write 'stop' or 'continue' " 
+    stp_cnt = verify_choice(content,['stop','continue'])
+    if stp_cnt == 'stop':
+        return False
+
+    return True
+
+
+def choose_tour():
+    print(" ")
+    show_all_tournaments()
+    tour = select_tournament(all_tournaments())
+    choosed_tournament(tour)
+    return tour
+
+
+def finish_or_cont(para_rd1, para_rd2):
+    # if actual_round == tour.round_numbers:
+    if para_rd1 == para_rd2:
+        print("All the rounds of this tournament have been played")
+        content = "Write 'back' to go to the main page "
+        back = verify_choice(content,['back'])
+        if back == 'back':
+            return 'back'
+
+    print("You can now start organzing the games or go back")
+    content = "write 'yes' or 'back' "
+    start_games = verify_choice(content,['yes','back'])
+    if start_games == 'back':
+        return 'back'
+
 
 
 def main_page():
@@ -63,13 +100,11 @@ def main_page():
     print(" -*-*-*-  -*-*-*- -*-*-*- -*-*-*-")
     choice0 = select_or_create()
     if choice0 == '1':
-        print(" ")
-        print("     Your Players Are:")
-        show_all_players()
-        add_player = ask_add_player()
-        if add_player == 'yes':
-            player = send_dt_player()
-            create_player(player)
+        if palyer_menu_1() == 'yes':
+            new_player = True
+            while new_player is True:
+                player = send_dt_player()
+                new_player = add_player(player)
         else:
             return True
         # go back to main menue
@@ -77,25 +112,11 @@ def main_page():
             return True
 
     if choice0 == '2':
-        print(" ")
-        show_all_tournaments()
-        tour = select_tournament(all_tournaments())
-        choosed_tournament(tour)
-        '''
-        Organizing games by round.
-        '''
+        tour = choose_tour()
+        #Organizing games by round.
         actual_round = tour.actual_round_number
-        if actual_round == tour.round_numbers:
-            print("All the rounds of this tournament have been played")
-            content = "Write 'back' to go to the main page "
-            back = verify_choice(content,['back'])
-            if back == 'back':
-                return True
-
-        print("You can now start organzing the games or go back")
-        content = "write 'yes' or 'back' "
-        start_games = verify_choice(content,['yes','back'])
-        if start_games == 'back':
+        cont_back = finish_or_cont(actual_round, tour.round_numbers)
+        if cont_back == 'back':
             return True
 
         # get the courrent round
@@ -106,7 +127,6 @@ def main_page():
             round = get_current_round(tour)
             if tour.actual_round_number < 1:    
                 sorted_players = order_players(tour.players_list,True)
-                print("Sorted PLayeRS if actual round is 0 ", sorted_players)
             else:
                 games = selected_games('round_id',str(round.id))
                 actual_players = calculate_points(tour)
@@ -190,8 +210,7 @@ def main_page():
         create_html_rapport(rapport)
 
 
-#-------
+#---------------- Test part
 
-# def main_rapport():
-#     # Starting rapport
-    
+
+#------------------
