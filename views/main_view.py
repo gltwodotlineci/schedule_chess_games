@@ -39,7 +39,6 @@ from controller.controller import sort_players_rnd2
 from controller.controller import get_current_round
 from controller.controller import selected_games
 from controller.controller import create_rapport
-from controller.controller import tournament_rounds
 from controller.controller import tournament_players
 
 
@@ -52,7 +51,7 @@ def welcom_header(data):
     print('                ')
 
 
-
+    
 #---------------- Test part
 
 
@@ -62,8 +61,8 @@ def welcom_header(data):
 def main_page():
     welcom_header(list_tournaments_players())
     print(" -*-*-*-  -*-*-*- -*-*-*- -*-*-*-")
-    choice1 = select_or_create()
-    if choice1 == '1':
+    choice0 = select_or_create()
+    if choice0 == '1':
         print(" ")
         print("     Your Players Are:")
         show_all_players()
@@ -77,7 +76,7 @@ def main_page():
         if go_back() == 'back':
             return True
 
-    if choice1 == '2':
+    if choice0 == '2':
         print(" ")
         show_all_tournaments()
         tour = select_tournament(all_tournaments())
@@ -139,9 +138,8 @@ def main_page():
             cont_back = verify_choice(content,['c','back'])
             if cont_back == 'back':
                 break
-     
 
-    elif choice1 == '3':
+    elif choice0 == '3':
         print(" ")
         print("Lets create some Tournaments ! ")
         dt_tournament = send_dt_tourn()
@@ -160,8 +158,8 @@ def main_page():
         
         print(" ")
         
-        choice = create_round_tour(tour)
-        if choice == 'back':
+        choice1 = create_round_tour(tour)
+        if choice1 == 'back':
             return True
 
         # creating all the rounds
@@ -176,24 +174,24 @@ def main_page():
         print(f"Congratulation, You have created the {tour.name} tournament")
         verify_choice("write 'yes' to go to the main menue: ",['yes'])
 
+    elif choice0 == 'R':
+        print(" Creating rapport based on choosed tournament: ")
+        print(" ")
+        # The tournaments
+        show_all_tournaments()
+        choosed_tour = select_tournament(all_tournaments())
+        # creating rapports
+        rapport = create_rapport()
+        rapport.choosed_tour = choosed_tour.id
+        tour_choice = rapport.choosed_tour
+        print("  ")
+        print(f"The selected tournament is: {tour_choice.get('name')} starting at {tour_choice.get('starting_date')} ending at {tour_choice.get('ending_date')}")
+        # create html rapport
+        create_html_rapport(rapport)
+
+
 #-------
 
-def main_rapport():
-    # Starting rapport
-    print(" Creating rapport based on choosed tournament: ")
-    print(" ")
-    # The tournaments
-    show_all_tournaments()
-    choosed_tour = select_tournament(all_tournaments())
-    # creating rapports
-    rapport = create_rapport()
-    rapport.choosed_tour = choosed_tour.id
-    tour_choice = rapport.choosed_tour
-    print(f"The selected tournament is: {tour_choice.get('name')} starting at {tour_choice.get('starting_date')} ending at {tour_choice.get('ending_date')}")
-    print("  ")
-    # Choosed tournament players
-    print("The players of this tournament are:")
-    tour_players = tournament_players(tour_choice.get('players_list'))
-    # Choosed tournament rounds
-    rounds_lst = tournament_rounds(tour_choice.get('rounds_list'))
-    create_html_rapport(rapport, tour_players, rounds_lst)
+# def main_rapport():
+#     # Starting rapport
+    

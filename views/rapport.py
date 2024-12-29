@@ -1,5 +1,6 @@
 from controller.controller import all_players
 from controller.controller import all_tournaments
+from controller.controller import tournament_players
 from controller.controller import games_by_round
 from controller.controller import calculate_points
 
@@ -20,9 +21,10 @@ def games_str(rounds):
     return ''.join(rounds_lst)
 
 
-def create_html_rapport(rapport, tour_players, rounds):
+def create_html_rapport(rapport):
     players = all_players()
     tournaments = all_tournaments()
+    tour_players = tournament_players(rapport.players_list)
 
     # Opening or creating a new html file
     f = open(f"raport {rapport.date_rapport}.html", 'w')
@@ -42,23 +44,23 @@ def create_html_rapport(rapport, tour_players, rounds):
     """ 
     html_template += ''.join([f'<p>{pl.first_name} {pl.last_name} {pl.fin}</p>' for pl in players])
     html_template += """
-    <p><b>The list of the the players of the tournament selected are: </b></p>
+    <p><b>The list of the the selected tournament and the list of it's players is: </b></p>
     """ 
+    html_template += f'<p>The tournament name <b>"{rapport.tour.name}"</b></p>'
     html_template += ''.join([f'<p>{pl.first_name} {pl.last_name} {pl.fin}</p>' for pl in tour_players])
     html_template += """
     <h3>The rounds details of the the tournament selected are: </h3>
     """
-    html_template +=  games_str(rounds)
+    html_template +=  games_str(rapport.rounds_lists)
 
     html_template += """
     <h3> The classement for this tournament is </h3>
     """
-    players_id = [x.id for x in tour_players]
-    actual_players = calculate_points(players_id)
+    # players_id = [x.id for x in tour_players]
+    actual_players = calculate_points(rapport.tour)
     html_template +=  after_contest(actual_players)
 
     html_template += """
-
 
     </body> 
     </html> 

@@ -39,16 +39,6 @@ def get_current_round(tour):
     return round
 
 
-# giving round from tournament list
-def tournament_rounds(list_id):
-    tournament_rounds_lst = []
-    for id in list_id:
-        round = Round.from_db(id)
-        tournament_rounds_lst.append(round)
-
-    return tournament_rounds_lst
-
-
 '''
 Tournement,
 create ans serialize tournement
@@ -89,12 +79,8 @@ def all_players():
 
 
 # List of players from a tournament
-def tournament_players(list_id):
-    tour_players_lst = []
-    for id in list_id:
-        player = Player.from_db('id',id)
-        tour_players_lst.append(player)
-
+def tournament_players(players):
+    tour_players_lst = players
     tour_players_lst.sort(key=attrgetter('last_name'))
     return tour_players_lst
 

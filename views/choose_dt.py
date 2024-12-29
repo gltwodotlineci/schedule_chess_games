@@ -12,12 +12,14 @@ def verify_choice(condition,options):
 Menue
 '''
 def select_or_create():
-    print("  ---      You have three choices      ---")
+    print("  ---      You have four choices      ---")
     print("  -- < Add/check the players   - 1 > --")
     print("  -- < Select a tournament     - 2 > --")
-    print("  -- < Create a new tournament - 3 > --")    
-    content = "Please write '1', '2' or '3' "
-    return verify_choice(content,['1','2','3'])
+    print("  -- < Create a new tournament - 3 > --")
+    print("  -- < Create a rapport        - R > --")
+
+    content = "Please write '1', '2', '3' or 'R' "
+    return verify_choice(content,['1','2','3', 'R'])
 
 
 def go_back():

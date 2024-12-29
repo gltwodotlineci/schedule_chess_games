@@ -47,7 +47,6 @@ class Tournament:
         }
     
 
-
     @classmethod
     def from_db(cls, id):
         tournament = select_from_db("json_data/tournaments.json",id)
