@@ -40,6 +40,7 @@ from controller.controller import get_current_round
 from controller.controller import selected_games
 from controller.controller import create_rapport
 from controller.controller import tournament_players
+from controller.controller import edit_tour_round
 
 
 
@@ -141,10 +142,10 @@ def main_page():
             # Geting round and creating games for round        
             round_games = games_by_round(str(round.id))
             players, games = round_players(round_games)
-            view_round_contest(players)
+            view_round_contest(players,games)
             add_winner_instruct()
-            winners = choos_winner(players)
-            games, tour = add_results(winners,games)
+            games = choos_winner(players,games)
+            tour = edit_tour_round(round)
             # check the players points based on games results
             actual_players = calculate_points(tour)
             after_contest(actual_players)

@@ -1,15 +1,17 @@
 from models.player import Player
+from controller.controller import white_king    
 
-
-def view_round_contest(data):
+def view_round_contest(data,games):
     print(" ")
     print("             The games are")
     for i,pl in enumerate(data):
         p1 = f"{pl[0].first_name} {pl[0].last_name}"
         p2 = f"{pl[1].first_name} {pl[1].last_name}"
+        p1_g = white_king(pl[0],games,p1)
+        p2_g = white_king(pl[1],games, p2)
         print("______        <>  <>  <>       ______")
         print(f"                 Game {i+1}")
-        print(f"{p1} as white king vs {p2} as black king")
+        print(f"{p1_g} vs {p2_g}")
     print(" ")
 
 

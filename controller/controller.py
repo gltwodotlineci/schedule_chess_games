@@ -59,7 +59,17 @@ def list_tournaments_players():
     data['tournaments'] = Tournament.all_data()
     data['players'] = Player.all_data()
     return data
-  
+
+
+def edit_tour_round(round):
+    tour = Tournament.from_db(round.tournament_id)
+    tour.actual_round_number += 1
+    tour.save(str(tour.id))
+    round.ending_date_hour = today_str()
+    round.save(str(round.id))
+
+    return tour
+
 
 '''
 Players part:
@@ -147,27 +157,30 @@ def selected_games(inst,name):
 def organize_game(players,round):
     existing_games = len(round.games_list)
     nb = len(players)
-    tour_id = str(round.tournament_id)
     games = []
     for i in range(existing_games*2,nb,2):
         game  = Game(
-            str(round.id),
+            round.id,
             players[i].id,
             players[i+1].id,
-            round.number
             )
         game.save()
         games.append(game)
     
+    # Senging all the games of the round instead of half of them
+    # In case we are restarting the game
     if existing_games != 0:
-        games = selected_games('round_id',str(round.id))
-
-
-    # tour = Tournament.from_db(tour_id)
-    # tour.actual_round_number += 1
-    # tour.save(str(tour_id))
+        games = selected_games('round_id',round.id)
 
     return games
+
+
+def white_king(player, games, pname):
+    for game in games:
+        if player.id == game.white_king:
+            return f"{pname} as white king"
+
+        return f"{pname} as black king"
 
 
 def sort_players_rnd2(players,old_games):
@@ -208,25 +221,27 @@ def games_by_round(rnd_id):
     return games_lst
 
 
-def add_results(results_list,games):
-    for i,game in enumerate(games):
-        if results_list[i] == "1":
+def add_results(result,game):
+    # for i,game in enumerate(games):
+    if game.res_p1 == None and game.res_p2 == None:
+        if result == "1":
             game.set_winner(game.player1)
-        elif results_list[i] == "2":
+        elif result == "2":
             game.set_winner(game.player2)
-        elif results_list[i] == "3":
+        elif result == "3":
             game.set_winner("None")
-        # save results on game:
+
         game.save(game.id)
+
     # closing hour round
-    rd_id = games[0].round_id
+    rd_id = game.round_id
     round = Round.from_db(rd_id)
     tour = Tournament.from_db(round.tournament_id)
-    tour.actual_round_number += 1
-    tour.save(str(tour.id))
-    round.ending_date_hour = today_str()
-    round.save(str(round.id))
-    return games, tour
+    # tour.actual_round_number += 1
+    # tour.save(str(tour.id))
+    # round.ending_date_hour = today_str()
+    # round.save(str(round.id))
+    return game
 
 
 # showing players contests for round
@@ -250,7 +265,7 @@ def calculate_points(tour):
     rounds_id = tour.rounds_list
     games = []
     for round_id in rounds_id:
-        games += selected_games('round_id', round_id)
+        games += selected_games('round_id', str(round_id))
 
     players = []
     for id in tour.players_list:

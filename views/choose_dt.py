@@ -1,5 +1,6 @@
 from controller.controller import check_fin
 from controller.controller import enter_existing_player
+from controller.controller import add_results
 
 def verify_choice(condition,options):
     input_var = input(condition)
@@ -154,18 +155,19 @@ def send_dt_round(round_nb):
 '''
 Game
 '''
-def choos_winner(data):
-    winners = []
+def choos_winner(players, data_games):
+    games = []
     content = "Choose 1 ,2 or 3"
-    for pl in data:
+    for i,pl in enumerate(players):
         p1 = f"player1 {pl[0].first_name} {pl[0].last_name} "
         p2 = f"player2 {pl[1].first_name} {pl[1].last_name} "
         print(f"{p1} VS {p2}")
         content = f"Choose 1 ,2 or 3 "
         winner = verify_choice(content,['1','2','3'])
-        winners.append(winner)
+        game = add_results(winner, data_games[i])
+        games.append(game)
 
-    return winners
+    return games
 
 from views.lists_values import show_all_tournaments
 from controller.controller import all_tournaments

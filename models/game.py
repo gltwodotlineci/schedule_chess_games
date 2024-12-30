@@ -2,16 +2,17 @@ from models.support_classes import read_json
 from models.support_classes import save_support
 from models.support_classes import select_from_db
 from models.support_classes import create_id
-
+import random
 
 
 class Game():
-    def __init__(self,round_id, player1, player2, round_nb, res_p1=None, res_p2=None, id=None):
+    def __init__(self,round_id, player1, player2, res_p1=None, res_p2=None, white_king=None,id=None):
         self.id = create_id(id)
         self.round_id = round_id
         self.player1_result = [player1, res_p1]
         self.player2_result = [player2, res_p2]
-        self.round_nb = round_nb
+        players = [player1,player2]
+        self._white_king = players[random.randint(0,1)]
 
 
     @property
@@ -22,14 +23,26 @@ class Game():
     @property
     def player2(self):
         return self.player2_result[0]
-    
+
+
     @property
     def res_p1(self):
         return self.player1_result[1]
-    
+
+
     @property
     def res_p2(self):
         return self.player2_result[1]
+
+
+    @property
+    def white_king(self):
+        return self._white_king
+
+
+    @white_king.setter
+    def white_king(self,value):
+        self._white_king = value
 
 
     def set_winner(self, winner):
@@ -40,7 +53,6 @@ class Game():
         elif winner == "None":
             self.player1_result[1] = False
             self.player2_result[1] = False
-
         
     def serialize_data(self):
         return {
@@ -48,7 +60,7 @@ class Game():
             'round_id': self.round_id,
             'player1_result': self.player1_result,
             'player2_result': self.player2_result,
-            'round_nb': self.round_nb
+            'white_king': self.white_king
         }
 
 
@@ -60,7 +72,7 @@ class Game():
             'round_id': game.get('round_id'),
             'player1': game.get('player1_result')[0],
             'player2': game.get('player2_result')[0],
-            'round_nb': game.get('round_nb'),
+            'white_king': game.get('white_king'),
             'res_p1': game.get('player1_result')[1],
             'res_p2': game.get('player2_result')[1]
         }
@@ -77,7 +89,7 @@ class Game():
             'round_id': game.get('round_id'),
             'player1': game.get('player1_result')[0],
             'player2': game.get('player2_result')[0],
-            'round_nb': game.get('round_nb'),
+            'white_king': game.get('white_king'),
             'res_p1': game.get('player1_result')[1],
             'res_p2': game.get('player2_result')[1]
 
@@ -106,7 +118,7 @@ class Game():
                     'round_id': game.get('round_id'),
                     'player1': game.get('player1_result')[0],
                     'player2': game.get('player2_result')[0],
-                    'round_nb': game.get('round_nb'),
+                    'white_king': game.get('white_king'),
                     'res_p1': game.get('player1_result')[1],
                     'res_p2': game.get('player2_result')[1]
                 }
