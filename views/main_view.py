@@ -111,6 +111,7 @@ def main_page():
         # go back to main menue
         if go_back() == 'back':
             return True
+        return False
 
     if choice0 == '2':
         tour = choose_tour()
@@ -159,6 +160,7 @@ def main_page():
             cont_back = verify_choice(content,['c','back'])
             if cont_back == 'back':
                 break
+            return True
 
     elif choice0 == '3':
         print(" ")
@@ -193,7 +195,10 @@ def main_page():
             rounds.append(create_round(data))
 
         print(f"Congratulation, You have created the {tour.name} tournament")
-        verify_choice("write 'yes' to go to the main menue: ",['yes'])
+        retour = verify_choice("write 'yes' to go to the main menue or 'C' to close: ",['yes', 'close'])
+        if retour == 'yes':
+            return True
+        return False
 
     elif choice0 == 'R':
         print(" Creating rapport based on choosed tournament: ")
@@ -209,6 +214,9 @@ def main_page():
         print(f"The selected tournament is: {tour_choice.get('name')} starting at {tour_choice.get('starting_date')} ending at {tour_choice.get('ending_date')}")
         # create html rapport
         create_html_rapport(rapport)
+        return True
+    else:
+        return False
 
 
 #---------------- Test part

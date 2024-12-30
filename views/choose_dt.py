@@ -19,13 +19,14 @@ def select_or_create():
     print("  -- < Create a new tournament - 3 > --")
     print("  -- < Create a rapport        - R > --")
 
-    content = "Please write '1', '2', '3' or 'R' "
-    return verify_choice(content,['1','2','3', 'R'])
+    content = "Please write '1', '2', '3', 'R' or 'C' to close the programme "
+    return verify_choice(content,['1','2','3','R','C'])
 
 
 def go_back():
-    content = "Write 'back' if you want to return to the main page"
-    return verify_choice(content,['back'])
+    content = "You can go back to the main menue or close the programe"
+    content += " Please write 'back' or 'C' "
+    return verify_choice(content,['back','C'])
 
 '''
 Tournament
