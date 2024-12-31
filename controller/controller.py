@@ -71,6 +71,20 @@ def edit_tour_round(round):
     return tour
 
 
+# Checking if the last tournamented created has all the players or rounds
+def check_last_tour(tour=None):
+    if tour:
+        last_tour = tour
+    else:
+        last_tour = Tournament.last_tour()
+    missing_players = int(last_tour.nb_players) - len(last_tour.players_list)
+    missing_rounds = last_tour.round_numbers - len(last_tour.rounds_list)
+    if missing_players > 0 or missing_rounds > 0:
+        return False, last_tour, missing_players, missing_rounds
+
+    return True, last_tour, missing_players, missing_rounds
+
+
 '''
 Players part:
 '''
@@ -233,14 +247,6 @@ def add_results(result,game):
 
         game.save(game.id)
 
-    # closing hour round
-    rd_id = game.round_id
-    round = Round.from_db(rd_id)
-    tour = Tournament.from_db(round.tournament_id)
-    # tour.actual_round_number += 1
-    # tour.save(str(tour.id))
-    # round.ending_date_hour = today_str()
-    # round.save(str(round.id))
     return game
 
 
@@ -294,5 +300,4 @@ Rapport
 from models.rapport import Rapport
 
 def create_rapport():
-    rapport = Rapport()
-    return rapport
+    return Rapport()

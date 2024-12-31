@@ -68,3 +68,13 @@ class Tournament:
     def save(self,id=None):
         #factoried save function
         save_support("json_data/tournaments.json", self.serialize_data(),id)
+
+
+    #giving last touranement
+    @classmethod
+    def last_tour(cls):
+        all_tours_json = read_json('json_data/tournaments.json')
+        nb_last = len(all_tours_json)
+        last_tour_json = all_tours_json[nb_last-1]
+        last_tour = cls(**last_tour_json)
+        return last_tour

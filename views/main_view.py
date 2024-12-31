@@ -10,6 +10,7 @@ from views.choose_dt import date_and_time
 from views.choose_dt import choos_winner
 from views.choose_dt import choos_fed_nb
 from views.choose_dt import go_back
+from views.choose_dt import nn_complet_tour
 from views.show import after_contest
 
 from views.show import view_round_contest
@@ -20,7 +21,6 @@ from views.lists_values import show_all_tournaments
 from views.lists_values import show_all_players
 
 from views.rapport import create_html_rapport
-
 
 from controller.controller import all_tournaments
 from controller.controller import list_tournaments_players
@@ -41,8 +41,6 @@ from controller.controller import selected_games
 from controller.controller import create_rapport
 from controller.controller import tournament_players
 from controller.controller import edit_tour_round
-
-
 
 
 def welcom_header(data):
@@ -74,11 +72,18 @@ def add_player(player):
 def choose_tour():
     print(" ")
     show_all_tournaments()
+    # checking if the tournament construction is complete
     tour = select_tournament(all_tournaments())
+    completed, tour, missing_pl, missing_rd = check_last_tour(tour)
+    if completed is False:
+        return nn_complet_tour(tour,missing_pl,missing_rd)
+
     choosed_tournament(tour)
     return tour
 
-
+'''
+Part 2 menue
+'''
 def finish_or_cont(para_rd1, para_rd2):
     # if actual_round == tour.round_numbers:
     if para_rd1 == para_rd2:
@@ -95,7 +100,66 @@ def finish_or_cont(para_rd1, para_rd2):
         return 'back'
 
 
+def sort_players(tour):
+    actual_round = tour.actual_round_number
+    print("--------")
+    print("Round ", actual_round+1)
+    print("--------")
+    round = get_current_round(tour)
+    if actual_round < 1:    
+        sorted_players = order_players(tour.players_list,True)
+    else:
+        games = selected_games('round_id',round.id)
+        actual_players = calculate_points(tour)
+        new_sorted_players_id = sort_players_rnd2(actual_players,games)
+        sorted_players = order_players(new_sorted_players_id)
 
+    return round, sorted_players
+
+
+def ending_menu2():
+    print("You played all the rounds of this turnament!")
+    print("If you want to close or go back write 'C' or 'back'")
+    content = "'C' for close and 'back' for going back "
+    cont_back = verify_choice(content,['C','back'])
+    if cont_back == 'back':
+        return True
+    return False
+
+'''
+Part 3 menue
+'''
+from controller.controller import check_last_tour
+def players_for_new_tour():
+    print(" ")
+    complete, lst_tour, missing_pls, missing_rds = check_last_tour()
+    if complete is False:
+        if missing_rds > 0 and missing_pls == 0:
+            print(f"Your tournament {lst_tour.name} is missing {missing_rds} rounds")
+            print(f"You can restart creating the missed rounds for this tournament")
+            return lst_tour, missing_pls
+        print(f"You haven't added all the players to your last tournament")
+        print(f"In your tournament '{lst_tour.name}' you need to add {missing_pls} player/s ")
+        nb_players = len(lst_tour.players_list)
+        show_all_players()
+        return lst_tour, missing_pls
+
+    print("Lets create some Tournaments ! ")
+    dt_tournament = send_dt_tourn()
+    tour = create_tournament(dt_tournament)
+    print(" ")
+    print("From the next player list you can choose the players for this tournament")
+    print("The number of players must be even. ")
+    print(" ")
+    show_all_players()
+    print("_________________")
+    nb_players = int(tour.nb_players)
+    print("Exemple of the FED Id nb 'AB12345' ")
+    return tour, nb_players
+
+'''
+    MAIN MENUE
+'''
 def main_page():
     welcom_header(list_tournaments_players())
     print(" -*-*-*-  -*-*-*- -*-*-*- -*-*-*-")
@@ -115,6 +179,8 @@ def main_page():
 
     if choice0 == '2':
         tour = choose_tour()
+        if tour == 'back':
+            return True
         #Organizing games by round.
         actual_round = tour.actual_round_number
         cont_back = finish_or_cont(actual_round, tour.round_numbers)
@@ -123,18 +189,7 @@ def main_page():
 
         # get the courrent round
         while actual_round < tour.round_numbers:
-            print("--------")
-            print("Round ", actual_round+1)
-            print("--------")
-            round = get_current_round(tour)
-            if tour.actual_round_number < 1:    
-                sorted_players = order_players(tour.players_list,True)
-            else:
-                games = selected_games('round_id',str(round.id))
-                actual_players = calculate_points(tour)
-                new_sorted_players_id = sort_players_rnd2(actual_players,games)
-                sorted_players = order_players(new_sorted_players_id)
-
+            round, sorted_players = sort_players(tour)
             games = organize_game(sorted_players, round)
             # adding list games to the round
             lst_games_id = [str(x.id) for x in games]
@@ -155,32 +210,14 @@ def main_page():
             if actual_round == tour.round_numbers:
                 break
 
-            print("If you want to continue or go back write 'c' or 'back'")
-            content = "write 'c' or 'back' "
-            cont_back = verify_choice(content,['c','back'])
-            if cont_back == 'back':
-                break
-            return True
+        return ending_menu2()
 
     elif choice0 == '3':
-        print(" ")
-        print("Lets create some Tournaments ! ")
-        dt_tournament = send_dt_tourn()
-        tour = create_tournament(dt_tournament)
-        print(" ")
-        print("From the next player list you can choose the players for this tournament")
-        print("The number of players must be even. ")
-        print(" ")
-        show_all_players()
-        print("_________________")
-
-        nb_players = int(tour.nb_players)
-        print("Exemple of the FED Id nb 'AB12345' ")
+        tour, nb_players = players_for_new_tour()
         for i in range(1,nb_players+1):
             add_player2_tour(tour,choos_fed_nb(tour,i))
-        
+
         print(" ")
-        
         choice1 = create_round_tour(tour)
         if choice1 == 'back':
             return True
@@ -217,9 +254,3 @@ def main_page():
         return True
     else:
         return False
-
-
-#---------------- Test part
-
-
-#------------------

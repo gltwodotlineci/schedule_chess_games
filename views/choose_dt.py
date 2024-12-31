@@ -53,6 +53,18 @@ def select_tournament(tours):
     nb_tour = verify_choice(content,nb_tours)
     return tours[int(nb_tour)-1]
 
+def nn_complet_tour(tour,missing_pl,missing_rd):
+    print(f"The tournment {tour.name} is incompleted")
+    print(f"You might have {missing_pl} players or {missing_rd} rounds missing")
+    cont0 = f"In order to complete this tournament go to "
+    cont0 += f"the option '3' of the main menue"
+    print(cont0)
+    content = "Please write 'c' to continue to the main menue "
+    choice2 = verify_choice(content,['c'])
+    if choice2:
+        return 'back'
+
+
 
 '''
 Players
