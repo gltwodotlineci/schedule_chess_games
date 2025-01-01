@@ -54,13 +54,6 @@ def all_tournaments():
     return tours
 
 
-def list_tournaments_players():
-    data = {}
-    data['tournaments'] = Tournament.all_data()
-    data['players'] = Player.all_data()
-    return data
-
-
 def edit_tour_round(round):
     tour = Tournament.from_db(round.tournament_id)
     tour.actual_round_number += 1
@@ -103,6 +96,7 @@ def all_players():
 
 
 # List of players from a tournament
+# ??? Check if it is not used anymore????
 def tournament_players(players):
     tour_players_lst = players
     tour_players_lst.sort(key=attrgetter('last_name'))
@@ -198,11 +192,11 @@ def white_king(player, games, pname):
 
 
 def sort_players_rnd2(players,old_games):
-    finished_games =[]
+    finished_games = set()
     lst_players = []
     for game in old_games:
-        gm = [game.player1, game.player2]
-        finished_games.append(gm)
+        gm = (game.player1, game.player2)
+        finished_games.add(gm)
 
     players.sort(key=attrgetter('points'), reverse=True)
 
@@ -218,7 +212,7 @@ def combination_no_repeat(players,used_comb):
     new_games = []
     for i in range(0,len(players),2):
         player1, player2 = sorted([players[i], players[i+1]])
-        combination_key = tuple(player1), tuple(player2)
+        combination_key = player1, player2
         if combination_key not in used_comb:
             new_games.append([player1, player2])
 

@@ -74,9 +74,9 @@ def game_details(games_list):
             result = "<p>This game was draw </p>"
         elif game.res_p1 is True:
             result = '<p style="color: green;">'
-            result = f'{p1.first_name} {p1.last_name} won the game</p>'
+            result += f'{p1.first_name} {p1.last_name} won the game</p>'
         elif game.res_p2 is True:
-            result = '<p style="color: green;">{p2.first_name}'
+            result = f'<p style="color: green;">{p2.first_name}'
             result += f' {p2.last_name} won the game</p>'
 
         results += header + f"{result}"
