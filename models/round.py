@@ -11,9 +11,9 @@ class Round:
             name,
             number,
             starting_date_hour,
-            ending_date_hour = None,
-            id = None,
-            games_list = []
+            ending_date_hour=None,
+            id=None,
+            games_list=[]
             ):
         self.id = create_id(id)
         self.tournament_id = tournament_id
@@ -34,13 +34,11 @@ class Round:
             'ending_date_hour': self.ending_date_hour
         }
 
-
-    #geting obj
+    # geting obj
     @classmethod
     def from_db(cls, id):
         round = select_from_db("json_data/rounds.json", id)
         return cls(**round)
-            
 
     # send all data method
     @classmethod
@@ -53,7 +51,6 @@ class Round:
 
         return rounds_list
 
-
-    #save method
+    # save method
     def save(self, id=None):
-        save_support("json_data/rounds.json", self.serialize_data(),id)
+        save_support("json_data/rounds.json", self.serialize_data(), id)
