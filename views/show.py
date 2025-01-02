@@ -53,7 +53,9 @@ def after_contest(players):
     print("The players points after the game are")
     for pl in players:
         result = f"{pl.first_name} {pl.last_name} - {pl.points} points"
+        print(result)
         results += result + "</p>"
+
     return results
 
 

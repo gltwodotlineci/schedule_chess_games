@@ -13,7 +13,7 @@ class Game():
             player2,
             res_p1=None,
             res_p2=None,
-            # white_king=None,
+            white_king=None,
             id=None
             ):
         self.id = create_id(id)

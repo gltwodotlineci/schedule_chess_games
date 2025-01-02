@@ -38,6 +38,8 @@ from controller.controller import selected_games
 from controller.controller import create_rapport
 from controller.controller import edit_tour_round
 from controller.controller import check_last_tour
+from controller.controller import new_game_players
+from controller.controller import get_passed_round
 
 
 def welcom_header(tours, players):
@@ -106,11 +108,14 @@ def sort_players(tour):
     print("Round ", actual_round+1)
     print("--------")
     round = get_current_round(tour)
+
     if actual_round < 1:
         sorted_players = order_players(tour.players_list, True)
     else:
-        games = selected_games('round_id', round.id)
+        passed_rd = get_passed_round(tour)
+        games = selected_games('round_id', passed_rd.id)
         actual_players = calculate_points(tour)
+        new_sorted_players_id = new_game_players(actual_players, games)
         new_sorted_players_id = sort_players_rnd2(actual_players, games)
         sorted_players = order_players(new_sorted_players_id)
 

@@ -164,20 +164,6 @@ def date_and_time(existing_round):
     return data
 
 
-# asking to create the 1st, second, third or n-th round
-# ?? check if it is still used
-def confirm_creation(existing_rund):
-    print(" ")
-    print(f" You have {existing_rund} rounds")
-    content = "Write 'yes' if you confirm the creation of Round"
-    content += f" {existing_rund+1} or 'no' to go back "
-    choice = verify_choice(content, ['yes', 'no'])
-    if choice == 'no':
-        return 'back'
-
-    return choice
-
-
 def select_round(round_nb):
     content = "You can choose the number of the round "
     return verify_choice(content, [str(x) for x in range(1, round_nb+1)])
