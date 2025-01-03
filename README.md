@@ -70,3 +70,18 @@ And to execute the programme you shall just write the next command.
 ```bash
 python main.py
 ```
+
+The programme will propose you the next  options
+
+- Add/check the players   ->  write 1
+- Select a tournament     ->  write 2
+- Create a new tournament ->  write 3
+- Create a report         ->  write R
+
+- In the first option You can check the players that are on your data base
+- In the second you can select a tournament. After you choosed it, you'll have the list of all tournament and their state if they are finished, in progress or if they don't have all of their instance. Exemple missine a round, or player.
+    - Once you choosed one of the tournaments. You can continue by adding the game's result of each round
+    - Once you completed all the games of all the rounds. The list of player's ranking will be exposed.
+- In the third option you can create a new Tournament, its rounds and associating to the tournament the players from your player's list.
+    - In case the tournament that you just created, you forgot to add a round ore some players are missing. When you come back to this option, you will be directed at the part of the tournament where you were interopted last time.
+- Report. By choosing this option you will have the list of all tournaments that you want to choose for your report. Once you choosed you will have a html file repport with general information about the players and the tournaments and details abut the tournament selected
