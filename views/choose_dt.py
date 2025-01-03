@@ -21,7 +21,7 @@ def select_or_create():
     print("  -- < Add/check the players   - 1 > --")
     print("  -- < Select a tournament     - 2 > --")
     print("  -- < Create a new tournament - 3 > --")
-    print("  -- < Create a rapport        - R > --")
+    print("  -- < Create a report        - R > --")
 
     content = "Please write '1', '2', '3', 'R' or 'C' to close the programme "
     return verify_choice(content, ['1', '2', '3', 'R', 'C'])

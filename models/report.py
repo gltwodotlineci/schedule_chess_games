@@ -4,10 +4,10 @@ from models.player import Player
 from models.round import Round
 
 
-# Creating rapport model
-class Rapport:
+# Creating report model
+class Report:
     def __init__(self):
-        self.date_rapport = datetime.now().strftime("%d-%m-%Y-%H:%M")
+        self.date_report = datetime.now().strftime("%d-%m-%Y-%H:%M")
         self.list_tournaments = Tournament.all_data()
         self.list_players = Player.all_data()
         self._choosed_tour = {}

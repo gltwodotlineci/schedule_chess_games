@@ -19,7 +19,7 @@ from views.show import choosed_tournament
 from views.lists_values import show_all_tournaments
 from views.lists_values import show_all_players
 
-from views.rapport import create_html_rapport
+from views.report import create_html_report
 
 from controller.controller import all_tournaments
 from controller.controller import all_players
@@ -35,7 +35,7 @@ from controller.controller import calculate_points
 from controller.controller import sort_players_rnd2
 from controller.controller import get_current_round
 from controller.controller import selected_games
-from controller.controller import create_rapport
+from controller.controller import create_report
 from controller.controller import edit_tour_round
 from controller.controller import check_last_tour
 from controller.controller import new_game_players
@@ -256,22 +256,22 @@ def main_page():
         return False
 
     elif choice0 == 'R':
-        print(" Creating rapport based on choosed tournament: ")
+        print(" Creating report based on choosed tournament: ")
         print(" ")
         # The tournaments
         show_all_tournaments()
         choosed_tour = select_tournament(all_tournaments())
-        # creating rapports
-        rapport = create_rapport()
-        rapport.choosed_tour = choosed_tour.id
-        tour_choice = rapport.choosed_tour
+        # creating reports
+        report = create_report()
+        report.choosed_tour = choosed_tour.id
+        tour_choice = report.choosed_tour
         print("  ")
         slct_tr = f"The selected tournament is: {tour_choice.get('name')}"
         slct_tr += f"starting at {tour_choice.get('starting_date')}"
         slct_tr += f" ending at {tour_choice.get('ending_date')}"
         print(slct_tr)
-        # create html rapport
-        create_html_rapport(rapport)
+        # create html report
+        create_html_report(report)
         return True
     else:
         return False

@@ -5,7 +5,7 @@ from models.player import Player
 from models.round import Round
 from models.tournament import Tournament
 from models.game import Game
-from models.rapport import Rapport
+from models.report import Report
 
 from controller.validator import ValidatePlayer
 from controller.validator import ValidateRound
@@ -330,6 +330,6 @@ def calculate_points(tour):
     return players
 
 
-# Rapport
-def create_rapport():
-    return Rapport()
+# Report
+def create_report():
+    return Report()

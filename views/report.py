@@ -22,20 +22,20 @@ def games_str(rounds):
     return ''.join(rounds_lst)
 
 
-def create_html_rapport(rapport):
+def create_html_report(report):
     players = all_players()
     tournaments = all_tournaments()
-    tour_players = tournament_players(rapport.players_list)
+    tour_players = tournament_players(report.players_list)
 
     # Opening or creating a new html file
-    f = open(f"raport {rapport.date_rapport}.html", 'w')
+    f = open(f"raport {report.date_report}.html", 'w')
     html_template = f"""<html>
     <head>
-    <title>Rapport</title>
+    <title>Report</title>
     </head>
     <body style="text-align: center;">
-    <h1>Tournament Rapport date {rapport.date_rapport}</h1>
-    <h2>Welcome to the Tournament rapport page.</h2>
+    <h1>Tournament Report date {report.date_report}</h1>
+    <h2>Welcome to the Tournament report page.</h2>
     <p><b>The list of all tournaments is</b></p>
     """
     html_template += ''.join([f'<p>{tour.name}</p>' for tour in tournaments])
@@ -54,7 +54,7 @@ def create_html_rapport(rapport):
     html_template += """
     """
     html_template += '<p>The tournament name <b>'
-    html_template += f'"{rapport.tour.name}"</b></p>'
+    html_template += f'"{report.tour.name}"</b></p>'
 
     y = ''
     for pl in tour_players:
@@ -64,12 +64,12 @@ def create_html_rapport(rapport):
     html_template += """
     <h3>The rounds details of the the tournament selected are: </h3>
     """
-    html_template += games_str(rapport.rounds_lists)
+    html_template += games_str(report.rounds_lists)
 
     html_template += """
     <h3> The classement for this tournament is </h3>
     """
-    actual_players = calculate_points(rapport.tour)
+    actual_players = calculate_points(report.tour)
     html_template += after_contest(actual_players)
 
     html_template += """
