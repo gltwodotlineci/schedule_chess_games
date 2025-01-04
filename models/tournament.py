@@ -2,6 +2,7 @@ from models.support_classes import read_json
 from models.support_classes import create_id
 from models.support_classes import select_from_db
 from models.support_classes import save_support
+from models.support_classes import update_support
 
 
 class Tournament:
@@ -65,6 +66,10 @@ class Tournament:
     def save(self, id=None):
         # factoried save function
         save_support("json_data/tournaments.json", self.serialize_data(), id)
+
+    # update method
+    def update(self, id):
+        update_support("json_data/tournaments.json", self.serialize_data(), id)
 
     # giving last touranement
     @classmethod

@@ -24,20 +24,33 @@ def create_id(id=None):
 # select method factorized
 def select_from_db(json_path, id):
     list_dt_json = read_json(json_path)
-    for element in list_dt_json:
-        if element.get('id') == id:
-            return element
+
+    # generator expression
+    match_id = (x for x in list_dt_json if x.get('id') == id)
+    # generator
+    try:
+        obj = next(match_id)
+        return obj
+    except StopIteration:
+        raise ValueError("The given id does not exist")
 
 
 # Save method factorized
-def save_support(json_path, serialized_data, id=None):
+def save_support(json_path, serialized_data):
     list_dt_json = read_json(json_path)
-    if id is None:
-        list_dt_json.append(serialized_data)
-    else:
-        for element in list_dt_json:
-            if element.get('id') == id:
-                element.update(serialized_data)
-                break
-
+    list_dt_json.append(serialized_data)
     write_json(json_path, list_dt_json)
+
+
+# Update method factorized
+def update_support(json_path, serialized_data, id):
+    lst_dt_json = read_json(json_path)
+    # generator expression
+    match_id = (x for x in lst_dt_json if x.get('id') == id)
+    # generator
+    try:
+        obj = next(match_id)
+        obj.update(serialized_data)
+        write_json(json_path, lst_dt_json)
+    except StopIteration:
+        raise ValueError("The given id does not exist")

@@ -32,9 +32,15 @@ class Player:
     @classmethod
     def from_db(cls, key, player_id):
         list_players = read_json('json_data/players.json')
-        for player in list_players:
-            if player.get(key) == player_id:
-                return cls(**player)
+
+        # generator expression
+        match_id = (pl for pl in list_players if pl.get(key) == player_id)
+        # generator
+        try:
+            player = next(match_id)
+            return cls(**player)
+        except StopIteration:
+            raise ValueError("The given id does not exist")
 
     @classmethod
     def all_data(cls):
@@ -47,5 +53,5 @@ class Player:
         return players_list
 
     # save method
-    def save_dt(self, id=None):
-        save_support("json_data/players.json", self.serialize_player(), id)
+    def save(self):
+        save_support("json_data/players.json", self.serialize_player())

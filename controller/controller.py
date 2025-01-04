@@ -28,7 +28,7 @@ def create_round(data):
     # adding round id to Tournament
     tournament = Tournament.from_db(round.tournament_id)
     tournament.rounds_list.append(str(round.id))
-    tournament.save(str(tournament.id))
+    tournament.update(str(tournament.id))
     round.save()
     return round
 
@@ -72,9 +72,9 @@ def all_tournaments():
 def edit_tour_round(round):
     tour = Tournament.from_db(round.tournament_id)
     tour.actual_round_number += 1
-    tour.save(str(tour.id))
+    tour.update(str(tour.id))
     round.ending_date_hour = today_str()
-    round.save(str(round.id))
+    round.update(str(round.id))
 
     return tour
 
@@ -101,7 +101,7 @@ Players part:
 # Create player
 def create_player(data):
     player = support_create(ValidatePlayer, Player, data, 'player')
-    player.save_dt()
+    player.save()
     return player
 
 
@@ -155,7 +155,7 @@ def add_player2_tour(tour, fed_id):
     pl = Player.from_db('fin', fed_id)
     tour.players_list.append(pl.id)
 
-    tour.save(str(tour.id))
+    tour.update(str(tour.id))
 
 
 def refact_if__game(player_result):
@@ -282,7 +282,7 @@ def add_results(result, game):
         elif result == "3":
             game.set_winner("None")
 
-        game.save(game.id)
+        game.update(game.id)
 
     return game
 

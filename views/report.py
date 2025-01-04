@@ -4,8 +4,7 @@ from controller.controller import tournament_players
 from controller.controller import games_by_round
 from controller.controller import calculate_points
 
-from views.show import after_contest
-from views.show import game_details
+from views.show import ShowDetails
 
 
 def games_str(rounds):
@@ -16,7 +15,7 @@ def games_str(rounds):
         # geting the games of each round
         intro = "<p><b>The games of this round are: </b></p>"
         games = games_by_round(round.id)
-        round_games = game_details(games)
+        round_games = ShowDetails.game_details(games)
         rounds_lst.append(rnd_str + intro + round_games)
 
     return ''.join(rounds_lst)
@@ -70,7 +69,7 @@ def create_html_report(report):
     <h3> The classement for this tournament is </h3>
     """
     actual_players = calculate_points(report.tour)
-    html_template += after_contest(actual_players)
+    html_template += ShowDetails.after_contest(actual_players)
 
     html_template += """
 

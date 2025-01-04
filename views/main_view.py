@@ -10,14 +10,9 @@ from views.choose_dt import choos_winner
 from views.choose_dt import choos_fed_nb
 from views.choose_dt import go_back
 from views.choose_dt import nn_complet_tour
-from views.show import after_contest
 
-from views.show import view_round_contest
-from views.show import add_winner_instruct
-from views.show import choosed_tournament
-
-from views.lists_values import show_all_tournaments
-from views.lists_values import show_all_players
+from views.show import ShowDetails
+from views.lists_values import ShowAll
 
 from views.report import create_html_report
 
@@ -52,7 +47,7 @@ def welcom_header(tours, players):
 def palyer_menu_1():
     print(" ")
     print("     Your Players Are:")
-    show_all_players()
+    ShowAll.show_all_players()
     return ask_add_player()
 
 
@@ -70,14 +65,14 @@ def add_player(player):
 
 def choose_tour():
     print(" ")
-    show_all_tournaments()
+    ShowAll.show_all_tournaments()
     # checking if the tournament construction is complete
     tour = select_tournament(all_tournaments())
     completed, tour, missing_pl, missing_rd = check_last_tour(tour)
     if completed is False:
         return nn_complet_tour(tour, missing_pl, missing_rd)
 
-    choosed_tournament(tour)
+    ShowDetails.choosed_tournament(tour)
     return tour
 
 
@@ -154,7 +149,7 @@ def players_for_new_tour():
         lst_tour += f" to add {missing_pls} player/s"
         print(lst_tour)
         nb_players = len(lst_tour.players_list)
-        show_all_players()
+        ShowAll.show_all_players()
         return lst_tour, missing_pls
 
     print("Lets create some Tournaments ! ")
@@ -166,8 +161,7 @@ def players_for_new_tour():
     print(nxt_pl)
     print("The number of players must be even. ")
     print(" ")
-    show_all_players()
-    print("_________________")
+    ShowAll.show_all_players()
     nb_players = int(tour.nb_players)
     print("Exemple of the FED Id nb 'AB12345' ")
     return tour, nb_players
@@ -216,13 +210,13 @@ def main_page():
             # Geting round and creating games for round
             round_games = games_by_round(str(round.id))
             players, games = round_players(round_games)
-            view_round_contest(players, games)
-            add_winner_instruct()
+            ShowDetails.view_round_contest(players, games)
+            ShowDetails.add_winner_instruct()
             games = choos_winner(players, games)
             tour = edit_tour_round(round)
             # check the players points based on games results
             actual_players = calculate_points(tour)
-            after_contest(actual_players)
+            ShowDetails.after_contest(actual_players)
             # Checking if all rounds have been played
             actual_round = tour.actual_round_number
             if actual_round == tour.round_numbers:
@@ -259,7 +253,7 @@ def main_page():
         print(" Creating report based on choosed tournament: ")
         print(" ")
         # The tournaments
-        show_all_tournaments()
+        ShowAll.show_all_tournaments()
         choosed_tour = select_tournament(all_tournaments())
         # creating reports
         report = create_report()

@@ -2,6 +2,7 @@ from models.support_classes import read_json
 from models.support_classes import save_support
 from models.support_classes import select_from_db
 from models.support_classes import create_id
+from models.support_classes import update_support
 
 
 class Round:
@@ -54,3 +55,7 @@ class Round:
     # save method
     def save(self, id=None):
         save_support("json_data/rounds.json", self.serialize_data(), id)
+
+    # update method
+    def update(self, id):
+        update_support("json_data/rounds.json", self.serialize_data(), id)
