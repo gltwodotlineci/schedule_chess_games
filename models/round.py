@@ -53,8 +53,8 @@ class Round:
         return rounds_list
 
     # save method
-    def save(self, id=None):
-        save_support("json_data/rounds.json", self.serialize_data(), id)
+    def save(self):
+        save_support("json_data/rounds.json", self.serialize_data())
 
     # update method
     def update(self, id):

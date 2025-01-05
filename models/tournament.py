@@ -63,9 +63,9 @@ class Tournament:
         return tournaments_list
 
     # save  method
-    def save(self, id=None):
+    def save(self):
         # factoried save function
-        save_support("json_data/tournaments.json", self.serialize_data(), id)
+        save_support("json_data/tournaments.json", self.serialize_data())
 
     # update method
     def update(self, id):

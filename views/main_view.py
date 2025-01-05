@@ -147,7 +147,6 @@ def players_for_new_tour():
         print("You haven't added all the players to your last tournament")
         lst_tour = f"In your tournament '{lst_tour.name}' you need"
         lst_tour += f" to add {missing_pls} player/s"
-        print(lst_tour)
         nb_players = len(lst_tour.players_list)
         ShowAll.show_all_players()
         return lst_tour, missing_pls
@@ -206,7 +205,7 @@ def main_page():
             # adding list games to the round
             lst_games_id = [str(x.id) for x in games]
             round.games_list = lst_games_id
-            round.save(str(round.id))
+            round.update(str(round.id))
             # Geting round and creating games for round
             round_games = games_by_round(str(round.id))
             players, games = round_players(round_games)
