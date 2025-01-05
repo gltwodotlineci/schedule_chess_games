@@ -2,7 +2,18 @@ from models.player import Player
 from controller.controller import white_king
 
 
+def _players(tour):
+    print("The players registred at the turnament are: ")
+    if tour.players_list == []:
+        print("There are no players registred on this tournaments")
+    else:
+        for pl_id in tour.players_list:
+            player = Player.from_db('id', pl_id)
+            print(f"{player.first_name} {player.last_name} Id {player.fin}")
+
+
 class ShowDetails:
+
     @staticmethod
     def view_round_contest(data, games):
         print(" ")
@@ -18,18 +29,16 @@ class ShowDetails:
         print(" ")
 
     @staticmethod
+    def tournament_players(tour):
+        _players(tour)
+
+    @staticmethod
     def choosed_tournament(tournament):
         print(" ")
         print(f"You selected {tournament.name} at {tournament.place}")
         print(f"From {tournament.starting_date} to {tournament.ending_date}")
-        if tournament.players_list == []:
-            print("There are no players registred on this tournaments")
-        else:
-            print("The players registred of the turnament are: ")
-            for pl_id in tournament.players_list:
-                player = Player.from_db('id', pl_id)
-                print(f"{player.first_name} {player.last_name} ")
-
+        # giving the players for the tournament
+        _players(tournament)
         if tournament.rounds_list != []:
             print("The rounds for this turnament are.")
             for i in range(1, len(tournament.rounds_list)+1):
@@ -64,9 +73,10 @@ class ShowDetails:
     def game_details(games_list):
         results = ""
         for game in games_list:
-            p1 = Player.from_db('id',game.player1)
-            p2 = Player.from_db('id',game.player2)
-            header = f"<p style='font-size: large;'>{p1.first_name} {p1.last_name}"
+            p1 = Player.from_db('id', game.player1)
+            p2 = Player.from_db('id', game.player2)
+            header = "<p style='font-size: large;'>"
+            header += f"{p1.first_name} {p1.last_name}"
             header += f" against {p2.first_name} {p2.last_name}</p>"
             if game.res_p1 is None and game.res_p2 is None:
                 result = "<p>The game is not played jet</p>"

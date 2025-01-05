@@ -12,6 +12,7 @@ class ShowAll:
         for player in players:
             print(f"{player.first_name} {player.last_name}.  Id {player.fin}")
         print("_______________________________________")
+
     @staticmethod
     def show_all_tournaments():
         tournaments = all_tournaments()
@@ -28,4 +29,3 @@ class ShowAll:
                 print(f"{state} : {tour.name} - {i} ")
                 i += 1
                 state = "In progress... -> "
-

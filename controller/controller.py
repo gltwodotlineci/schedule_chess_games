@@ -85,6 +85,7 @@ def check_last_tour(tour=None):
         last_tour = tour
     else:
         last_tour = Tournament.last_tour()
+
     missing_players = int(last_tour.nb_players) - len(last_tour.players_list)
     missing_rounds = last_tour.round_numbers - len(last_tour.rounds_list)
     if missing_players > 0 or missing_rounds > 0:

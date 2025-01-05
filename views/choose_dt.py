@@ -14,6 +14,8 @@ def verify_choice(condition, options):
 '''
 Menue
 '''
+
+
 class MyClass:
     @staticmethod
     def select_or_create():

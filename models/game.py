@@ -107,7 +107,6 @@ class Game():
     # update method
     def update(self, id):
         update_support("json_data/games.json", self.serialize_data(), id)
-     
 
     # filter method
     @classmethod

@@ -134,22 +134,25 @@ Part 3 menue
 
 def players_for_new_tour():
     print(" ")
-    complete, lst_tour, missing_pls, missing_rds = check_last_tour()
+    complete, last_tour, missing_pls, missing_rds = check_last_tour()
     if complete is False:
         if missing_rds > 0 and missing_pls == 0:
-            msng = f"Your tournament {lst_tour.name} is missing"
+            msng = f"Your tournament {last_tour.name} is missing"
             msng += f" {missing_rds} rounds"
             print(msng)
             restart = "You can restart creating the missed"
             restart += " rounds for this tournament"
             print(restart)
-            return lst_tour, missing_pls
+            return last_tour, missing_pls
         print("You haven't added all the players to your last tournament")
-        lst_tour = f"In your tournament '{lst_tour.name}' you need"
-        lst_tour += f" to add {missing_pls} player/s"
-        nb_players = len(lst_tour.players_list)
+        tour_dits = f"In your tournament '{last_tour.name}' you need"
+        tour_dits += f" to add {missing_pls} player/s"
+        print(tour_dits)
+        nb_players = len(last_tour.players_list)
         ShowAll.show_all_players()
-        return lst_tour, missing_pls
+        print(" ")
+        ShowDetails.tournament_players(last_tour)
+        return last_tour, missing_pls
 
     print("Lets create some Tournaments ! ")
     dt_tournament = send_dt_tourn()
