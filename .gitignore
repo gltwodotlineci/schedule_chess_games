@@ -12,4 +12,4 @@ json_data/
 lib/
 lib64/
 *.html
-
+flake-report/

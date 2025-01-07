@@ -27,7 +27,6 @@ from controller.controller import add_player2_tour
 from controller.controller import games_by_round
 from controller.controller import round_players
 from controller.controller import calculate_points
-from controller.controller import sort_players_rnd2
 from controller.controller import get_current_round
 from controller.controller import selected_games
 from controller.controller import create_report
@@ -111,7 +110,6 @@ def sort_players(tour):
         games = selected_games('round_id', passed_rd.id)
         actual_players = calculate_points(tour)
         new_sorted_players_id = new_game_players(actual_players, games)
-        new_sorted_players_id = sort_players_rnd2(actual_players, games)
         sorted_players = order_players(new_sorted_players_id)
 
     return round, sorted_players
@@ -135,7 +133,7 @@ Part 3 menue
 def players_for_new_tour():
     print(" ")
     complete, last_tour, missing_pls, missing_rds = check_last_tour()
-    if complete is False:
+    if complete is False and last_tour is not None:
         if missing_rds > 0 and missing_pls == 0:
             msng = f"Your tournament {last_tour.name} is missing"
             msng += f" {missing_rds} rounds"

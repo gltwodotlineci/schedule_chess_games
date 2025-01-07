@@ -85,6 +85,8 @@ def check_last_tour(tour=None):
         last_tour = tour
     else:
         last_tour = Tournament.last_tour()
+        if last_tour is False:
+            return False, None, None, None
 
     missing_players = int(last_tour.nb_players) - len(last_tour.players_list)
     missing_rounds = last_tour.round_numbers - len(last_tour.rounds_list)
@@ -233,34 +235,6 @@ def new_game_players(p, passed_games):
 
     new_pl_lst = [item for sublist in new_g for item in sublist]
     return new_pl_lst
-
-
-def sort_players_rnd2(players, old_games):
-    finished_games = set()
-    lst_players = []
-    for game in old_games:
-        gm = (game.player1, game.player2)
-        finished_games.add(gm)
-
-    players.sort(key=attrgetter('points'), reverse=True)
-
-    for player in players:
-        lst_players.append(player.id)
-
-    combined_pl = combination_no_repeat(lst_players, finished_games)
-    new_pl_lst = [item for sublist in combined_pl for item in sublist]
-    return new_pl_lst
-
-
-def combination_no_repeat(players, used_comb):
-    new_games = []
-    for i in range(0, len(players), 2):
-        player1, player2 = sorted([players[i], players[i+1]])
-        combination_key = player1, player2
-        if combination_key not in used_comb:
-            new_games.append([player1, player2])
-
-    return new_games
 
 
 # Givin games by round
