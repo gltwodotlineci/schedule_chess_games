@@ -34,6 +34,7 @@ from controller.controller import edit_tour_round
 from controller.controller import check_last_tour
 from controller.controller import new_game_players
 from controller.controller import get_passed_round
+from controller.controller import check_games
 
 
 def welcom_header(tours, players):
@@ -80,9 +81,9 @@ Part 2 menue
 '''
 
 
-def finish_or_cont(para_rd1, para_rd2):
+def finish_or_cont(para_1rd, para_2rd):
     # if actual_round == tour.round_numbers:
-    if para_rd1 == para_rd2:
+    if para_1rd == para_2rd:
         print("All the rounds of this tournament have been played")
         content = "Write 'back' to go to the main page "
         back = verify_choice(content, ['back'])
@@ -255,10 +256,22 @@ def main_page():
         # The tournaments
         ShowAll.show_all_tournaments()
         choosed_tour = select_tournament(all_tournaments())
+        # send back if the tour is uncompleted
+        completed, tour, missing_pl, missing_rd = check_last_tour(choosed_tour)
+        if completed is False:
+            return nn_complet_tour(tour, missing_pl, missing_rd)
+
         # creating reports
         report = create_report()
         report.choosed_tour = choosed_tour.id
         tour_choice = report.choosed_tour
+        games = check_games(report.choosed_tour.get('rounds_list'))
+        if games is False:
+            print("This tournament has not any game orgnized ")
+            content_c = "Please write 'back' to return at the menu page "
+            back = verify_choice(content_c, ['back'])
+            if back == 'back':
+                return True
         print("  ")
         slct_tr = f"The selected tournament is: {tour_choice.get('name')}"
         slct_tr += f"starting at {tour_choice.get('starting_date')}"

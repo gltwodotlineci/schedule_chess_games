@@ -307,3 +307,14 @@ def calculate_points(tour):
 # Report
 def create_report():
     return Report()
+
+
+def check_games(rounds_id_list):
+    all_games = []
+    for round_id in rounds_id_list:
+        all_games += games_by_round(round_id)
+
+    if all_games == []:
+        return False
+
+    return True
