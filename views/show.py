@@ -3,9 +3,9 @@ from controller.controller import white_king
 
 
 def _players(tour):
-    print("The players registred at the turnament are: ")
+    print("The players registered at the tournament are: ")
     if tour.players_list == []:
-        print("There are no players registred on this tournaments")
+        print("There are no players registered on this tournaments")
     else:
         for pl_id in tour.players_list:
             player = Player.from_db('id', pl_id)
@@ -40,7 +40,7 @@ class ShowDetails:
         # giving the players for the tournament
         _players(tournament)
         if tournament.rounds_list != []:
-            print("The rounds for this turnament are.")
+            print("The rounds for this tournament are.")
             for i in range(1, len(tournament.rounds_list)+1):
                 print(f"Round {i}")
 
@@ -49,8 +49,8 @@ class ShowDetails:
         print('__________________________________________')
         print("               Entering the results     ")
         print(" ")
-        strt = "To enter the results you will be asked to choose between"
-        strt += "the three posible cases"
+        strt = "To enter the results, you will be asked to choose between"
+        strt += "the three possible cases"
         print(strt)
         instruct2 = "Write '1' if the player 1 won, '2' if the player 2"
         instruct2 += " won, and '3' if it's a draw."

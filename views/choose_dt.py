@@ -29,12 +29,12 @@ def select_or_create():
     print("  -- < Create a new tournament - 3 > --")
     print("  -- < Create a report        - R > --")
 
-    content = "Please write '1', '2', '3', 'R' or 'C' to close the programme "
+    content = "Please write '1', '2', '3', 'R' or 'C' to close the program "
     return verify_choice(content, ['1', '2', '3', 'R', 'C'])
 
 
 def go_back():
-    content = "You can go back to the main menue or close the programe"
+    content = "You can go back to the main menu or close the program"
     content += " Please write 'back' or 'C' "
     return verify_choice(content, ['back', 'C'])
 
@@ -69,12 +69,12 @@ def select_tournament(tours):
 
 
 def nn_complet_tour(tour, missing_pl, missing_rd):
-    print(f"The tournment {tour.name} is incompleted")
+    print(f"The tournament {tour.name} is uncompleted")
     print(f"You might need {missing_pl} more players or {missing_rd} rounds")
     cont0 = "In order to complete this tournament go to "
-    cont0 += "the option '3' of the main menue"
+    cont0 += "the option '3' of the main menu"
     print(cont0)
-    content = "Please write 'c' to continue to the main menue "
+    content = "Please write 'c' to continue to the main menu "
     choice2 = verify_choice(content, ['c'])
     if choice2:
         return 'back'
@@ -97,9 +97,9 @@ def send_dt_player():
     print("Please enter the data for the new player")
     given_fin = input("Enter the FED ID ").upper()
     verify_fin = check_fin(given_fin)
-    # Check if it allredy exists on the DB
+    # Check if it already exists on the DB
     while verify_fin is True:
-        print("This FED ID allredy exist. Try another FED ID please ")
+        print("This FED ID already exist. Try another FED ID please ")
         given_fin = input("Enter a non-existent FED ID ").upper()
         verify_fin = check_fin(given_fin)
     dt['fin'] = given_fin
@@ -113,7 +113,7 @@ def send_dt_player():
 def choos_fed_nb(tour, nb):
     content = f"Enter the player {nb} FED number: "
     given_fin = input(content)
-    # if player allredy exists
+    # if player already exists
     verify_fin = check_fin(given_fin)
     # Verify if there is no dublant
     doublant_check = enter_existing_player(given_fin, tour)
@@ -136,7 +136,7 @@ Round
 
 # asking if it want to create a round for the new tournament
 def create_round_tour(tour_data):
-    print("Do you want to start creating round for the new tournament?")
+    print("Do you want to start creating a round for the new tournament?")
     rd_4tour = tour_data.round_numbers
     existing_rds = len(tour_data.rounds_list)
 

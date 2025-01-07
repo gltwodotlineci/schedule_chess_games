@@ -18,11 +18,11 @@ class ShowAll:
         tournaments = all_tournaments()
         state = "In progress... -> "
         if len(tournaments) > 0:
-            print("Here you have the tournement names and their number. ")
+            print("Here you have the tournament names and their number. ")
             i = 1
             for tour in tournaments:
                 if check_last_tour(tour)[0] is False:
-                    state = "Incompleted... -> "
+                    state = "Uncompleted... -> "
                 if tour.round_numbers == tour.actual_round_number:
                     state = "  -- Ended --  -> "
 

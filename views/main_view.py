@@ -39,8 +39,8 @@ from controller.controller import get_passed_round
 
 def welcom_header(tours, players):
     print("--- WELCOME TO THE CHESS GAME APPLICATION! ---")
-    print(f"You have registred {len(tours)} tournements")
-    print(f"You alsow have {len(players)} players")
+    print(f"You have registered {len(tours)} tournaments")
+    print(f"You also have {len(players)} players")
     print('                ')
 
 
@@ -54,7 +54,7 @@ def palyer_menu_1():
 def add_player(player):
     create_player(player)
     print("Write 'stop' if you don't want to add more players")
-    print("Or write 'continue' if you want to add an other player")
+    print("Or write 'continue' if you want to add another player")
     content = "Write 'stop' or 'continue' "
     stp_cnt = verify_choice(content, ['stop', 'continue'])
     if stp_cnt == 'stop':
@@ -90,7 +90,7 @@ def finish_or_cont(para_rd1, para_rd2):
         if back == 'back':
             return 'back'
 
-    print("You can now start organzing the games or go back")
+    print("You can now start organizing the games or go back")
     content = "write 'yes' or 'back' "
     start_games = verify_choice(content, ['yes', 'back'])
     if start_games == 'back':
@@ -118,8 +118,8 @@ def sort_players(tour):
 
 
 def ending_menu2():
-    print("You played all the rounds of this turnament!")
-    print("If you want to close or go back write 'C' or 'back'")
+    print("You played all the rounds of this tournament!")
+    print("If you want to close or go back, write 'C' or 'back'")
     content = "'C' for close and 'back' for going back "
     cont_back = verify_choice(content, ['C', 'back'])
     if cont_back == 'back':
@@ -165,7 +165,7 @@ def players_for_new_tour():
     print(" ")
     ShowAll.show_all_players()
     nb_players = int(tour.nb_players)
-    print("Exemple of the FED Id nb 'AB12345' ")
+    print("Example of the FED Id nb 'AB12345' ")
     return tour, nb_players
 
 
@@ -252,7 +252,7 @@ def main_page():
         return False
 
     elif choice0 == 'R':
-        print(" Creating report based on choosed tournament: ")
+        print(" Creating report based on choosen tournament: ")
         print(" ")
         # The tournaments
         ShowAll.show_all_tournaments()

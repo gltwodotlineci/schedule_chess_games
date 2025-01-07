@@ -47,8 +47,8 @@ def create_html_report(report):
         x += f'<p>{pl.first_name} {pl.last_name} {pl.fin}</p>'
 
     html_template += x
-    end_str = "<p><b>The list of the the selected tournament and "
-    end_str += "the list of it's players is: </b></p>"
+    end_str = "<p><b>The list of the selected tournament and "
+    end_str += "the list of its players is: </b></p>"
     html_template += end_str
     html_template += """
     """
@@ -61,7 +61,7 @@ def create_html_report(report):
 
     html_template += y
     html_template += """
-    <h3>The rounds details of the the tournament selected are: </h3>
+    <h3>The rounds details of the tournament selected are: </h3>
     """
     html_template += games_str(report.rounds_lists)
 
