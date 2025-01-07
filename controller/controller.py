@@ -33,14 +33,14 @@ def create_round(data):
     return round
 
 
-# get the current round
+# Get the current round
 def get_current_round(tour):
     current_round = tour.actual_round_number
     round_id = tour.rounds_list[current_round]
     return Round.from_db(round_id)
 
 
-# get the passed round
+# Get the passed round
 def get_passed_round(tour):
     passed_round = tour.actual_round_number - 1
     round_id = tour.rounds_list[passed_round]
@@ -120,7 +120,7 @@ def tournament_players(players):
     return tour_players_lst
 
 
-# check if fin exists
+# Check if fin exists
 def check_fin(data):
     for fin in Player.all_data():
         if fin.fin == data:
@@ -138,20 +138,20 @@ def enter_existing_player(fed_id, tour):
     return False
 
 
-# selecting player from it's last name
+# Selecting player from it's last name
 def order_players(players_id, round1=False):
     lst_players = []
     for pl_id in players_id:
         player = Player.from_db('id', pl_id)
         lst_players.append(player)
 
-    # ordering the players from last name
+    # Ordering the players from last name
     if round1:
         lst_players.sort(key=attrgetter('last_name'))
     return lst_players
 
 
-# ad multiple players
+# Add multiple players
 def add_player2_tour(tour, fed_id):
     pl = Player.from_db('fin', fed_id)
     tour.players_list.append(pl.id)
@@ -174,7 +174,7 @@ create and serialize game
 '''
 
 
-# send selected games
+# Send selected games
 def selected_games(inst, name):
     games = Game.filter_by_instance(inst, name)
     return games
@@ -263,7 +263,7 @@ def combination_no_repeat(players, used_comb):
     return new_games
 
 
-# givin games by round
+# Givin games by round
 def games_by_round(rnd_id):
     games_lst = []
     for game in Game.all_data():
@@ -274,7 +274,6 @@ def games_by_round(rnd_id):
 
 
 def add_results(result, game):
-    # for i,game in enumerate(games):
     if game.res_p1 is None and game.res_p2 is None:
         if result == "1":
             game.set_winner(game.player1)
@@ -288,7 +287,7 @@ def add_results(result, game):
     return game
 
 
-# showing players contests for round
+# Showing players contests for round
 def round_players(games_by_round):
     players = []
     games = []
@@ -304,7 +303,7 @@ def round_players(games_by_round):
     return players, games
 
 
-# convert game results to player instance points
+# Convert game results to player instance points
 def calculate_points(tour):
     rounds_id = tour.rounds_list
     games = []

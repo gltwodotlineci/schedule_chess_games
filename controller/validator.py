@@ -88,7 +88,7 @@ class ValidateRound(Round):
             self._starting_date_hour = val
         except ValueError:
             content_error = "Wrong date and hour format, please retry"
-            content_error += " with this format 'dd-mm-yyyy-HH:MM' "
+            content_error += " with this format, 'dd-mm-yyyy-HH:MM' "
             raise ValueError(content_error)
 
 

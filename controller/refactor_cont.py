@@ -11,12 +11,12 @@ def correction_dt(data, type):
         data['nb_players'] = input(input_text_1)
     elif type == 'round':
         print("Remember the format of the date: 'dd-mm-yyyy-HH:MM' ")
-        input_text_2 = "write again the starting date and hour please: "
+        input_text_2 = "write again the starting date and hour, please: "
         data['starting_date_hour'] = input(input_text_2)
     elif type == 'player':
         print("Error of date format or of FED ID")
-        data['birth_date'] = input("write again the birth date please: ")
-        print("Remember the fin format exemple is: 'AB1245' ")
+        data['birth_date'] = input("write again the birthdate please: ")
+        print("Remember the fin format example is: 'AB1245' ")
         data['fin'] = input("write again the fin number: ")
 
 
