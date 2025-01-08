@@ -14,7 +14,6 @@ def correction_dt(data, type):
         input_text_2 = "write again the starting date and hour, please: "
         data['starting_date_hour'] = input(input_text_2)
     elif type == 'player':
-        print("Error of date format or of FED ID")
         data['birth_date'] = input("write again the birthdate please: ")
         print("Remember the fin format example is: 'AB1245' ")
         data['fin'] = input("write again the fin number: ")
