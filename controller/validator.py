@@ -12,6 +12,11 @@ class ValidatePlayer(Player):
         super().__init__(fin, first_name, last_name, birth_date)
 
     def serialize_validator(self):
+        '''
+        Serializing a validate_player object.
+        :return: validate_player object as dictionary with the keys and their
+        respectiv values. fin, first_name, last_name, and birth_date
+        '''
         return {
             'fin': self.fin,
             'first_name': self.first_name,
@@ -21,14 +26,30 @@ class ValidatePlayer(Player):
 
     @property
     def birth_date(self):
+        '''
+        It will return the value birth_date
+        :param birth_date: date as string
+        :return: the birth date in string
+        '''
         return self._birth_date
 
     @property
     def fin(self):
+        '''
+        It will return the value fin
+        :param birth_date: string
+        :return: the fin value in string
+        '''
         return self._fin
 
     @birth_date.setter
     def birth_date(self, val):
+        '''
+        It will set the value of the birth date
+        :param value: date as string
+        The date value will be passed at the birth_date instance if the
+        format is appropriate to the date condition
+        '''
         try:
             datetime.datetime.strptime(val, "%d-%m-%Y")
             self._birth_date = val
@@ -39,7 +60,12 @@ class ValidatePlayer(Player):
 
     @fin.setter
     def fin(self, nb):
-        # regex
+        '''
+        It will set the value of the fed id number
+        :param nb: string number
+        The number will be passed at the fin instance if the federation id
+        format is respected
+        '''
         if bool(re.match(r"^[A-Z]{2}\d{5}$", nb)) is False:
             content_error = "Wrong 'fin' format, please retray with"
             content_error += " the format 'AB12345' "
@@ -56,6 +82,11 @@ class ValidateRound(Round):
         super().__init__(tournament_id, name, number, starting_date_hour)
 
     def serialize_validator(self):
+        '''
+        Serializing a validate_round object.
+        :return: validate_round object as dictionary with the keys and their
+        respectiv values. starting_date_hour, tournament_id, name and number
+        '''
         return {
             'tournament_id': self.tournament_id,
             'name': self.name,
@@ -65,10 +96,20 @@ class ValidateRound(Round):
 
     @property
     def number(self):
+        '''
+        It will return the value number
+        :param number: integer
+        :return: the round number
+        '''
         return self._number
 
     @number.setter
     def number(self, nb_val):
+        '''
+        It will set the value of the validat_round number
+        :param nb_val: integer
+        The value will be passed at the number instance if it is an integer
+        '''
         if nb_val.is_integer():
             self._number = nb_val
         else:
@@ -78,10 +119,21 @@ class ValidateRound(Round):
 
     @property
     def starting_date_hour(self):
+        '''
+        It will return the value starting_date_hour
+        :param starting_date_hour: date and hour as string
+        :return: the date hour in string
+        '''
         return self._starting_date_hour
 
     @starting_date_hour.setter
     def starting_date_hour(self, val):
+        '''
+        It will set the value of the starting date hour
+        :param value: date hour as string
+        The date hour value will be passed at the startign_date_hour instance
+        if the format is appropriate to the date hour condition
+        '''
         try:
             datetime.datetime.strptime(val, "%d-%m-%Y-%H:%M")
             self._starting_date_hour = val
@@ -124,6 +176,12 @@ class ValidateTournament(Tournament):
         self._ending_date = ending_date
 
     def serialize_validator(self):
+        '''
+        Serializing a validate_tournament object.
+        :return: validate_tournament object as dictionary with the keys
+        and their respectiv values. name, place, starting_date, ending_date,
+        description and nb_players
+        '''
         return {
             'name': self.name,
             'place': self.place,
@@ -135,18 +193,39 @@ class ValidateTournament(Tournament):
 
     @property
     def starting_date(self):
+        '''
+        It will return the value starting_date
+        :param starting_date: date as string
+        :return: the date in string
+        '''
         return self._starting_date
 
     @property
     def ending_date(self):
+        '''
+        It will return the value ending_date
+        :param ending_date: date as string
+        :return: the date in string
+        '''
         return self._ending_date
 
     @property
     def nb_players(self):
+        '''
+        It will return the value of number of players of the round
+        :param nb_players: string
+        :return: the number of tournament validate players in string
+        '''
         return self._nb_players
 
     @starting_date.setter
     def starting_date(self, val):
+        '''
+        It will set the value of the starting date
+        :param value: date as string
+        The date hour value will be passed at the startign_date instance
+        if the format is appropriate to the date condition
+        '''
         try:
             datetime.datetime.strptime(val, "%d-%m-%Y")
             self._starting_date = val
@@ -157,6 +236,12 @@ class ValidateTournament(Tournament):
 
     @ending_date.setter
     def ending_date(self, val):
+        '''
+        It will set the value of the ending date
+        :param value: date as string
+        The date hour value will be passed at the endign_date instance
+        if the format is appropriate to the date condition
+        '''
         try:
             datetime.datetime.strptime(val, "%d-%m-%Y")
             self._ending_date = val
@@ -167,6 +252,12 @@ class ValidateTournament(Tournament):
 
     @nb_players.setter
     def nb_players(self, nb):
+        '''
+        It will set the value of the number of players
+        :param value: string
+        The nb value will be passed at the nb_players instance
+        if the value will be an even number
+        '''
         if int(nb) % 2 != 0 or nb.isnumeric() is False:
             error_content = "Error, the number of"
             error_content += " players must be an even number "

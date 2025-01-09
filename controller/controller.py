@@ -24,6 +24,12 @@ Round
 
 
 def create_round(data):
+    '''
+    Will create a round object and update it's id in tournament's rounds_list
+    also saving the new round and updating tournament on theri json data
+    :param data: dictionary
+    :return: round object
+    '''
     round = support_create(ValidateRound, Round, data, 'round')
     # adding round id to Tournament
     tournament = Tournament.from_db(round.tournament_id)
@@ -35,6 +41,11 @@ def create_round(data):
 
 # Get the current round
 def get_current_round(tour):
+    '''
+    Choose the round based on it's tour_id foreign key
+    :param tour: tour object
+    :return: round object updated
+    '''
     current_round = tour.actual_round_number
     round_id = tour.rounds_list[current_round]
     return Round.from_db(round_id)
@@ -42,6 +53,11 @@ def get_current_round(tour):
 
 # Get the passed round
 def get_passed_round(tour):
+    '''
+    Choose the n-1 round based on its given tour_id foreign key
+    :param tour: tour object
+    :return: round object updated
+    '''
     passed_round = tour.actual_round_number - 1
     round_id = tour.rounds_list[passed_round]
     return Round.from_db(round_id)
@@ -54,6 +70,11 @@ create ans serialize tournement
 
 
 def create_tournament(data):
+    '''
+    Will create a tournament object and save it on its json data
+    :param data: dictionary
+    :return: tournament object
+    '''
     tournament = support_create(
         ValidateTournament,
         Tournament,
@@ -65,11 +86,18 @@ def create_tournament(data):
 
 
 def all_tournaments():
+    # Sending the list of all tournaments objects
     tours = Tournament.all_data()
     return tours
 
 
 def edit_tour_round(round):
+    '''
+    Updating the round and tournament object and saving them to their
+    respectiv json data
+    :param round: tour object
+    :return: tournament object updated
+    '''
     tour = Tournament.from_db(round.tournament_id)
     tour.actual_round_number += 1
     tour.update(str(tour.id))
@@ -81,6 +109,13 @@ def edit_tour_round(round):
 
 # Checking if the last tournamented created has all the players or rounds
 def check_last_tour(tour=None):
+    ''''
+    Checking the state of a given/last tournament if all their players are
+    associeted and if all their rounds are created
+    :param tour: None or tour object
+    :return: False if the given/last tournament is uncomplate and the missing
+    rounds or players. False if the given/last tournament is completed
+    '''
     if tour:
         last_tour = tour
     else:
@@ -103,6 +138,11 @@ Players part:
 
 # Create player
 def create_player(data):
+    '''
+    Will create a player object and save it in its json data file
+    :param data: dictionary
+    :return: player object
+    '''
     player = support_create(ValidatePlayer, Player, data, 'player')
     player.save()
     return player
@@ -110,6 +150,7 @@ def create_player(data):
 
 # List of all players
 def all_players():
+    # Sending the list of all players objects
     all_players = Player.all_data()
     all_players.sort(key=attrgetter('last_name'))
     return all_players
@@ -117,6 +158,11 @@ def all_players():
 
 # List of players from a tournament
 def tournament_players(players):
+    '''
+    Giving the list playes in alphabetic order
+    :param players: list (with player objects)
+    :return: list populated with player objects
+    '''
     tour_players_lst = players
     tour_players_lst.sort(key=attrgetter('last_name'))
     return tour_players_lst
@@ -124,6 +170,11 @@ def tournament_players(players):
 
 # Check if fin exists
 def check_fin(data):
+    '''
+    Avoiding to create a double in data base
+    :param data: string (fin number)
+    :return: True if the player allredy exist on DB, False if not
+    '''
     for fin in Player.all_data():
         if fin.fin == data:
             return True
@@ -131,7 +182,13 @@ def check_fin(data):
     return False
 
 
+# In this case
 def enter_existing_player(fed_id, tour):
+    '''
+    Checking the fin allredy exist on the tournament
+    :param data: string (fin number)
+    :return: True if fin exist in the tournament. False if it doesn't
+    '''
     for player_id in tour.players_list:
         player = Player.from_db('id', player_id)
         if player.fin == fed_id:
@@ -142,6 +199,12 @@ def enter_existing_player(fed_id, tour):
 
 # Selecting player from it's last name
 def order_players(players_id, round1=False):
+    '''
+    ordering the list of players in alphabet order
+    :param players_id: uuid
+    :param round1: integer/False
+    :return: list of player objects
+    '''
     lst_players = []
     for pl_id in players_id:
         player = Player.from_db('id', pl_id)
@@ -153,8 +216,13 @@ def order_players(players_id, round1=False):
     return lst_players
 
 
-# Add multiple players
 def add_player2_tour(tour, fed_id):
+    '''
+    Adding players from db to the tournament
+    :param tour: tour object
+    :param fed_id: string (fin)
+    Updating tournament playrs list with player's uuid
+    '''
     pl = Player.from_db('fin', fed_id)
     tour.players_list.append(pl.id)
 
@@ -162,6 +230,7 @@ def add_player2_tour(tour, fed_id):
 
 
 def refact_if__game(player_result):
+    # refactoring the player point calculation
     if player_result is True:
         return 1.0
     elif player_result is False:
@@ -178,11 +247,24 @@ create and serialize game
 
 # Send selected games
 def selected_games(inst, name):
+    '''
+    Filter games that have a cummon round id
+    :param inst: string (round_id)
+    :param name: uuid
+    :return: list of games objects
+    '''
     games = Game.filter_by_instance(inst, name)
     return games
 
 
 def organize_game(players, round):
+    '''
+    Organizing games and checking if some round games
+    are cut in the midle. Saving new games
+    :param players: list
+    :param round: round object
+    :return: list of games object
+    '''
     existing_games = len(round.games_list)
     nb = len(players)
     games = []
@@ -204,6 +286,13 @@ def organize_game(players, round):
 
 
 def white_king(player, games, pname):
+    '''
+    Determine randomly witch player will be the white or the black king
+    :param player: player object
+    :param games: list of games object
+    :pname: string
+    :return: player frist and last name and if he is white/black king
+    '''
     for game in games:
         if player.id == game.white_king:
             return f"{pname} as white king"
@@ -212,6 +301,12 @@ def white_king(player, games, pname):
 
 
 def new_game_players(p, passed_games):
+    '''
+    ordering new game players based on their points and avoiding repetition
+    :parametre p: player object
+    :passed_games: list with passed games objects
+    :return: list of players ordering by their points
+    '''
     old = []
     usd = []
     new_g = []
@@ -248,6 +343,12 @@ def games_by_round(rnd_id):
 
 
 def add_results(result, game):
+    '''
+    Adding resul in game updating the results on db
+    :param result: string number
+    :param game: game object
+    :return: updated game object
+    '''
     if game.res_p1 is None and game.res_p2 is None:
         if result == "1":
             game.set_winner(game.player1)
@@ -279,6 +380,11 @@ def round_players(games_by_round):
 
 # Convert game results to player instance points
 def calculate_points(tour):
+    '''
+    Calculate points of player int tournemant that he had participated
+    :param: tournament object
+    :return: list of players in classement oder
+    '''
     rounds_id = tour.rounds_list
     games = []
     for round_id in rounds_id:
@@ -306,10 +412,16 @@ def calculate_points(tour):
 
 # Report
 def create_report():
+    # creating report and returning it
     return Report()
 
 
 def check_games(rounds_id_list):
+    '''
+    Checking if the first round has alredy all its games created
+    :param rounds_id_list: list with uuid
+    :return: True if it allredy have games created, False if not
+    '''
     all_games = []
     for round_id in rounds_id_list:
         all_games += games_by_round(round_id)

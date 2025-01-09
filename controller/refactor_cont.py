@@ -1,6 +1,13 @@
 
 
 def correction_dt(data, type):
+    '''
+    Informing of error in data input
+    :param data: dictionary
+    :param type: string
+    Using type param to inform for the case error and entering the new input
+    at the given data
+    '''
     if type == 'tournament':
         data_format = "Remember the format of the date:"
         data_format += " 'dd-mm-yyyy and the players must be even' "
@@ -20,6 +27,15 @@ def correction_dt(data, type):
 
 
 def support_create(valid_model, model, data, type):
+    '''
+    Refactoring the creation fonction for creating all kind of models
+    :param valid_model: validate model
+    :param model: model
+    :param data: dictionary
+    :param type: string
+    Using validate data to check the input datas, once the data validated
+    it create the model
+    '''
     try:
         validated_dt = valid_model(**data)
         obj = model(**validated_dt.serialize_validator())
