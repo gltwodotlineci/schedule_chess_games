@@ -14,10 +14,22 @@ class Report:
 
     @property
     def choosed_tour(self):
+        '''
+        It will return the choosed tournament
+        :param choosed_tour: dictionary with tournament data.
+        :return: A dictionary with the keys and their respectiv values.
+        tour, name, starting_date, ending_date, players_list and rounds_list
+        '''
         return self._choosed_tour
 
     @choosed_tour.setter
     def choosed_tour(self, id):
+        '''
+        It will set the value of the choosed tour instance
+        :param id: given uuid
+        The uuid value will be used to get a tournament and populate
+        the choosed_tour
+        '''
         tournament = Tournament.from_db(id)
         self._choosed_tour = {
             'tour': tournament,
@@ -30,10 +42,20 @@ class Report:
 
     @property
     def tour(self):
+        '''
+        It will return the tournament
+        :param tour: uuid.
+        :return: The uuid of a tournament
+        '''
         return self._choosed_tour.get('tour')
 
     @property
     def players_list(self):
+        '''
+        It will return the players list
+        :param players_list: list.
+        :return: A list of players uuid
+        '''
         players_id_lst = self._choosed_tour.get('players_list')
         players = []
         for player_id in players_id_lst:
@@ -44,6 +66,11 @@ class Report:
 
     @property
     def rounds_lists(self):
+        '''
+        It will return the rounds list
+        :param rounds_list: list.
+        :return: A list of rounds uuid
+        '''
         rounds_id_lst = self._choosed_tour.get('rounds_list')
         rounds = []
         for round_id in rounds_id_lst:

@@ -33,6 +33,13 @@ class Tournament:
         self.actual_round_number = actual_round_number
 
     def serialize_data(self):
+        '''
+        Serializing a tournament object.
+        :return: tournament object as dictionary with the keys and their
+        respective values as: id, name, place, starting_date, ending_date
+        description, nb_players, rounds_players, players_list, round_numbers
+        and actual_round_number
+        '''
         return {
             'id': str(self.id),
             'name': self.name,
@@ -49,11 +56,21 @@ class Tournament:
 
     @classmethod
     def from_db(cls, id):
+        '''
+        Using a class method to send json data as object selected from
+        the given id
+        :param id: uuid of a specific tournament
+        :return: a tournament object based on the given id
+        '''
         tournament = select_from_db("json_data/tournaments.json", id)
         return cls(**tournament)
 
     @classmethod
     def all_data(cls):
+        '''
+        Using a class method to send all json tournament data  as objects
+        :return: A list of all tournament objects
+        '''
         lst_tours_json = read_json('json_data/tournaments.json')
         tournaments_list = []
         for tournament in lst_tours_json:
@@ -69,11 +86,20 @@ class Tournament:
 
     # update method
     def update(self, id):
+        '''
+        Updating a tournament object at json_data
+        :param id: uuid of a choosen tournament
+        It will use the id to update a tournament object and
+        save the changes on tournaments.json
+        '''
         update_support("json_data/tournaments.json", self.serialize_data(), id)
 
     # giving last touranement
     @classmethod
     def last_tour(cls):
+        '''
+        Using class method so we can send the last tournament object
+        '''
         all_tours_json = read_json('json_data/tournaments.json')
         nb_last = len(all_tours_json)
         if nb_last == 0:

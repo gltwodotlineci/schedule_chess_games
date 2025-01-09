@@ -23,14 +23,31 @@ class Player:
 
     @property
     def points(self):
+        '''
+        It will return the points of the player
+        :param points: integer
+        :return: commulated points
+        '''
         return self._points
 
     @points.setter
     def points(self, value):
+        '''
+        It will set the value of players point
+        :param value: integer
+        The value will pe passed to points instance
+        '''
         self._points = value
 
     @classmethod
     def from_db(cls, key, player_id):
+        '''
+        Using a class method to send json data as object selected from
+        the given id
+        :param key: the instance name
+        :param player_id: uuid of a specific player
+        :return: a player objedct based on the given instance and the id
+        '''
         list_players = read_json('json_data/players.json')
 
         # generator expression
@@ -44,6 +61,10 @@ class Player:
 
     @classmethod
     def all_data(cls):
+        '''
+        Using a class method to send all json players data  as objects
+        :return: A list of all players objects
+        '''
         lst_players_json = read_json('json_data/players.json')
         players_list = []
         for player in lst_players_json:
@@ -54,4 +75,5 @@ class Player:
 
     # save method
     def save(self):
+        # saving the player object on players.json
         save_support("json_data/players.json", self.serialize_player())
