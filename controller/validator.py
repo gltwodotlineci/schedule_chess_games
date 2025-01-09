@@ -60,7 +60,6 @@ class ValidateRound(Round):
             'tournament_id': self.tournament_id,
             'name': self.name,
             'number': self.number,
-            # 'games_list': self.games_list,
             'starting_date_hour': self.starting_date_hour,
         }
 

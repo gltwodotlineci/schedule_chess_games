@@ -85,3 +85,34 @@ The programme will propose you the next  options
 - In the third option you can create a new Tournament, its rounds and associating to the tournament the players from your player's list.
     - In case the tournament that you just created, you forgot to add a round ore some players are missing. When you come back to this option, you will be directed at the part of the tournament where you were interopted last time.
 - Report. By choosing this option you will have the list of all tournaments that you want to choose for your report. Once you choosed you will have a html file repport with general information about the players and the tournaments and details abut the tournament selected
+
+## Running Flake8 and Flake8-html
+
+### Flake8
+To be noticed in your terminal about the redactions errors, you can run Flake8 in the root of the application (the same level with the file main.py)
+Then you can run the next command:
+```bash
+flake8
+```
+
+> [!IMPORTANT]
+> Thare is a large possibility that flake8 will catch redaction errors from different libraries and not from our code.
+You can avoid this problem with the previews commands
+```bash
+flake8 ./main.py
+flake8 ./controller/
+flake8 ./models/
+flake8 ./views/
+```
+These commands will check each of our python files in our MVC
+
+### Flake8-html.
+You can run the previews command
+```bash
+flake8 --format=html --htmldir=flake-report
+```
+As in the previews case, you might have again a rapport with all the errors of different libraries from your project. You can have a rapport with only your python files with the next command.
+```bash
+flake8 --format=html --htmldir=flake-report $(find . -name '*.py' | grep -v '/venv/' | grep -v '/site-packages/')
+```
+In the html report, you will have an index file which will inform you that: "No flake8 errors found in 18 files scanned."
