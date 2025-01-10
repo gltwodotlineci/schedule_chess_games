@@ -1,5 +1,3 @@
-
-
 def correction_dt(data, type):
     '''
     Informing of error in data input

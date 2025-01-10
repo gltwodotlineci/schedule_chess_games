@@ -7,6 +7,39 @@ import random
 
 
 class Game():
+    '''
+    The class handles game initialization, input processing, state updates,
+    rendering and managing the result of the game and which player
+    will start the game
+
+    Attributes:
+        round_id uuid: foreign key of the round that the game belongs
+        player1 uuid: The player's id that will play as the first player
+        player2 uuid: The player's id that will play as the second player
+        res_p1 boolean: True if the player 1 has won, Draw if it's a draw.
+        res_p2 boolean: True if the player 2 has won, Draw if it's a draw.
+        white_king uuid: The uuid of player 1 or 2
+        id uuid: To identify the game
+
+    Methods:
+        __init__(round_id, palayer1, player2, res_p1, res_p2, white_king, id):
+                        Initializing class parameters.
+        player1(self): Getter of player1.
+        player2(self): Getter of player2.
+        res_p1(self): Getter of result of player1.
+        res_p2(self): Getter of result of player2.
+        white_king(getter=True): Getter of player's uuid that will
+                                be the white king.
+        white_king(value): Setter of the white king. Associating uuid
+                                    of the player that will be white king
+
+        set_winner(winner): Will set the player_result to win or False
+        serialize_data(): Serialize data in dictionary format
+        save(): Saving the game object on games.json
+        update(id): Update game object with the given id on games.json
+        filter_by_instance(instance, name): Filter one or multiple json_data
+                                             based on the given value
+    '''
     def __init__(
             self,
             round_id,
@@ -154,7 +187,6 @@ class Game():
 
     # save method
     def save(self):
-        # saving the game object on games.json
         save_support("json_data/games.json", self.serialize_data())
 
     # update method
