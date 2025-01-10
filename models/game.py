@@ -10,7 +10,7 @@ class Game():
     '''
     The class handles game initialization, input processing, state updates,
     rendering and managing the result of the game and which player
-    will start the game. also handeling rational data.
+    will start the game. also handeling structure for rational data.
 
     Attributes:
         id uuid: To identify the game
@@ -33,7 +33,6 @@ class Game():
                                 be the white king.
         white_king(value): Setter of the white king. Associating uuid
                             of the player that will be white king
-
         set_winner(winner): Will set the player_result to win or False
         from_db(cls, id): specific game object according to given id
         all_data(cls): Returning all game objects in a list

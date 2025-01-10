@@ -20,13 +20,13 @@ class ValidatePlayer(Player):
     Methods:
         __init__(fin, first_name, last_name, birth_date):
                 Initializing class with the given parameters.
-        serialize_validator(): Serialize data in dictionary format
-        birth_date(getter=True): Getter of birth_date
-        fin(getter=True): Getter of fin (Fed Id)
-        birth_date(): Setter of birth_date by passing the given value
-                    if its input is conform to the asked format
-        fin(): Setter of fin by passing the given value if its input is
-                conform to the asked format
+        serialize_validator(): Serialize data in dictionary format.
+        birth_date(getter=True): Getter of birth_date.
+        fin(getter=True): Getter of fin (Fed Id).
+        birth_date(val): Setter of birth_date by passing the given value.
+                    if its input is conform to the asked format.
+        fin(nb): Setter of fin by passing the given value (nb) if its input is
+                conform to the asked format.
     '''
     def __init__(self, fin, first_name, last_name, birth_date):
         self._birth_date = birth_date
@@ -116,7 +116,7 @@ class ValidateRound(Round):
         if nb is integer.
         starting_date_hour(getter=True): Getter of starting_date_hour.
         starting_date_hour(val): Setter of the starting_date_hour if it is
-                        conform to the asked format.
+                    conform to the asked format.
     '''
     def __init__(self, tournament_id, name, number, starting_date_hour):
         self._number = number
@@ -190,7 +190,7 @@ class ValidateTournament(Tournament):
     '''
     The class inherit Tournament class and handles the validation of
     interactive instances. And it renders the player object serialized
-    if the predefined format is respected
+    if the predefined format is respected.
 
     Attributes:
         name string: Tournament's name.
@@ -198,9 +198,9 @@ class ValidateTournament(Tournament):
         starting_date string: Starting date of the tournament.
         ending_date string: Ending date of the tournament.
         description string: Tournament description.
-        nb_players string: Number of players of tournament.
-        rounds_list list: List of tournament round's uuid.
-        players_list list: List of tournament player's list.
+        nb_players string: Number of tournament players.
+        rounds_list list: List of round's uuid.
+        players_list list: List of player's list.
         round_numbers string: Number of rounds for the tournament.
         actual_round_number integer: The actual round of the tournament.
 

@@ -14,19 +14,17 @@ class Player:
         first_name string: Player's first name.
         last_name string: Player's last name.
         birth_date date string: Player's birthdate.
-        points integer: Instance with player points for a given tournament.
+        points integer: Instance with player's points for a given tournament.
 
     Methods:
         __init__(fin, first_name, last_name, birth_date, id):
-                            Initializing class with the given parameters.
-        serialize_player(): Serialize data in dictionary format
+            Initializing class with the given parameters.
+        serialize_player(): Serialize player data in dictionary format.
         points(getter=True): Getter of points.
         points(value): Setter of points with the giving value.
-        from_db(cls, id): Return specific player object according to given id
-        all_data(cls): Return all player objects in a list
+        from_db(cls, id): Return specific player object according to given id.
+        all_data(cls): Return all player objects in a list.
         save(): Saving the player object on players.json
-
-
     '''
     def __init__(self, fin, first_name, last_name, birth_date, id=None):
         self.id = create_id(id)
