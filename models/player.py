@@ -7,15 +7,14 @@ class Player:
     '''
     The class handles player initialization, input processing,
     rendering and managing the points instance.
-    will start the game
 
     Attributes:
-        fin string: foreign key of the round that the game belongs
-        first_name string: The player's id that will play as the first player
-        last_name string: The player's id that will play as the second player
-        birth_date date string: True if the player 1 has won, False if draw.
-        _points integer: Instance with player points for given tournament.
-        id uuid: To identify the game
+        id uuid: To identify the player
+        fin string: Federation identification number.
+        first_name string: Player's first name.
+        last_name string: Player's last name.
+        birth_date date string: Player's birthdate.
+        points integer: Instance with player points for a given tournament.
 
     Methods:
         __init__(fin, first_name, last_name, birth_date, id):

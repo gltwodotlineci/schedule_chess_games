@@ -8,7 +8,7 @@ from models.round import Round
 class Report:
     '''
     The class handles report initialization, input processing,
-    rendering report and object minning.
+    rendering report and object mining.
 
     Attributes:
         date_report uuid:

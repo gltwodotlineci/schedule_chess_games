@@ -5,8 +5,29 @@ from models.round import Round
 from models.tournament import Tournament
 
 
-# validating the datas for the player creation
 class ValidatePlayer(Player):
+    '''
+    The class inherit Player class and handles the validation of interactive
+    instances. And it renders the player object serialized if the predefined
+    format is respected
+
+    Attributes:
+        fin string: Federation identification number.
+        first_name string: Player's first name.
+        last_name string: Player's last name.
+        birth_date date string: Player's birthdate.
+
+    Methods:
+        __init__(fin, first_name, last_name, birth_date):
+                Initializing class with the given parameters.
+        serialize_validator(): Serialize data in dictionary format
+        birth_date(getter=True): Getter of birth_date
+        fin(getter=True): Getter of fin (Fed Id)
+        birth_date(): Setter of birth_date by passing the given value
+                    if its input is conform to the asked format
+        fin(): Setter of fin by passing the given value if its input is
+                conform to the asked format
+    '''
     def __init__(self, fin, first_name, last_name, birth_date):
         self._birth_date = birth_date
         super().__init__(fin, first_name, last_name, birth_date)
@@ -74,8 +95,29 @@ class ValidatePlayer(Player):
             self._fin = nb
 
 
-# validating the datas for the round creation
 class ValidateRound(Round):
+    '''
+    The class inherit Round class and handles the validation of interactive
+    instances. And it renders the round object serialized if the predefined
+    format is respected
+
+    Attributes:
+        tournament_id uuid: foreign key of tournament.
+        name string: Round name.
+        number integer: Round number.
+        starting_date_hour date hour string: Starting date/hour of the round.
+
+    Methods:
+        __init__(tournament_id, name, number, starting_date_hour):
+                Initializing class with the given parameters.
+        serialize_validator(): Serialize round data in dictionary format.
+        number(getter=True): Getter of round number.
+        number(nb): Setter of round number. It will set the nb
+        if nb is integer.
+        starting_date_hour(getter=True): Getter of starting_date_hour.
+        starting_date_hour(val): Setter of the starting_date_hour if it is
+                        conform to the asked format.
+    '''
     def __init__(self, tournament_id, name, number, starting_date_hour):
         self._number = number
         self._starting_date_hour = starting_date_hour
@@ -145,6 +187,39 @@ class ValidateRound(Round):
 
 # validating the datas for the tournament creation
 class ValidateTournament(Tournament):
+    '''
+    The class inherit Tournament class and handles the validation of
+    interactive instances. And it renders the player object serialized
+    if the predefined format is respected
+
+    Attributes:
+        name string: Tournament's name.
+        place string: Place of the tournament.
+        starting_date string: Starting date of the tournament.
+        ending_date string: Ending date of the tournament.
+        description string: Tournament description.
+        nb_players string: Number of players of tournament.
+        rounds_list list: List of tournament round's uuid.
+        players_list list: List of tournament player's list.
+        round_numbers string: Number of rounds for the tournament.
+        actual_round_number integer: The actual round of the tournament.
+
+    Methods:
+        __init__(name, place, starting_date, ending_date, description,
+                nb_players, rounds_list, players_list, round_numbers,
+                acrual_rond_number): Initializing class with the given
+                                    parameters.
+        serialize_validator(): Serialize tournament data in dictionary format
+        starting_date(getter=True): Getter of starting_date.
+        ending_date(getter=True): Getter of ending_date.
+        nb_players(getter=True): Getter of nb_players
+        starting_date(): Setter of starting_date by passing the given value
+                    if its input is conformed to the asked format.
+        ending_date(): Setter of ending_date by passing the given value
+                    if it's input is conformed to the asked format.
+        nb_players(): Setter of nb_players by passing the given value
+                    if it's input is conformed to the asked format.
+    '''
     def __init__(
             self,
             name,

@@ -7,6 +7,29 @@ from models.support_classes import update_support
 
 class Round:
     '''
+    The class handles round initialization, input processing, state updates,
+    rendering and managing the round state and rational data.
+
+    Attributes:
+        id uuid: To identify the game
+        tournament_id uuid: tournament foreign key.
+        name string: The round name
+        number integer: Round number
+        starting_date_hour date string: The date and hour of starting round.
+        ending_date_hour date string: The date/hour of ending round.
+        games_list list: List of round games uuid
+
+    Methods:
+        __init__(tournament_id, name, number, starting_date_hour,
+                ending_date_hour, games_list, id) Initializing class with
+        the given parameters.
+        serialize_data(): Serialize round data in dictionary format
+
+
+        from_db(cls, id): specific round object according to given id
+        all_data(cls): Returning all round objects in a list
+        save(): Saving the round object on rounds.json
+        update(id): Update round object with the given id on rounds.json
     '''
     def __init__(
             self,

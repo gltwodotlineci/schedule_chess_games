@@ -10,16 +10,16 @@ class Game():
     '''
     The class handles game initialization, input processing, state updates,
     rendering and managing the result of the game and which player
-    will start the game
+    will start the game. also handeling rational data.
 
     Attributes:
+        id uuid: To identify the game
         round_id uuid: foreign key of the round that the game belongs
         player1 uuid: The player's id that will play as the first player
         player2 uuid: The player's id that will play as the second player
         res_p1 boolean: True if the player 1 has won, Draw if it's a draw.
         res_p2 boolean: True if the player 2 has won, Draw if it's a draw.
         white_king uuid: The uuid of player 1 or 2
-        id uuid: To identify the game
 
     Methods:
         __init__(round_id, palayer1, player2, res_p1, res_p2, white_king, id):
