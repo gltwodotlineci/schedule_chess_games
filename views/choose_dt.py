@@ -4,6 +4,12 @@ from controller.controller import add_results
 
 
 def verify_choice(condition, options):
+    '''
+    Verifying if the given input is consistent with the determined options
+    :param condition: string/integer
+    :param options: list
+    :return: condition input
+    '''
     input_var = input(condition)
     while input_var not in options:
         print('Please verify your choice')
@@ -16,13 +22,8 @@ Menue
 '''
 
 
-class MyClass:
-    @staticmethod
-    def select_or_create():
-        pass
-
-
 def select_or_create():
+    # Giving the select choices for the main menu
     print("  ---      You have four choices      ---")
     print("  -- < Add/check the players   - 1 > --")
     print("  -- < Select a tournament     - 2 > --")
@@ -34,6 +35,7 @@ def select_or_create():
 
 
 def go_back():
+    # Going back to the main page
     content = "You can go back to the main menu or close the program"
     content += " Please write 'back' or 'C' "
     return verify_choice(content, ['back', 'C'])
@@ -45,6 +47,7 @@ Tournament
 
 
 def send_dt_tourn():
+    # Sending details for the tournament
     data = {}
     print("Please enter the data for the tournament")
     data['name'] = input("Please write the tournament name: ")
@@ -61,6 +64,11 @@ def send_dt_tourn():
 
 
 def select_tournament(tours):
+    '''
+    Select one of the tournaments from the list
+    :param tours: list of tour objects
+    :return: the tour object that fit to the choosed tournament
+    '''
     nb_tours = [str(x) for x in range(1, len(tours)+1)]
     content = "For choosing the tournament, write one of the "
     content += f"numbers {' '.join(nb_tours)} "
@@ -69,6 +77,14 @@ def select_tournament(tours):
 
 
 def nn_complet_tour(tour, missing_pl, missing_rd):
+    '''
+    Sending to the main page if the choosed tournament has
+    missing rounds or players
+    :param tour: tour object
+    :param missing_pl: integer
+    :param missing_rd: integer
+    :return: 'back' as string
+    '''
     print(f"The tournament {tour.name} is uncompleted")
     print(f"You might need {missing_pl} more players or {missing_rd} rounds")
     cont0 = "In order to complete this tournament go to "
@@ -86,6 +102,7 @@ Players
 
 
 def ask_add_player():
+    # Question part if the user must confirm adding a player
     print("Write 'yes' or 'back' if you want to add a player or to go back")
     content = " Do you want to add a player - 'yes' or 'back' to go back "
     yes_back = verify_choice(content, ['yes', 'back'])
@@ -93,6 +110,10 @@ def ask_add_player():
 
 
 def send_dt_player():
+    '''
+    input data for player creation object
+    :return: data dictinary with player attributs
+    '''
     dt = {}
     print("Please enter the data for the new player")
     given_fin = input("Enter the FED ID ").upper()
@@ -111,6 +132,13 @@ def send_dt_player():
 
 # to choose players
 def choos_fed_nb(tour, nb):
+    '''
+    Entering fin (Fed Id) and checking if it is not allredy entered
+    in the tournament or if it does exist in the data base
+    :param: tour object
+    :nb: string
+    :return: the fin in uppecase
+    '''
     content = f"Enter the player {nb} FED number: "
     given_fin = input(content)
     # if player already exists
@@ -136,6 +164,8 @@ Round
 
 # asking if it want to create a round for the new tournament
 def create_round_tour(tour_data):
+    # Asking if the user want to continue creating rounds for the
+    # tournament ent returnin 'yes' or 'back' string
     print("Do you want to start creating a round for the new tournament?")
     rd_4tour = tour_data.round_numbers
     existing_rds = len(tour_data.rounds_list)
@@ -150,6 +180,8 @@ def create_round_tour(tour_data):
 
 # asking for date and time
 def date_and_time(existing_round):
+    # Asking for the datas of the round and sending the data in
+    # a dictionary format
     print(" ")
     starting_rnd = "You can start choosing the date and the hour"
     starting_rnd += f" of the Round {existing_round+1}"
@@ -170,23 +202,18 @@ def date_and_time(existing_round):
     return data
 
 
-def select_round(round_nb):
-    content = "You can choose the number of the round "
-    return verify_choice(content, [str(x) for x in range(1, round_nb+1)])
-
-
-def send_dt_round(round_nb):
-    content = f"Write {round_nb} if it's the first round: "
-    rnd = verify_choice(content, [str(round_nb)])
-    return rnd
-
-
 '''
 Game
 '''
 
 
 def choos_winner(players, data_games):
+    '''
+    Asking user to choos the winner and adding the result to the game
+    :param players: list with player objects
+    :data_games: dictionary
+    :return: list of game objects
+    '''
     games = []
     content = "Choose 1 ,2 or 3"
     for i, pl in enumerate(players):

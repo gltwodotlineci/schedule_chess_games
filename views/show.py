@@ -3,6 +3,10 @@ from controller.controller import white_king
 
 
 def _players(tour):
+    '''
+    Showing the players associated to the tournament
+    :tour: tournament object
+    '''
     print("The players registered at the tournament are: ")
     if tour.players_list == []:
         print("There are no players registered on this tournaments")
@@ -16,6 +20,10 @@ class ShowDetails:
 
     @staticmethod
     def view_round_contest(data, games):
+        '''
+        Showing the games of each round and the players that will
+        confort each other and if they're white king or black king
+        '''
         print(" ")
         print("             The games are ")
         for i, pl in enumerate(data):
@@ -34,6 +42,11 @@ class ShowDetails:
 
     @staticmethod
     def choosed_tournament(tournament):
+        '''
+        Giving inforamtions as Name, strting date and ending date
+        about the choosed tournament
+        :param tournament: tournament object
+        '''
         print(" ")
         print(f"You selected {tournament.name} at {tournament.place}")
         print(f"From {tournament.starting_date} to {tournament.ending_date}")
@@ -46,6 +59,7 @@ class ShowDetails:
 
     @staticmethod
     def add_winner_instruct():
+        # Instrucion about choosing the winner
         print('__________________________________________')
         print("               Entering the results     ")
         print(" ")
@@ -59,6 +73,11 @@ class ShowDetails:
 
     @staticmethod
     def after_contest(players):
+        '''
+        Showing the comulated points and sending the results after each round
+        :param players: list of player objects
+        :return: string of results
+        '''
         print(" ")
         results = "<p>"
         print("The players points after the game are")
@@ -71,6 +90,11 @@ class ShowDetails:
 
     @staticmethod
     def game_details(games_list):
+        '''
+        Giving games details and sending them as a string
+        :param games_list: lsit of game objects
+        :return: html format string with games descriptions
+        '''
         results = ""
         for game in games_list:
             p1 = Player.from_db('id', game.player1)

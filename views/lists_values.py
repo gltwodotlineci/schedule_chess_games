@@ -6,6 +6,7 @@ from controller.controller import check_last_tour
 class ShowAll:
     @staticmethod
     def show_all_players():
+        # Showing all the players and their details
         players = all_players()
         print("Playrs first name - last name - FED Id ")
         print("_______________________________________")
@@ -15,6 +16,7 @@ class ShowAll:
 
     @staticmethod
     def show_all_tournaments():
+        # Showing all the tournaments and their details
         tournaments = all_tournaments()
         state = "In progress... -> "
         if len(tournaments) > 0:
