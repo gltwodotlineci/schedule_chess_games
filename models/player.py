@@ -4,6 +4,31 @@ from models.support_classes import save_support
 
 
 class Player:
+    '''
+    The class handles player initialization, input processing,
+    rendering and managing the points instance.
+    will start the game
+
+    Attributes:
+        fin string: foreign key of the round that the game belongs
+        first_name string: The player's id that will play as the first player
+        last_name string: The player's id that will play as the second player
+        birth_date date string: True if the player 1 has won, False if draw.
+        _points integer: Instance with player points for given tournament.
+        id uuid: To identify the game
+
+    Methods:
+        __init__(fin, first_name, last_name, birth_date, id):
+                            Initializing class with the given parameters.
+        serialize_player(): Serialize data in dictionary format
+        points(getter=True): Getter of points.
+        points(value): Setter of points with the giving value.
+        from_db(cls, id): Return specific player object according to given id
+        all_data(cls): Return all player objects in a list
+        save(): Saving the player object on players.json
+
+
+    '''
     def __init__(self, fin, first_name, last_name, birth_date, id=None):
         self.id = create_id(id)
         self.fin = fin

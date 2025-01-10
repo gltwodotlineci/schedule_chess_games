@@ -6,6 +6,25 @@ from models.round import Round
 
 # Creating report model
 class Report:
+    '''
+    The class handles report initialization, input processing,
+    rendering report and object minning.
+
+    Attributes:
+        date_report uuid:
+        list_tournaments list:
+        list_players list:
+        choosed_tou dictionary:
+
+    Methods:
+        __init__(): Initializing class.
+        choosed_tour(getter=True): Getter of choosed_tour where we have the
+                    tournaments values in a dictionar format
+        choosed_tour(id): Setter of choosed tour and population of it
+        tour(getter=True): Getter of the tour object
+        players_list(): Getter of player objects in a list
+        rounds_lists(): Getter of round objects in a list
+    '''
     def __init__(self):
         self.date_report = datetime.now().strftime("%d-%m-%Y-%H:%M")
         self.list_tournaments = Tournament.all_data()

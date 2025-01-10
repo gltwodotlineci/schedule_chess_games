@@ -23,22 +23,24 @@ class Game():
 
     Methods:
         __init__(round_id, palayer1, player2, res_p1, res_p2, white_king, id):
-                        Initializing class parameters.
-        player1(self): Getter of player1.
-        player2(self): Getter of player2.
-        res_p1(self): Getter of result of player1.
-        res_p2(self): Getter of result of player2.
+                        Initializing class with the given parameters.
+        serialize_data(): Serialize data in dictionary format
+        player1(getter=True): Getter of player1.
+        player2(getter=True): Getter of player2.
+        res_p1(getter=True): Getter of result of player1.
+        res_p2(getter=True): Getter of result of player2.
         white_king(getter=True): Getter of player's uuid that will
                                 be the white king.
         white_king(value): Setter of the white king. Associating uuid
-                                    of the player that will be white king
+                            of the player that will be white king
 
         set_winner(winner): Will set the player_result to win or False
-        serialize_data(): Serialize data in dictionary format
+        from_db(cls, id): specific game object according to given id
+        all_data(cls): Returning all game objects in a list
         save(): Saving the game object on games.json
         update(id): Update game object with the given id on games.json
         filter_by_instance(instance, name): Filter one or multiple json_data
-                                             based on the given value
+                                            based on the given value
     '''
     def __init__(
             self,
@@ -56,6 +58,21 @@ class Game():
         self.player2_result = [player2, res_p2]
         players = [player1, player2]
         self._white_king = players[random.randint(0, 1)]
+
+    def serialize_data(self):
+        '''
+        Serializing a game object.
+        :return: game object as dictionary with the keys and their
+        respective values as: id, player1_result, player2_result
+        and white_king
+        '''
+        return {
+            'id': str(self.id),
+            'round_id': self.round_id,
+            'player1_result': self.player1_result,
+            'player2_result': self.player2_result,
+            'white_king': self.white_king
+        }
 
     @property
     def player1(self):
@@ -125,21 +142,6 @@ class Game():
         elif winner == "None":
             self.player1_result[1] = False
             self.player2_result[1] = False
-
-    def serialize_data(self):
-        '''
-        Serializing a game object.
-        :return: game object as dictionary with the keys and their
-        respective values as: id, player1_result, player2_result
-        and white_king
-        '''
-        return {
-            'id': str(self.id),
-            'round_id': self.round_id,
-            'player1_result': self.player1_result,
-            'player2_result': self.player2_result,
-            'white_king': self.white_king
-        }
 
     @classmethod
     def from_db(cls, id):
